@@ -1,0 +1,6 @@
+﻿  Quad.cpp
+C:\Users\joanc\Desktop\VJ\lab1\OpenGL\02-primitives\02-primitives\Quad.cpp(16,151): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
+C:\Users\joanc\Desktop\VJ\lab1\OpenGL\02-primitives\02-primitives\Quad.cpp(16,151): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\joanc\Desktop\VJ\lab1\OpenGL\02-primitives\02-primitives\Quad.cpp(16,166): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
+C:\Users\joanc\Desktop\VJ\lab1\OpenGL\02-primitives\02-primitives\Quad.cpp(16,166): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+  02-primitives.vcxproj -> C:\Users\joanc\Desktop\VJ\lab1\OpenGL\02-primitives\Debug\02-primitives.exe
