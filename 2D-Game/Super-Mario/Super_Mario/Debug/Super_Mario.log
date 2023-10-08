@@ -1,0 +1,16 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: El directorio intermedio (Debug\) contiene archivos compartidos de otro proyecto (02-Bubble.vcxproj). Esto puede dar lugar a un comportamiento incorrecto de limpieza y recompilación.
+  Game.cpp
+  main.cpp
+  Player.cpp
+  Scene.cpp
+  Shader.cpp
+  ShaderProgram.cpp
+  Sprite.cpp
+  Texture.cpp
+  TileMap.cpp
+  Generando código...
+SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(image_DXT.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(image_helper.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(SOIL.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(stb_image_aug.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+  Super_Mario.vcxproj -> C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Debug\Super_Mario.exe
