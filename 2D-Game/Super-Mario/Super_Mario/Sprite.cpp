@@ -92,7 +92,7 @@ int Sprite::animation() const {
 }
 
 void Sprite::setPosition(const glm::vec2 &pos) {
-	position = pos;
+	this->position = pos;
 }
 
 
