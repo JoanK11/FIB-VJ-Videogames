@@ -5,7 +5,10 @@
 #include <glm/glm.hpp>
 #include "Texture.h"
 #include "ShaderProgram.h"
-
+#include "Tile.h"
+#include "Brick.h"
+#include <unordered_map>
+#include <utility>
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
 // simple format (see level01.txt for an example). With this information
@@ -28,26 +31,24 @@ public:
 	void render() const;
 	void free();
 	
-	int getTileSize() const { return tileSize; }
+	int getTileSize() const { return blockSize; }
 
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 	
 private:
-	bool loadLevel(const string &levelFile);
-	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
+	bool loadLevel(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
+	Tile* getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 textureC, glm::vec2 textureS, Texture* t);
 
 private:
-	GLuint vao;
-	GLuint vbo;
-	GLint posLocation, texCoordLocation;
+	unordered_map<string, pair<int,bool>> dicc;
 	int nTiles;
 	glm::ivec2 position, mapSize, tilesheetSize;
-	int tileSize, blockSize;
+	int blockSize;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
-	int *map;
+	Tile **map;
 
 };
 

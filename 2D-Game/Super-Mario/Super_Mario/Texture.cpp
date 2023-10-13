@@ -17,7 +17,7 @@ Texture::Texture()
 bool Texture::loadFromFile(const string &filename, PixelFormat format)
 {
 	unsigned char *image = NULL;
-	
+
 	switch(format)
 	{
 	case TEXTURE_PIXEL_FORMAT_RGB:
