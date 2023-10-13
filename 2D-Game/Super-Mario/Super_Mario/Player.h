@@ -10,8 +10,7 @@
 // all properties it needs to track its movement, jumping, and collisions.
 
 
-class Player
-{
+class Player {
 
 public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
@@ -22,12 +21,21 @@ public:
 	void setPosition(const glm::vec2 &pos);
 	
 private:
-	bool bJumping;
+	bool bJumping, bFalling;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
 	Texture spritesheet;
-	Sprite *sprite;
+	Sprite *sprite, *superSprite, *starSprite;
 	TileMap *map;
+	float Vx, Vy;
+
+	bool lastLeft, lastRight;
+
+	// Mario Types
+	bool superMario, superMarioKey;
+	bool starMario, starMarioKey;
+	int starMarioTime;
+	
 
 };
 
