@@ -5,8 +5,8 @@
 #include "Scene.h"
 
 // la resolución original era 256*240. En nuestro caso debería ser mínimo el doble en cada lugar
-#define SCREEN_WIDTH 256
-#define SCREEN_HEIGHT 240
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 480
 
 
 // Game is a singleton (a class with a single instance) that represents our whole application

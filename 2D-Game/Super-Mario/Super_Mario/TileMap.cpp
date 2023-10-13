@@ -53,7 +53,7 @@ void TileMap::render() const
 {
 	for (int j = 0; j < mapSize.y; j++) {
 		for (int i = 0; i < mapSize.x; i++) {
-			if(map[j * mapSize.x + i] != nullptr) map[j * mapSize.x + i]->render();
+			if (map[j * mapSize.x + i] != nullptr)  map[j * mapSize.x + i]->render();
 		}
 	}
 }
