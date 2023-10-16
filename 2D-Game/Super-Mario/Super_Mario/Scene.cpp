@@ -41,7 +41,7 @@ void Scene::update(int deltaTime) {
 	player->update(deltaTime);
 }
 
-void Scene::render()
+void Scene::render(glm::vec2 pos, glm::vec2 size)
 {
 	
 	glm::mat4 modelview;
@@ -52,7 +52,7 @@ void Scene::render()
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-	map->render();
+	map->render(pos,size);
 	player->render();
 }
 

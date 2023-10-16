@@ -49,10 +49,15 @@ TileMap::~TileMap()
 }
 
 
-void TileMap::render() const
+void TileMap::render(glm::vec2 pos, glm::vec2 size) const
 {
-	for (int j = 0; j < mapSize.y; j++) {
-		for (int i = 0; i < mapSize.x; i++) {
+	//aplicamos el desplazamiento a la camara
+	glm::vec2 posOriginal = (pos+position) / float(blockSize);
+	glm::vec2 posFinal = posOriginal + size / float(blockSize);
+
+	
+	for (int j = posOriginal.y; j < min((int)posFinal.y,mapSize.y); j++) {
+		for (int i = posOriginal.x; i < min((int)posFinal.x,mapSize.x); i++) {
 			if (map[j * mapSize.x + i] != nullptr)  map[j * mapSize.x + i]->render();
 		}
 	}
@@ -69,7 +74,7 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 	string line, tilesheetFile;
 	stringstream sstream;
 	char tile;
-	
+	position = minCoords;
 	fin.open(levelFile.c_str());
 	if(!fin.is_open())
 		return false;

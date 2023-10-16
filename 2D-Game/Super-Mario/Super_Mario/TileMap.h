@@ -28,7 +28,7 @@ public:
 
 	~TileMap();
 
-	void render() const;
+	void render(glm::vec2 pos, glm::vec2 size) const;
 	void free();
 	
 	int getTileSize() const { return blockSize; }
@@ -45,7 +45,8 @@ private:
 private:
 	unordered_map<string, pair<int,bool>> dicc;
 	int nTiles;
-	glm::ivec2 position, mapSize, tilesheetSize;
+	glm::ivec2  mapSize, tilesheetSize;
+	glm::vec2 position;
 	int blockSize;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;

@@ -21,7 +21,7 @@ public:
 
 	void init();
 	void update(int deltaTime);
-	void render();
+	void render(glm::vec2 pos, glm::vec2 size);
 
 private:
 	void initShaders();
