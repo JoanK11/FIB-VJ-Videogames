@@ -53,7 +53,7 @@ void TileMap::render(glm::vec2 pos, glm::vec2 size) const
 {
 	//aplicamos el desplazamiento a la camara
 	//hablarlo con joan
-	glm::vec2 posOriginal = (pos+position) / float(blockSize);
+	glm::vec2 posOriginal = position / float(blockSize);
 	glm::vec2 posFinal = posOriginal + size / float(blockSize);
 
 	

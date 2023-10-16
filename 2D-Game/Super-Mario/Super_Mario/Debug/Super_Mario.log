@@ -1,3 +1,42 @@
-﻿  TileMap.cpp
-C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\TileMap.cpp(76,7): warning C4101: 'tile': variable local sin referencia
+﻿  Game.cpp
+  Player.cpp
+C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\Player.cpp(190,26): warning C4305: '-=': truncamiento de 'double' a 'float'
+C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\Player.cpp(193,26): warning C4305: '+=': truncamiento de 'double' a 'float'
+C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\Player.cpp(194,31): warning C4305: '-=': truncamiento de 'double' a 'float'
+C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\Player.cpp(201,38): warning C4244: '+=': conversión de 'float' a 'T'; posible pérdida de datos
+          with
+          [
+              T=int
+          ]
+C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\Player.cpp(219,25): warning C4305: '+=': truncamiento de 'double' a 'float'
+C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\Player.cpp(222,25): warning C4305: '-=': truncamiento de 'double' a 'float'
+C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\Player.cpp(223,30): warning C4305: '+=': truncamiento de 'double' a 'float'
+C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\Player.cpp(230,38): warning C4244: '+=': conversión de 'float' a 'T'; posible pérdida de datos
+          with
+          [
+              T=int
+          ]
+C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\Player.cpp(235,13): warning C4305: '-=': truncamiento de 'double' a 'float'
+C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\Player.cpp(236,19): warning C4244: '+=': conversión de 'float' a 'T'; posible pérdida de datos
+          with
+          [
+              T=int
+          ]
+C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\Player.cpp(239,13): warning C4305: '+=': truncamiento de 'double' a 'float'
+C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\Player.cpp(240,19): warning C4244: '+=': conversión de 'float' a 'T'; posible pérdida de datos
+          with
+          [
+              T=int
+          ]
+  Scene.cpp
+  Sprite.cpp
+  TileMap.cpp
+C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\TileMap.cpp(77,7): warning C4101: 'tile': variable local sin referencia
+  main.cpp
+  Generando código...
+  LINK : no se encontró C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Debug\Super_Mario.exe o no lo generó el último vínculo incremental; ejecutando vínculo completo
+SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(image_DXT.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(image_helper.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(SOIL.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(stb_image_aug.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
   Super_Mario.vcxproj -> C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Debug\Super_Mario.exe
