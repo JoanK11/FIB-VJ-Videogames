@@ -52,12 +52,13 @@ TileMap::~TileMap()
 void TileMap::render(glm::vec2 pos, glm::vec2 size) const
 {
 	//aplicamos el desplazamiento a la camara
+	//hablarlo con joan
 	glm::vec2 posOriginal = (pos+position) / float(blockSize);
 	glm::vec2 posFinal = posOriginal + size / float(blockSize);
 
 	
-	for (int j = posOriginal.y; j < min((int)posFinal.y,mapSize.y); j++) {
-		for (int i = posOriginal.x; i < min((int)posFinal.x,mapSize.x); i++) {
+	for (int j = max((int)posOriginal.y,0); j < min((int)posFinal.y,mapSize.y); j++) {
+		for (int i = max((int)posOriginal.x, 0); i < min((int)posFinal.x,mapSize.x); i++) {
 			if (map[j * mapSize.x + i] != nullptr)  map[j * mapSize.x + i]->render();
 		}
 	}
@@ -88,7 +89,7 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 	sstream.str(line);
 	sstream >> mapSize.x >> mapSize.y;
 	sstream.clear();
-	//miramos tamaño de bloque logico
+	//miramos tama o de bloque logico
 	getline(fin, line);
 	sstream.str(line);
 	sstream >> blockSize;
@@ -102,7 +103,7 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 	tilesheet.setWrapT(GL_CLAMP_TO_EDGE);
 	tilesheet.setMinFilter(GL_NEAREST);
 	tilesheet.setMagFilter(GL_NEAREST);
-	//miramos el tamaño de la textura
+	//miramos el tama o de la textura
 	getline(fin, line);
 	sstream.str(line);
 	sstream >> tilesheetSize.x >> tilesheetSize.y;

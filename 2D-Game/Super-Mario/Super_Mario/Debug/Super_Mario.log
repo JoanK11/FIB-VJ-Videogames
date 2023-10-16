@@ -1,13 +1,3 @@
 ﻿  TileMap.cpp
-C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\TileMap.cpp(59,13): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
-          with
-          [
-              T=float
-          ]
-C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\TileMap.cpp(60,14): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
-          with
-          [
-              T=float
-          ]
 C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Super_Mario\TileMap.cpp(76,7): warning C4101: 'tile': variable local sin referencia
   Super_Mario.vcxproj -> C:\Users\jerem\Desktop\estudios\VJ\FIB-VJ-Videojocs\2D-Game\Super-Mario\Debug\Super_Mario.exe
