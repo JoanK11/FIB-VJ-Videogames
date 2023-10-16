@@ -196,6 +196,27 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	return false;
 }
 
+bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
+{
+	int x0, x1, y;
+
+	x0 = pos.x / blockSize;
+	x1 = (pos.x + size.x - 1) / blockSize;
+	y = (pos.y) / blockSize;
+	for (int x = x0; x <= x1; x++)
+	{
+		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable())
+		{
+			if (*posY - blockSize * y + size.y <= 4)
+			{
+				*posY = blockSize * y - size.y;
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
 Tile* TileMap::getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 tileSheetSize,glm::vec2 textureS, Texture* t) {
 	//seleccionamos el tipo de tile
 	pair<int,bool> obj = dicc[type];
