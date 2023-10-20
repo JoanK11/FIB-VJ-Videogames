@@ -6,7 +6,7 @@
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
-
+#include "Projection.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -21,7 +21,7 @@ public:
 
 	void init();
 	void update(int deltaTime);
-	void render(glm::vec2 pos, glm::vec2 size);
+	void render();
 
 private:
 	void initShaders();
@@ -31,7 +31,7 @@ private:
 	Player *player;
 	ShaderProgram texProgram;
 	float currentTime;
-	glm::mat4 projection;
+	Projection projection;
 
 };
 

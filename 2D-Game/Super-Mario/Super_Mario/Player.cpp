@@ -140,7 +140,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
-void Player::update(int deltaTime) {
+void Player::update(int deltaTime, float xmin, float& max) {
 	/* --- Mario Sprites --- */
 	Sprite* activeSprite = sprite;
 	if (superMario)     activeSprite = superSprite;
@@ -198,7 +198,10 @@ void Player::update(int deltaTime) {
 			Vx = 0;
 			activeSprite->changeAnimation(STAND_LEFT);
 		}
-		else if (!colision) posPlayer.x += Vx;
+		else if (!colision) {
+			posPlayer.x += Vx;
+			
+		} 
 	}
 
 	else if (keyRight) {
@@ -227,7 +230,12 @@ void Player::update(int deltaTime) {
 			Vx = 0;
 			activeSprite->changeAnimation(STAND_RIGHT);
 		}
-		else if (!colision) posPlayer.x += Vx;
+		else if (!colision) {
+			posPlayer.x += Vx;
+			if (posPlayer.x + tileMapDispl.x > max) {
+				max = posPlayer.x + tileMapDispl.x;
+			}
+		} 
 	}
 
 	else {

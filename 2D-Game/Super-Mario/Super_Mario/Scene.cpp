@@ -15,6 +15,7 @@
 Scene::Scene() {
 	map = NULL;
 	player = NULL;
+	projection = Projection(glm::vec2(0.f, 0.f), glm::vec2(0.f, 0.f));
 }
 
 Scene::~Scene() {
@@ -32,27 +33,34 @@ void Scene::init() {
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+	projection = Projection(glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1)));
 	currentTime = 0.0f;
 }
 
 void Scene::update(int deltaTime) {
 	currentTime += deltaTime;
-	player->update(deltaTime);
+	float actualMid = projection.getXmid();
+	cout << actualMid << endl;
+	player->update(deltaTime, projection.getXmin(), actualMid);
+	cout << actualMid << endl;
+	if (actualMid != projection.getXmid()) {
+		cout << "he entrado" << endl;
+		projection.setMidXPosition(actualMid);
+	}
 }
 
-void Scene::render(glm::vec2 pos, glm::vec2 size)
+void Scene::render()
 {
 	
 	glm::mat4 modelview;
 
 	texProgram.use();
-	texProgram.setUniformMatrix4f("projection", projection);
+	projection.bindProjection(texProgram);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-	map->render(pos,size);
+	map->render(projection.getPosition(), projection.getSize());
 	player->render();
 }
 

@@ -17,7 +17,7 @@ bool Game::update(int deltaTime) {
 
 void Game::render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	scene.render(glm::vec2(0,0), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+	scene.render();
 }
 
 void Game::keyPressed(int key) {

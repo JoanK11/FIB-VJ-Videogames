@@ -57,8 +57,8 @@ void TileMap::render(glm::vec2 pos, glm::vec2 size) const
 	glm::vec2 posFinal = posOriginal + size / float(blockSize);
 
 	
-	for (int j = max((int)posOriginal.y,0); j < min((int)posFinal.y,mapSize.y); j++) {
-		for (int i = max((int)posOriginal.x, 0); i < min((int)posFinal.x,mapSize.x); i++) {
+	for (int j = max((int)posOriginal.y,0); j <= min((int)posFinal.y,mapSize.y-1); j++) {
+		for (int i = max((int)posOriginal.x, 0); i <= min((int)posFinal.x,mapSize.x-1); i++) {
 			if (map[j * mapSize.x + i] != nullptr)  map[j * mapSize.x + i]->render();
 		}
 	}
