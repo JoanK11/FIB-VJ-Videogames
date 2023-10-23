@@ -213,7 +213,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 	{
 		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable())
 		{
-			if (*posY - blockSize * y + size.y <= 4)
+			if (*posY - blockSize * y + size.y <= 0)
 			{
 				*posY = blockSize * y - size.y;
 				return true;

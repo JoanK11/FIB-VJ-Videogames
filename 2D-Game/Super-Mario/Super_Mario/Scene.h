@@ -31,7 +31,8 @@ private:
 	Player *player;
 	ShaderProgram texProgram;
 	float currentTime;
-	Projection projection;
+	Projection camera;
+	glm::mat4 projection;
 
 };
 

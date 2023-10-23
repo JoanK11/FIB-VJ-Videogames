@@ -15,7 +15,7 @@
 Scene::Scene() {
 	map = NULL;
 	player = NULL;
-	projection = Projection(glm::vec2(0.f, 0.f), glm::vec2(0.f, 0.f));
+	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(0.f, 0.f));
 }
 
 Scene::~Scene() {
@@ -33,16 +33,17 @@ void Scene::init() {
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
-	projection = Projection(glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1)));
+	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1)));
 	currentTime = 0.0f;
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 }
 
 void Scene::update(int deltaTime) {
 	currentTime += deltaTime;
-	float actualMid = projection.getXmid();
-	player->update(deltaTime, projection.getXmin(), actualMid);
-	if (actualMid != projection.getXmid()) {
-		projection.setMidXPosition(actualMid);
+	float actualMid = camera.getXmid();
+	player->update(deltaTime, camera.getXmin(), actualMid);
+	if (actualMid != camera.getXmid()) {
+		camera.setMidXPosition(actualMid);
 	}
 }
 
@@ -52,12 +53,13 @@ void Scene::render()
 	glm::mat4 modelview;
 
 	texProgram.use();
-	projection.bindProjection(texProgram);
+	camera.bindProjection(texProgram);
+	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-	map->render(projection.getPosition(), projection.getSize());
+	map->render(camera.getPosition(), camera.getSize());
 	player->render();
 }
 
