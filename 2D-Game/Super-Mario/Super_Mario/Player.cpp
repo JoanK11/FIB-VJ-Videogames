@@ -200,6 +200,10 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		}
 		else if (!colision) {
 			posPlayer.x += Vx;
+			if (posPlayer.x < xmin) {
+				posPlayer.x = xmin;
+				Vx = 0;
+			}
 			
 		} 
 	}

@@ -40,11 +40,8 @@ void Scene::init() {
 void Scene::update(int deltaTime) {
 	currentTime += deltaTime;
 	float actualMid = projection.getXmid();
-	cout << actualMid << endl;
 	player->update(deltaTime, projection.getXmin(), actualMid);
-	cout << actualMid << endl;
 	if (actualMid != projection.getXmid()) {
-		cout << "he entrado" << endl;
 		projection.setMidXPosition(actualMid);
 	}
 }
