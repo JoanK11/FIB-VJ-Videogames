@@ -21,7 +21,7 @@ private:
 	int score;
 	int coins;
 	pair<int, int> world;
-	int time;
+	double time;
 	int lives;
 	Text text;
 

@@ -1,1 +1,13 @@
 ./2D-Game/Super-Mario/.vs/
+
+*.vsidx
+*.ipch
+*.pdb
+*.obj
+*.ilk
+*.tlog
+*.idb
+*.lastbuildstate
+*.suo
+*.db
+*.lock

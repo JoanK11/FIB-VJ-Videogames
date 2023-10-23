@@ -12,27 +12,27 @@ void Score::init() {
 }
 
 void Score::update(int deltaTime) {
-
+	time -= (deltaTime/1000.f);
 }
 
 void Score::render() {
 	/* SCORE */
-	text.render("SCORE", glm::vec2(50, 50), 32, glm::vec4(1, 1, 1, 1));
-	//text.render(to_string(score), glm::vec2(10, 32), 32, glm::vec4(1, 1, 1, 1));
+	text.render("SCORE", glm::vec2(32, 32), 20, glm::vec4(1, 1, 1, 1));
+	text.render(to_string(score), glm::vec2(78, 56), 20, glm::vec4(1, 1, 1, 1));
 
 	/* COINS */
-	//text.render("COINS", glm::vec2(10, 32), 32, glm::vec4(1, 1, 1, 1));
-	//text.render(to_string(coins), glm::vec2(10, 32), 32, glm::vec4(1, 1, 1, 1));
+	text.render("COINS", glm::vec2(208, 32), 20, glm::vec4(1, 1, 1, 1));
+	text.render(to_string(coins), glm::vec2(256, 56), 22, glm::vec4(1, 1, 1, 1));
 
 	/* WORLD */
-	//text.render("WORLD", glm::vec2(10, 32), 32, glm::vec4(1, 1, 1, 1));
-	//text.render(to_string(world.first) + "-" + to_string(world.second), glm::vec2(10, 32), 32, glm::vec4(1, 1, 1, 1));
+	text.render("WORLD", glm::vec2(384, 32), 20, glm::vec4(1, 1, 1, 1));
+	text.render(to_string(world.first) + "-" + to_string(world.second), glm::vec2(408, 56), 20, glm::vec4(1, 1, 1, 1));
 
 	/* TIME */
-	//text.render("TIME", glm::vec2(10, 32), 32, glm::vec4(1, 1, 1, 1));
-	//text.render(to_string(time), glm::vec2(10, 32), 32, glm::vec4(1, 1, 1, 1));
+	text.render("TIME", glm::vec2(560, 32), 20, glm::vec4(1, 1, 1, 1));
+	text.render(to_string(int(time)), glm::vec2(572, 56), 20, glm::vec4(1, 1, 1, 1));
 
 	/* LIVES */
-	//text.render("LIVES", glm::vec2(10, 32), 32, glm::vec4(1, 1, 1, 1));
-	//text.render(to_string(lives), glm::vec2(10, 32), 32, glm::vec4(1, 1, 1, 1));
+	text.render("LIVES", glm::vec2(704, 32), 20, glm::vec4(1, 1, 1, 1));
+	text.render(to_string(lives), glm::vec2(736, 56), 20, glm::vec4(1, 1, 1, 1));
 }

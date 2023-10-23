@@ -188,8 +188,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	x1 = (pos.x + size.x - 1) / blockSize;
 	y = (pos.y + size.y - 1) / blockSize;
 	for(int x=x0; x<=x1; x++) {
-		if(map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable())
-		{
+		if(map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
 			if(*posY - blockSize * y + size.y <= 4)
 			{
 				*posY = blockSize * y - size.y;

@@ -327,6 +327,8 @@ void Player::update(int deltaTime, float xmin, float& max) {
 	superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
 	//te he comentado abajo porque sino te explota el programa
 	//starSprite-> setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
+
+	cout << Vx << endl;
 }
 
 void Player::render() {

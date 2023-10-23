@@ -52,6 +52,7 @@ void Scene::update(int deltaTime) {
 	currentTime += deltaTime;
 	float actualMid = projection.getXmid();
 	player->update(deltaTime, projection.getXmin(), actualMid);
+	score->update(deltaTime);
 	if (actualMid != projection.getXmid()) {
 		projection.setMidXPosition(actualMid);
 	}
