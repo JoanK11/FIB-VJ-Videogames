@@ -179,7 +179,7 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		bool colision = false;
 		if (!bJumping && !bFalling && Vx > 0) {
 			activeSprite->changeAnimation(CHANGE_RIGHT);
-			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) {
+			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) {
 				Vx = 0;
 				activeSprite->changeAnimation(STAND_RIGHT);
 				colision = true;
@@ -194,7 +194,7 @@ void Player::update(int deltaTime, float xmin, float& max) {
 			else if (Vx > -3) Vx -= 0.2;
 		}
 		
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) {
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) {
 			Vx = 0;
 			activeSprite->changeAnimation(STAND_LEFT);
 		}
@@ -215,7 +215,7 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		bool colision = false;
 		if (!bJumping && !bFalling && Vx < 0) {
 			activeSprite->changeAnimation(CHANGE_LEFT);
-			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) {
+			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) {
 				Vx = 0;
 				activeSprite->changeAnimation(STAND_LEFT);
 				colision = true;
@@ -230,7 +230,7 @@ void Player::update(int deltaTime, float xmin, float& max) {
 			else if (Vx < 3) Vx += 0.2;
 		}
 		
-		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) {
+		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) {
 			Vx = 0;
 			activeSprite->changeAnimation(STAND_RIGHT);
 		}
@@ -259,8 +259,8 @@ void Player::update(int deltaTime, float xmin, float& max) {
 				activeSprite->changeAnimation(STAND_RIGHT);
 		}
 
-		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) Vx = 0;
-		else if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) Vx = 0;
+		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) Vx = 0;
+		else if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) Vx = 0;
 		/*
 		if (activeSprite->animation() == MOVE_LEFT)
 			activeSprite->changeAnimation(STAND_LEFT);
@@ -280,8 +280,11 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		}
 		else {
 			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-			//if (jumpAngle > 90)
+			if (jumpAngle > 90)
 				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+			else {
+				bJumping = !map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+			}
 		}
 
 		if (activeSprite->animation() == MOVE_LEFT || activeSprite->animation() == STAND_LEFT)

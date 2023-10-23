@@ -148,7 +148,7 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 // Method collisionMoveDown also corrects Y coordinate if the box is
 // already intersecting a tile below.
 
-bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const
+bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, int* posX) const
 {
 	int x, y0, y1;
 	
@@ -157,24 +157,35 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 	y1 = (pos.y + size.y - 1) / blockSize;
 	for(int y=y0; y<=y1; y++)
 	{
-		if(map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable())
-			return true;
+		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
+			if (*posX - blockSize * (x+1)  <= 0)
+			{
+				*posX = blockSize * (x + 1);
+				return true;
+			}
+		}
 	}
 	
 	return false;
 }
 
-bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const
+bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, int* posX) const
 {
 	int x, y0, y1;
 	
-	x = (pos.x + size.x - 1) / blockSize;
+	x = (pos.x + size.x) / blockSize;
 	y0 = pos.y / blockSize;
 	y1 = (pos.y + size.y - 1) / blockSize;
 	for(int y=y0; y<=y1; y++)
 	{
-		if(map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable())
-			return true;
+		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
+			if (*posX - blockSize * x + size.x <= 1)
+			{
+				*posX = blockSize * x - size.x;
+				return true;
+			}
+		}
+			
 	}
 	
 	return false;
@@ -213,9 +224,9 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 	{
 		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable())
 		{
-			if (*posY - blockSize * y + size.y <= 0)
+			if (*posY - blockSize * (y+1) <= 4)
 			{
-				*posY = blockSize * y - size.y;
+				*posY = blockSize * (y + 1);
 				return true;
 			}
 		}
