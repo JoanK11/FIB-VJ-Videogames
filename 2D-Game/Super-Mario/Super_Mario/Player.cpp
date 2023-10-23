@@ -200,11 +200,6 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		}
 		else if (!colision) {
 			posPlayer.x += Vx;
-			if (posPlayer.x < xmin) {
-				posPlayer.x = xmin;
-				Vx = 0;
-			}
-			
 		} 
 	}
 
@@ -236,9 +231,6 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		}
 		else if (!colision) {
 			posPlayer.x += Vx;
-			if (posPlayer.x + tileMapDispl.x > max) {
-				max = posPlayer.x + tileMapDispl.x;
-			}
 		} 
 	}
 
@@ -280,8 +272,10 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		}
 		else {
 			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-			if (jumpAngle > 90)
+			if (jumpAngle > 90) { // is falling down
 				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+				//if (!bJumping) posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
+			}
 		}
 
 		if (activeSprite->animation() == MOVE_LEFT || activeSprite->animation() == STAND_LEFT)
@@ -318,6 +312,14 @@ void Player::update(int deltaTime, float xmin, float& max) {
 			else if (activeSprite->animation() == MOVE_RIGHT || activeSprite->animation() == STAND_RIGHT)
 				activeSprite->changeAnimation(JUMP_RIGHT);
 		}
+	}
+
+	if (posPlayer.x + 32 + tileMapDispl.x > max) {
+		max = posPlayer.x + 32 + tileMapDispl.x;
+	}
+	else if (posPlayer.x < xmin && !keyRight) {
+		posPlayer.x = xmin;
+		Vx = 0;
 	}
 
 	/* --- Sprite Update --- */

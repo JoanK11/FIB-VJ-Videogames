@@ -7,19 +7,20 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "Projection.h"
+#include "Score.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
 
 
-class Scene
-{
+class Scene {
 
 public:
 	Scene();
 	~Scene();
 
 	void init();
+	void change();
 	void update(int deltaTime);
 	void render();
 
@@ -32,7 +33,7 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	Projection projection;
-
+	Score *score;
 };
 
 
