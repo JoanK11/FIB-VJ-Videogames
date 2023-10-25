@@ -51,7 +51,17 @@
     <ClInclude Include="Projection.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Object.h">
+=======
+    <ClInclude Include="Score.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturedQuad.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+>>>>>>> 5684f19678a8e3e59cbeb9f92c78ccc4b3e317a9
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,7 +102,17 @@
     <ClCompile Include="Projection.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Object.cpp">
+=======
+    <ClCompile Include="Score.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturedQuad.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+>>>>>>> 5684f19678a8e3e59cbeb9f92c78ccc4b3e317a9
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>

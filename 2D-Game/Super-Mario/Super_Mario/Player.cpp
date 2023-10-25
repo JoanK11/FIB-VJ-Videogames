@@ -179,7 +179,7 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		bool colision = false;
 		if (!bJumping && !bFalling && Vx > 0) {
 			activeSprite->changeAnimation(CHANGE_RIGHT);
-			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) {
+			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) {
 				Vx = 0;
 				activeSprite->changeAnimation(STAND_RIGHT);
 				colision = true;
@@ -194,17 +194,12 @@ void Player::update(int deltaTime, float xmin, float& max) {
 			else if (Vx > -3) Vx -= 0.2;
 		}
 		
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) {
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32),&posPlayer.x)) {
 			Vx = 0;
 			activeSprite->changeAnimation(STAND_LEFT);
 		}
 		else if (!colision) {
 			posPlayer.x += Vx;
-			if (posPlayer.x < xmin) {
-				posPlayer.x = xmin;
-				Vx = 0;
-			}
-			
 		} 
 	}
 
@@ -215,7 +210,7 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		bool colision = false;
 		if (!bJumping && !bFalling && Vx < 0) {
 			activeSprite->changeAnimation(CHANGE_LEFT);
-			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) {
+			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) {
 				Vx = 0;
 				activeSprite->changeAnimation(STAND_LEFT);
 				colision = true;
@@ -230,15 +225,12 @@ void Player::update(int deltaTime, float xmin, float& max) {
 			else if (Vx < 3) Vx += 0.2;
 		}
 		
-		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) {
+		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) {
 			Vx = 0;
 			activeSprite->changeAnimation(STAND_RIGHT);
 		}
 		else if (!colision) {
 			posPlayer.x += Vx;
-			if (posPlayer.x + tileMapDispl.x > max) {
-				max = posPlayer.x + tileMapDispl.x;
-			}
 		} 
 	}
 
@@ -259,8 +251,8 @@ void Player::update(int deltaTime, float xmin, float& max) {
 				activeSprite->changeAnimation(STAND_RIGHT);
 		}
 
-		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) Vx = 0;
-		else if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) Vx = 0;
+		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) Vx = 0;
+		else if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) Vx = 0;
 		/*
 		if (activeSprite->animation() == MOVE_LEFT)
 			activeSprite->changeAnimation(STAND_LEFT);
@@ -280,8 +272,13 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		}
 		else {
 			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-			//if (jumpAngle > 90)
+
+			if (jumpAngle > 90) { // is falling down
 				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+			
+				//if (!bJumping) posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
+			}
+			else bJumping = !map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
 		}
 
 		if (activeSprite->animation() == MOVE_LEFT || activeSprite->animation() == STAND_LEFT)
@@ -319,12 +316,21 @@ void Player::update(int deltaTime, float xmin, float& max) {
 				activeSprite->changeAnimation(JUMP_RIGHT);
 		}
 	}
-	cout << "Bjumping = " << bJumping << endl;
+
+	if (posPlayer.x + 32 + tileMapDispl.x > max) {
+		max = posPlayer.x + 32 + tileMapDispl.x;
+	}
+	else if (posPlayer.x < xmin && !keyRight) {
+		posPlayer.x = xmin;
+		Vx = 0;
+	}
 	/* --- Sprite Update --- */
 	sprite->     setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y     )));
 	superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
 	//te he comentado abajo porque sino te explota el programa
 	//starSprite-> setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
+
+	//cout << Vx << endl;
 }
 
 void Player::render() {

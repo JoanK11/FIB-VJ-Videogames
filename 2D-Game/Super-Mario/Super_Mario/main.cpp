@@ -79,6 +79,7 @@ static void idleCallback()
 	}
 }
 
+#define GAME_SCALE_FACTOR 1
 
 int main(int argc, char **argv)
 {
@@ -86,7 +87,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(100, 100);
-	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	glutInitWindowSize(SCREEN_WIDTH * GAME_SCALE_FACTOR, SCREEN_HEIGHT * GAME_SCALE_FACTOR);
 
 	glutCreateWindow(argv[0]);
 	glutDisplayFunc(drawCallback);
