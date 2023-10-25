@@ -17,6 +17,12 @@ public:
 	void update(int deltaTime);
 	void render();
 
+	void increaseScore(int x);
+	void increaseCoins(int x);
+	void updateWorld(int x, int y);
+	void decreaseLive();
+	
+
 private:
 	int score;
 	int coins;
@@ -24,7 +30,6 @@ private:
 	double time;
 	int lives;
 	Text text;
-
 };
 
 #endif // _SCORE_INCLUDE

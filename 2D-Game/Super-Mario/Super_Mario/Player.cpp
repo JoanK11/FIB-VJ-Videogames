@@ -170,6 +170,11 @@ void Player::update(int deltaTime, float xmin, float& max) {
 	}
 	if (!keySuperMario) superMarioKey = false;
 
+	/* PHYSICS */
+	glm::ivec2 dimMario = glm::ivec2(32, 32);
+	if (superMario) dimMario = glm::ivec2(32, 64);
+	int currentPosY = posPlayer.y;
+
 	/* MOVEMENT */
 
 	if (keyLeft) {
@@ -179,7 +184,7 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		bool colision = false;
 		if (!bJumping && !bFalling && Vx > 0) {
 			activeSprite->changeAnimation(CHANGE_RIGHT);
-			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) {
+			if (map->collisionMoveRight(posPlayer, dimMario)) {
 				Vx = 0;
 				activeSprite->changeAnimation(STAND_RIGHT);
 				colision = true;
@@ -187,20 +192,24 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		}
 
 		if (keyRun) {
-			if (Vx > -5) Vx -= 0.2;
+			if (Vx > -5.f) Vx -= 0.2f;
 		}
 		else {
-			if (Vx < -3) Vx += 0.2;
-			else if (Vx > -3) Vx -= 0.2;
+			if (Vx < -3.f) Vx += 0.2f;
+			else if (Vx > -3.f) Vx -= 0.2f;
 		}
 		
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) {
+		if (map->collisionMoveLeft(posPlayer, dimMario)) {
 			Vx = 0;
 			activeSprite->changeAnimation(STAND_LEFT);
 		}
 		else if (!colision) {
 			posPlayer.x += Vx;
-		} 
+		}
+
+		// Vx Correction
+		if (Vx < -5) Vx = -5;
+		else if (!keyRun && Vx < -3) Vx = -3;
 	}
 
 	else if (keyRight) {
@@ -210,7 +219,7 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		bool colision = false;
 		if (!bJumping && !bFalling && Vx < 0) {
 			activeSprite->changeAnimation(CHANGE_LEFT);
-			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) {
+			if (map->collisionMoveLeft(posPlayer, dimMario)) {
 				Vx = 0;
 				activeSprite->changeAnimation(STAND_LEFT);
 				colision = true;
@@ -218,29 +227,33 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		}
 
 		if (keyRun) {
-			if (Vx < 5) Vx += 0.2;
+			if (Vx < 5) Vx += 0.2f;
 		}
 		else {
-			if (Vx > 3) Vx -= 0.2;
-			else if (Vx < 3) Vx += 0.2;
+			if (Vx > 3) Vx -= 0.2f;
+			else if (Vx < 3) Vx += 0.2f;
 		}
 		
-		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) {
+		if (map->collisionMoveRight(posPlayer, dimMario)) {
 			Vx = 0;
 			activeSprite->changeAnimation(STAND_RIGHT);
 		}
 		else if (!colision) {
 			posPlayer.x += Vx;
-		} 
+		}
+
+		// Vx Correction
+		if (Vx > 5) Vx = 5;
+		else if (!keyRun && Vx > 3) Vx = 3;
 	}
 
 	else {
-		if (Vx > 0.1) {
-			Vx -= 0.1;
+		if (Vx > 0.1f) {
+			Vx -= 0.1f;
 			posPlayer.x += Vx;
 		}
-		else if (Vx < -0.1) {
-			Vx += 0.1;
+		else if (Vx < -0.1f) {
+			Vx += 0.1f;
 			posPlayer.x += Vx;
 		}
 		else {
@@ -251,13 +264,8 @@ void Player::update(int deltaTime, float xmin, float& max) {
 				activeSprite->changeAnimation(STAND_RIGHT);
 		}
 
-		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) Vx = 0;
-		else if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) Vx = 0;
-		/*
-		if (activeSprite->animation() == MOVE_LEFT)
-			activeSprite->changeAnimation(STAND_LEFT);
-		else if (activeSprite->animation() == MOVE_RIGHT)
-			activeSprite->changeAnimation(STAND_RIGHT);*/
+		if (map->collisionMoveRight(posPlayer, dimMario)) Vx = 0;
+		else if (map->collisionMoveLeft(posPlayer, dimMario)) Vx = 0;
 	}
 	
 	if (keyDown) {
@@ -273,14 +281,16 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		else {
 			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
 			if (jumpAngle > 90) { // is falling down
-				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+				bJumping = !map->collisionMoveDown(posPlayer, dimMario, &posPlayer.y);
 				//if (!bJumping) posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
 			}
 		}
 
-		if (activeSprite->animation() == MOVE_LEFT || activeSprite->animation() == STAND_LEFT)
+		if (activeSprite->animation() == MOVE_LEFT || activeSprite->animation() == STAND_LEFT ||
+		activeSprite->animation() == CHANGE_LEFT)
 			activeSprite->changeAnimation(JUMP_LEFT);
-		else if (activeSprite->animation() == MOVE_RIGHT || activeSprite->animation() == STAND_RIGHT)
+		else if (activeSprite->animation() == MOVE_RIGHT || activeSprite->animation() == STAND_RIGHT ||
+		activeSprite->animation() == CHANGE_RIGHT)
 			activeSprite->changeAnimation(JUMP_RIGHT);
 	}
 	else {
@@ -297,7 +307,7 @@ void Player::update(int deltaTime, float xmin, float& max) {
 			}
 		}
 
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
+		if (map->collisionMoveDown(posPlayer, dimMario, &posPlayer.y)) {
 			bFalling = false;
 			if (keyUp) {
 				bJumping = true;
@@ -322,13 +332,20 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		Vx = 0;
 	}
 
+	/**/
+	if (map->collisionMoveUp(posPlayer, dimMario, &posPlayer.y)) {
+		posPlayer.y = currentPosY;
+		Vy = 0;
+		cout << "COLLISION UP" << endl;
+	}
+	else cout << "." << endl;
+
 	/* --- Sprite Update --- */
 	sprite->     setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y     )));
 	superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
 	//te he comentado abajo porque sino te explota el programa
 	//starSprite-> setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
-
-	cout << Vx << endl;
+	
 }
 
 void Player::render() {
