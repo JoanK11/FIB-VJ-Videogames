@@ -15,7 +15,16 @@ TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoo
 	return map;
 }
 
+void TileMap::update(int dt) {
+	for (int j = 0; j < mapSize.y; j++)
+	{
+		for (int i = 0; i < mapSize.x; i++)
+		{
+			if (map[j * mapSize.x + i] != nullptr)  map[j * mapSize.x + i]->update(dt);
+		}
 
+	}
+}
 TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
 {
 	ifstream fin;
@@ -236,6 +245,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 }
 Tile* TileMap::getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 tileSheetSize,glm::vec2 textureS, Texture* t) {
 	//seleccionamos el tipo de tile
+	if (type == "INT") return new IntBox(tileC, tileS, &s);
 	pair<int,bool> obj = dicc[type];
 	if (obj.first == -1) return nullptr;
 	//calculamos la posicion de la textura

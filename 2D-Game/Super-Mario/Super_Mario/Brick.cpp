@@ -4,6 +4,7 @@ Brick::Brick(glm::vec2 tilePosition, glm::vec2 tileSize, glm::vec2 texturePositi
 	isDestroyed = false;
 	isWall = true;
 }
+Brick::Brick(){}
 Brick::~Brick() {}
 
 void Brick::render(){

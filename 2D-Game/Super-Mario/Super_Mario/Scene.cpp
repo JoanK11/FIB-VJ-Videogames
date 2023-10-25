@@ -52,6 +52,7 @@ void Scene::change() {
 }
 
 void Scene::update(int deltaTime) {
+	map->update(deltaTime);
 	currentTime += deltaTime;
 	float actualMid = camera.getXmid();
 	player->update(deltaTime, camera.getXmin(), actualMid);

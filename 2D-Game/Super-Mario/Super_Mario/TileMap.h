@@ -9,7 +9,7 @@
 #include "Brick.h"
 #include <unordered_map>
 #include <utility>
-
+#include "IntBox.h"
 // Class Tilemap is capable of loading a tile map from a text file in a very
 // simple format (see level01.txt for an example). With this information
 // it builds a single VBO that contains all tiles. As a result the render
@@ -37,7 +37,7 @@ public:
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &, int* posX) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
-	
+	void update(int dt);
 private:
 	bool loadLevel(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
 	Tile* getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 textureC, glm::vec2 textureS, Texture* t);

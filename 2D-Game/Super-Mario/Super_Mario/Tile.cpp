@@ -20,7 +20,7 @@ Tile::Tile(glm::vec2 tilePosition, glm::vec2 tileSize, glm::vec2 texturePosition
 
 	this->text = text;
 }
-
+Tile::Tile(){}
 
 Tile::~Tile() {}
 
@@ -37,3 +37,4 @@ void Tile::render() {
 bool Tile::isTouchable() {
 	return isWall;
 }
+void Tile::update(float dt) {}
