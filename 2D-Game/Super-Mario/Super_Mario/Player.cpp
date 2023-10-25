@@ -35,7 +35,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 
 	spritesheet.loadFromFile("images/spriteMario.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.0625, 0.125), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(9);
+	sprite->setNumberAnimations(11);
 		
 		// ----- IDLE -----
 		sprite->setAnimationSpeed(STAND_RIGHT, 8);
@@ -96,7 +96,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	/* ----------------------- */
 
 	superSprite = Sprite::createSprite(glm::ivec2(32, 64), glm::vec2(0.0625, 0.25), &spritesheet, &shaderProgram);
-	superSprite->setNumberAnimations(11);
+	superSprite->setNumberAnimations(9);
 
 		// ----- IDLE -----
 		superSprite->setAnimationSpeed(STAND_RIGHT, 8);
@@ -154,6 +154,10 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		            Game::instance().getKey('w')                   || Game::instance().getKey('W');
 	bool keyDown  = Game::instance().getSpecialKey(GLUT_KEY_DOWN)  || Game::instance().getKey('s') || Game::instance().getKey('S');
 	bool keyRun = Game::instance().getModifierKey(0);
+
+	//if (keyLeft) cout << "LEFT" << endl;
+	//if (keyRight) cout << "RIGHT" << endl;
+	//if (keyUp) cout << "UP" << endl;
 
 	/* --- Power-Up Keys --- */
 	bool keySuperMario = Game::instance().getKey('m') || Game::instance().getKey('M');
@@ -338,7 +342,7 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		Vy = 0;
 		cout << "COLLISION UP" << endl;
 	}
-	else cout << "." << endl;
+	//else cout << "." << endl;
 
 	/* --- Sprite Update --- */
 	sprite->     setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y     )));

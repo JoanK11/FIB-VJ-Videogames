@@ -9,8 +9,7 @@ ShaderProgram::ShaderProgram()
 }
 
 
-void ShaderProgram::init()
-{
+void ShaderProgram::init() {
 	programId = glCreateProgram();
 }
 

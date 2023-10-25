@@ -56,6 +56,9 @@ void Sprite::render() const {
 	glEnableVertexAttribArray(texCoordLocation);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glDisable(GL_TEXTURE_2D);
+	//shaderProgram->setUniformMatrix4f("modelview", glm::mat4(1.f));
+	//shaderProgram->setUniform2f("texCoordDispl", 0, 0);
+	
 }
 
 void Sprite::free() {

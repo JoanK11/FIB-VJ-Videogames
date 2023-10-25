@@ -35,8 +35,6 @@ private:
 	bool superMario, superMarioKey;
 	bool starMario, starMarioKey;
 	int starMarioTime;
-	
-
 };
 
 

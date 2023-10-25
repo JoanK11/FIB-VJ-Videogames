@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Projection.h"
 #include "Score.h"
+#include "StartMenu.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.

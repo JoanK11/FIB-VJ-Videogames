@@ -7,21 +7,23 @@ void Game::init() {
 	bPlay = true;
 	glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
 	scene.init();
+	startMenu.init();
 }
 
 bool Game::update(int deltaTime) {
 	scene.update(deltaTime);
-	
+	startMenu.update(deltaTime);
 	return bPlay;
 }
 
 void Game::render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	scene.render();
+	startMenu.render();
 }
 
 void Game::keyPressed(int key) {
-	if(key == 27) // Escape code
+	if (key == 27) // Escape code
 		bPlay = false;
 	keys[key] = true;
 
