@@ -158,7 +158,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	for(int y=y0; y<=y1; y++)
 	{
 		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
-			if (*posX - blockSize * (x+1)  <= 0)
+			if (*posX - blockSize * (x+1)  <= 3)
 			{
 				*posX = blockSize * (x + 1);
 				return true;
@@ -179,7 +179,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, 
 	for(int y=y0; y<=y1; y++)
 	{
 		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
-			if (*posX - blockSize * x + size.x <= 1)
+			if (*posX - blockSize * x + size.x <= 3)
 			{
 				*posX = blockSize * x - size.x;
 				return true;
