@@ -8,6 +8,7 @@ private:
 	glm::vec2 pos;
 	glm::vec2 size;
 	glm::mat4 projectionMatrix;
+	glm::vec2 displacement;
 public:
 	Projection();
 	Projection(const glm::vec2& position, const glm::vec2& size);

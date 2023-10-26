@@ -24,9 +24,9 @@ class Tile
 	
 public:
 	Tile(glm::vec2 tilePosition, glm::vec2 tileSize, glm::vec2 texturePosition, glm::vec2 textureSize, ShaderProgram& shader,  Texture* text);
-	
+	Tile();
 	virtual ~Tile();
-
+	virtual void update(float dt);
 	virtual void render();
 	
 	virtual bool isTouchable();
