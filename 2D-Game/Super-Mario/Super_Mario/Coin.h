@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COIN_INCLUDE
+#define COIN_INCLUDE
 #include "Object.h"
 #include "ShaderProgram.h"
 class Coin :
@@ -20,4 +21,4 @@ public:
     virtual void update(float dt);
     virtual void render();
 };
-
+#endif
