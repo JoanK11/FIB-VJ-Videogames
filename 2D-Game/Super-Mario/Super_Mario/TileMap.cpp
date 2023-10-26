@@ -199,19 +199,15 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 	return false;
 }
 
-bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
-{
+bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const {
 	int x0, x1, y;
 
 	x0 = pos.x / blockSize;
 	x1 = (pos.x + size.x - 1) / blockSize;
 	y = (pos.y + size.y - 1) / blockSize;
-	for (int x = x0; x <= x1; x++)
-	{
-		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable())
-		{
-			if (*posY - blockSize * y + size.y <= 4)
-			{
+	for (int x = x0; x <= x1; x++) {
+		if (y >= 0 && map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
+			if (*posY - blockSize * y + size.y <= 4)	{
 				*posY = blockSize * y - size.y;
 				return true;
 			}
@@ -221,19 +217,15 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 	return false;
 }
 
-bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
-{
+bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const {
 	int x0, x1, y;
 
 	x0 = pos.x / blockSize;
 	x1 = (pos.x + size.x - 1) / blockSize;
-	y = (pos.y) / blockSize;
-	for (int x = x0; x <= x1; x++)
-	{
-		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable())
-		{
-			if (*posY - blockSize * (y + 1) <= 4)
-			{
+	y  = pos.y / blockSize;
+	for (int x = x0; x <= x1; x++) {
+		if (y >= 0 && map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
+			if (*posY - blockSize * (y + 1) <= 4) {
 				*posY = blockSize * (y + 1);
 				return true;
 			}
@@ -242,6 +234,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 
 	return false;
 }
+
 Tile* TileMap::getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 tileSheetSize,glm::vec2 textureS, Texture* t) {
 	//seleccionamos el tipo de tile
 	if (type == "INT") return new IntBox(tileC, tileS, &s);

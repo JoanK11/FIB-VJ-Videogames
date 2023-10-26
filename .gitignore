@@ -11,3 +11,14 @@
 *.suo
 *.db
 *.lock
+*.pdb
+*.idb
+*.obj
+*.tlog
+*.ilk
+*.enc
+*.db-wal
+*.db-shm
+*.opendb
+*.exe
+*.pdb

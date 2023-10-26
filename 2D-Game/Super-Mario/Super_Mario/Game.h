@@ -3,26 +3,24 @@
 
 
 #include "Scene.h"
+#include "StartMenu.h"
 
-// la resolución original era 256*240. En nuestro caso debería ser mínimo el doble en cada lugar
-#define SCREEN_WIDTH 832
+// la resolución original era 256*240 (512x480). En nuestro caso debería ser mínimo el doble en cada lugar
+#define SCREEN_WIDTH  832
 #define SCREEN_HEIGHT 480
 
 
 // Game is a singleton (a class with a single instance) that represents our whole application
 
 
-class Game
-{
+class Game {
 
 private:
 	Game() {}
 	
 public:
-	static Game &instance()
-	{
+	static Game &instance()	{
 		static Game G;
-	
 		return G;
 	}
 	
@@ -48,7 +46,7 @@ private:
 	Scene scene;                      // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that we can have access at any time
 	bool modifierKeys[3]; // 0 = shift, 1 = ctrl, 2 = alt
-
+	StartMenu startMenu;
 };
 
 

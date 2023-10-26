@@ -21,12 +21,14 @@ Scene::Scene() {
 }
 
 Scene::~Scene() {
-	if (map != NULL)
-		delete map;
-	if (player != NULL)
-		delete player;
+	if (map != NULL) delete map;
+	if (player != NULL) delete player;
+	if (score != NULL) delete score;
 }
 
+glm::ivec2 Scene::getTilePos() {
+	return glm::ivec2(SCREEN_X, SCREEN_Y);
+}
 
 void Scene::init() {
 	initShaders();
@@ -37,7 +39,7 @@ void Scene::init() {
 	player->setTileMap(map);
 	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1)));
 	currentTime = 0.0f;
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+	//JOAN projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	score = new Score();
 	score->init();
 }
@@ -51,7 +53,8 @@ void Scene::change() {
 
 }
 
-void Scene::update(int deltaTime) {
+void Scene::update(int deltaTime, bool inMenu) {
+	if (inMenu) return;
 	map->update(deltaTime);
 	currentTime += deltaTime;
 	float actualMid = camera.getXmid();
@@ -80,14 +83,12 @@ void Scene::initShaders() {
 	Shader vShader, fShader;
 
 	vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
-	if(!vShader.isCompiled())
-	{
+	if (!vShader.isCompiled()) {
 		cout << "Vertex Shader Error" << endl;
 		cout << "" << vShader.log() << endl << endl;
 	}
 	fShader.initFromFile(FRAGMENT_SHADER, "shaders/texture.frag");
-	if(!fShader.isCompiled())
-	{
+	if (!fShader.isCompiled()) {
 		cout << "Fragment Shader Error" << endl;
 		cout << "" << fShader.log() << endl << endl;
 	}

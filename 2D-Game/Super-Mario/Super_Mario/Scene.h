@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Projection.h"
 #include "Score.h"
+#include "StartMenu.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -21,8 +22,10 @@ public:
 
 	void init();
 	void change();
-	void update(int deltaTime);
+	void update(int deltaTime, bool inMenu);
 	void render();
+
+	glm::ivec2 getTilePos();
 
 private:
 	void initShaders();
