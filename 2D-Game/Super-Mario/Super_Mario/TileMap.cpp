@@ -50,17 +50,12 @@ TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProg
 	loadLevel(levelFile, minCoords,program);
 }
 
-TileMap::~TileMap()
-{
-	if(map != NULL)
-		delete map;
+TileMap::~TileMap() {
+	if (map != NULL) delete map;
 }
 
 
-void TileMap::render(glm::vec2 pos, glm::vec2 size) const
-{
-	//aplicamos el desplazamiento a la camara
-	//hablarlo con joan
+void TileMap::render(glm::vec2 pos, glm::vec2 size) const {
 	glm::vec2 posOriginal = (pos-position) / float(blockSize);
 	glm::vec2 posFinal = posOriginal + size / float(blockSize);
 
@@ -72,13 +67,11 @@ void TileMap::render(glm::vec2 pos, glm::vec2 size) const
 	}
 }
 
-void TileMap::free()
-{
+void TileMap::free() {
 	
 }
 
-bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, ShaderProgram& program)
-{
+bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, ShaderProgram& program) {
 	ifstream fin;
 	string line, tilesheetFile;
 	stringstream sstream;
@@ -156,8 +149,8 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 // Method collisionMoveDown also corrects Y coordinate if the box is
 // already intersecting a tile below.
 
-bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const
-{
+bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const {
+	if (!isInside(pos, size)) return false;
 	int x, y0, y1;
 
 	x = pos.x / blockSize;
@@ -165,7 +158,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 	y1 = (pos.y + size.y - 1) / blockSize;
 	for (int y = y0; y <= y1; y++)
 	{
-		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
+		if (pos.y < 448 && map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * (x + 1) <= 3)
 			{
 				*posX = blockSize * (x + 1);
@@ -177,8 +170,8 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 	return false;
 }
 
-bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const
-{
+bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const {
+	if (!isInside(pos, size)) return false;
 	int x, y0, y1;
 
 	x = (pos.x + size.x) / blockSize;
@@ -186,7 +179,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 	y1 = (pos.y + size.y - 1) / blockSize;
 	for (int y = y0; y <= y1; y++)
 	{
-		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
+		if (pos.y < 448 && map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * x + size.x <= 3)
 			{
 				*posX = blockSize * x - size.x;
@@ -200,13 +193,14 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 }
 
 bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const {
+	if (!isInside(pos, size)) return false;
 	int x0, x1, y;
 
 	x0 = pos.x / blockSize;
 	x1 = (pos.x + size.x - 1) / blockSize;
 	y = (pos.y + size.y - 1) / blockSize;
 	for (int x = x0; x <= x1; x++) {
-		if (y >= 0 && map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
+		if (pos.y < 448 && map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
 			if (*posY - blockSize * y + size.y <= 4)	{
 				*posY = blockSize * y - size.y;
 				return true;
@@ -218,6 +212,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 }
 
 bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const {
+	if (!isInside(pos, size)) return false;
 	int x0, x1, y;
 
 	x0 = pos.x / blockSize;
@@ -244,4 +239,16 @@ Tile* TileMap::getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2
 	glm::vec2 texturePos = glm::vec2(float(obj.first % tilesheetSize.x) / tilesheetSize.x, float(obj.first / tilesheetSize.x) / tilesheetSize.y);
 	if(obj.second) return new Brick(tileC, tileS, texturePos, textureS, s, t);
 	else return new Tile(tileC, tileS, texturePos, textureS, s, t);
+}
+
+bool TileMap::isInside(const glm::ivec2& pos, const glm::ivec2& size) const {
+	int xmin = pos.x;
+	int xmax = pos.x + size.x;
+	int ymin = pos.y;
+	int ymax = pos.y + size.y;
+
+	bool x = xmin >= 0 && xmax < (mapSize.x)* blockSize;
+	bool y = ymin >= 0 && ymax < (mapSize.y)* blockSize;
+	return x && y;
+
 }

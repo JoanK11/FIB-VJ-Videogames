@@ -26,10 +26,6 @@ Scene::~Scene() {
 	if (score != NULL) delete score;
 }
 
-glm::ivec2 Scene::getTilePos() {
-	return glm::ivec2(SCREEN_X, SCREEN_Y);
-}
-
 void Scene::init() {
 	initShaders();
 	map = TileMap::createTileMap("levels/prueba.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -39,9 +35,15 @@ void Scene::init() {
 	player->setTileMap(map);
 	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1)));
 	currentTime = 0.0f;
-	//JOAN projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	score = new Score();
 	score->init();
+}
+
+void Scene::restart() {
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	currentTime = 0.0f;
 }
 
 void Scene::change() {

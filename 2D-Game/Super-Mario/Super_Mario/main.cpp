@@ -69,10 +69,9 @@ static void idleCallback()
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 	int deltaTime = currentTime - prevTime;
 	
-	if(deltaTime > TIME_PER_FRAME)
-	{
+	if (deltaTime > TIME_PER_FRAME)	{
 		// Every time we enter here is equivalent to a game loop execution
-		if(!Game::instance().update(deltaTime))
+		if (!Game::instance().update(deltaTime))
 			exit(0);
 		prevTime = currentTime;
 		glutPostRedisplay();

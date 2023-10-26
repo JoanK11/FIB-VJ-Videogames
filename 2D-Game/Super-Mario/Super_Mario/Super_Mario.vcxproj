@@ -37,7 +37,6 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="IntBox.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="StartMenu.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />

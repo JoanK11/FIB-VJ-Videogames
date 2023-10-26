@@ -7,8 +7,7 @@ void Game::init() {
 	bPlay = true;
 	glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
 	scene.init();
-	glm::ivec2 tileMapPos = scene.getTilePos();
-	startMenu.init(tileMapPos);
+	startMenu.init();
 }
 
 bool Game::update(int deltaTime) {
@@ -27,8 +26,8 @@ void Game::render() {
 }
 
 void Game::keyPressed(int key) {
-	if (key == 27) // Escape code
-		bPlay = false;
+	//if (key == 27) // Escape code
+	//	bPlay = false;
 	keys[key] = true;
 
 	int modifiers = glutGetModifiers();
