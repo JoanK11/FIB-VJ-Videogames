@@ -7,25 +7,26 @@ enum PlayerAnims {
 	MUSHROOM
 };
 
-void StartMenu::init() {
+void StartMenu::init(const glm::ivec2& tileMapPos) {
 	initShaders();
 
 	visible = true;
-	pos = 0, posPlayer = glm::ivec2(0, 0);
+	pos = 0, posPlayer = glm::ivec2(240, 260);
 	keyUpPressed = false, keyDownPressed = false;
 	keyEnterPressed = false;
 
 	spritesheet.loadFromFile("images/spriteMario.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(2, 2), glm::vec2(0.0625, 0.125), &spritesheet, &texProgram);
+	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.0625f, 0.25f), &spritesheet, &texProgram);
 	sprite->setNumberAnimations(1);
 
 	// ----- IDLE -----
-	sprite->setAnimationSpeed(MUSHROOM, 8);
-	sprite->addKeyframe(MUSHROOM, glm::vec2(0.f, 0.f));
+	sprite->setAnimationSpeed(MUSHROOM, 1);
+	sprite->addKeyframe(MUSHROOM, glm::vec2(0.f, 0.25f));
 
 	sprite->changeAnimation(0);
-	sprite->setPosition(glm::vec2(float(100), float(100)));
-
+	tileMapDispl = tileMapPos;
+	//sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	sprite->setPosition(glm::vec2(10, 10));
 	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
 		cout << "Could not load font!!!" << endl;
 	}
@@ -45,45 +46,48 @@ void StartMenu::update(int deltaTime) {
 
 	if (!keyUpPressed && keyUp) {
 		keyUpPressed = true;
-		if (pos == 0) pos = 1;
+		if (pos == 0) pos = 2;
 		else --pos;
 	}
 	if (!keyDownPressed && keyDown) {
 		keyDownPressed = true;
-		pos = (pos + 1) % 2;
+		pos = (pos + 1) % 3;
 	}
 
 	if (!keyEnterPressed && keyEnter) {
 		keyEnterPressed = true;
-		if (pos == 0) {
+		//if (pos == 0) {
 			visible = !visible;
-		}
+		//}
 	}
 
 	if (!keyUp) keyUpPressed = false;
 	if (!keyDown) keyDownPressed = false;
 	if (!keyEnter) keyEnterPressed = false;
 
-	//posPlayer.y = 10 + 16 * pos;
-	sprite->setPosition(glm::vec2(float(150), float(150)));
-	
-	
+	posPlayer.y = 260 + 48 * pos;
+	sprite->setPosition(posPlayer);
 }
 
 void StartMenu::render() {
-	sprite->setPosition(glm::vec2(float(1000), float(1000)));
-	
 	if (visible) {
-		text.render("START GAME", glm::vec2(288, 288), 18, glm::vec4(1, 1, 1, 1));
-		text.render("INSTRUCTIONS", glm::vec2(288, 366), 18, glm::vec4(1, 1, 1, 1));
-		text.render("CREDITS", glm::vec2(288, 400), 18, glm::vec4(1, 1, 1, 1));
-		sprite->render();
+		text.Text::render("START GAME", glm::vec2(288, 288), 18, glm::vec4(1, 1, 1, 1));
+		text.render("INSTRUCTIONS", glm::vec2(288, 336), 18, glm::vec4(1, 1, 1, 1));
+		text.render("CREDITS", glm::vec2(288, 384), 18, glm::vec4(1, 1, 1, 1));
+		texProgram.use();
+		texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+		glm::mat4 modelview = glm::mat4(1.0f);
+		texProgram.setUniformMatrix4f("modelview", modelview);
+		texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+		glm::mat4 projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+		texProgram.setUniformMatrix4f("projection", projection);
+		sprite->Sprite::render();
 	}
 }
 
 void StartMenu::setPosition(const glm::vec2& pos) {
 	posPlayer = pos;
-	sprite->setPosition(glm::vec2(float(100), float(100)));
+	sprite->setPosition(glm::vec2(float(-20.f), float(0)));
 }
 
 void StartMenu::initShaders() {

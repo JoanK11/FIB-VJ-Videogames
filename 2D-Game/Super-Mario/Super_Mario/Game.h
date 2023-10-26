@@ -3,8 +3,9 @@
 
 
 #include "Scene.h"
+#include "StartMenu.h"
 
-// la resolución original era 256*240. En nuestro caso debería ser mínimo el doble en cada lugar
+// la resolución original era 256*240 (512x480). En nuestro caso debería ser mínimo el doble en cada lugar
 #define SCREEN_WIDTH  832
 #define SCREEN_HEIGHT 480
 

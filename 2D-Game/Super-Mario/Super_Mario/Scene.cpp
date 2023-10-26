@@ -25,6 +25,9 @@ Scene::~Scene() {
 	if (score != NULL) delete score;
 }
 
+glm::ivec2 Scene::getTilePos() {
+	return glm::ivec2(SCREEN_X, SCREEN_Y);
+}
 
 void Scene::init() {
 	initShaders();
@@ -48,7 +51,8 @@ void Scene::change() {
 	currentTime = 0.0f;
 }
 
-void Scene::update(int deltaTime) {
+void Scene::update(int deltaTime, bool inMenu) {
+	if (inMenu) return;
 	currentTime += deltaTime;
 	float actualMid = projection.getXmid();
 	player->update(deltaTime, projection.getXmin(), actualMid);

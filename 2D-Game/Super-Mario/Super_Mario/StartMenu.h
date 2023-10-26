@@ -9,13 +9,12 @@
 class StartMenu {
 
 public:
-	void init();
+	void init(const glm::ivec2& tileMapPos);
 	void update(int deltaTime);
 	void render();
 	void setPosition(const glm::vec2& pos);
 
 	void initShaders();
-
 	bool showingMenu() const;
 
 private:

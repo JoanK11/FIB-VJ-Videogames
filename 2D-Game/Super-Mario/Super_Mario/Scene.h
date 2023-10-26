@@ -22,8 +22,10 @@ public:
 
 	void init();
 	void change();
-	void update(int deltaTime);
+	void update(int deltaTime, bool inMenu);
 	void render();
+
+	glm::ivec2 getTilePos();
 
 private:
 	void initShaders();
