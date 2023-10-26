@@ -13,18 +13,24 @@ using namespace std;
 class Score {
 
 public:
+
+	/* OpenGL */
 	void init();
 	void update(int deltaTime);
 	void render();
 
+	/* Score */
 	void increaseScore(int x);
-	void increaseCoins(int x);
+	void increaseCoins();
+	void restart();
+	
+	
 	void updateWorld(int x, int y);
 	void decreaseLive();
 	
 
 private:
-	int score;
+	int score, lastScore;
 	int coins;
 	pair<int, int> world;
 	double time;

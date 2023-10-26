@@ -22,3 +22,9 @@
 *.opendb
 *.exe
 *.pdb
+*.exe
+*.pdb
+*.recipe
+*.log
+*.pdb
+2D-Game/Super-Mario/Debug/Super_Mario.pdb

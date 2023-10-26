@@ -9,25 +9,28 @@
 class StartMenu {
 
 public:
-	void init(const glm::ivec2& tileMapPos);
+	void init();
 	void update(int deltaTime);
 	void render();
-	void setPosition(const glm::vec2& pos);
 
 	void initShaders();
+	void restartShaders();
+	void openMenu();
 	bool showingMenu() const;
 
 private:
 	bool visible;
 	int pos;
-	Texture spritesheet;
-	Sprite *sprite;
-	Text text;
-	glm::ivec2 tileMapDispl, posPlayer;
+	int posYini, espacio;
+	Texture spritesheet, spritesheet2;
+	Sprite *sprite, * spriteWall, *sprite3;
+	Text text, textKeyboard;
+	glm::ivec2 posPlayer;
 	ShaderProgram texProgram;
 
 	bool keyUpPressed, keyDownPressed;
-	bool keyEnterPressed;
+	bool keyEnterPressed, keyEscPressed;
+	int state;
 };
 
 #endif // _STARTMENU_INCLUDE
