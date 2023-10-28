@@ -1,5 +1,5 @@
 #include "Coin.h"
-
+#include "Player.h"
 #define ANIMATION_TIME 3000.f
 
 Coin::Coin(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMapDisplay, TileMap* m, ShaderProgram* p):Object(pos,size,tileMapDisplay,m) {

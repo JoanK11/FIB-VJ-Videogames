@@ -1,4 +1,6 @@
 #include "Object.h"
+#include "TileMap.h"
+#include "Player.h"
 Object::Object(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMapDisplay, TileMap* m) {
 	this->pos = pos;
 	this->size = size;

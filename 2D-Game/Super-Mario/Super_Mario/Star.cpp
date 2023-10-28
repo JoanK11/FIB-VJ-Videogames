@@ -1,5 +1,6 @@
 #include "Star.h"
-
+#include "Player.h"
+#include "TileMap.h"
 #define TIME_ANIMATION 1500
 #define FALL_STEP 4
 #define JUMP_ANGLE_STEP 4

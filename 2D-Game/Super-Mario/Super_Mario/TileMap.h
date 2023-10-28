@@ -12,10 +12,11 @@
 #include <utility>
 #include "IntBox.h"
 #include <vector>
-#include "Coin.h"
-#include "Object.h"
-#include "Mushroom.h"
-#include "Star.h"
+// forward declaration (.h) + circular inclusion (.cpp) for resolve the problem of circular dependency
+class Coin;
+class Object;
+class Star;
+class Mushroom;
 class Player;
 // Class Tilemap is capable of loading a tile map from a text file in a very
 // simple format (see level01.txt for an example). With this information

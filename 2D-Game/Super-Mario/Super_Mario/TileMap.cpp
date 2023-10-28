@@ -2,8 +2,11 @@
 #include <fstream>
 #include <sstream>
 #include "TileMap.h"
-
-
+#include "Coin.h"
+#include "Object.h"
+#include "Mushroom.h"
+#include "Star.h"
+#include "Player.h"
 using namespace std;
 
 

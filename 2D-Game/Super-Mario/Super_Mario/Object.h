@@ -1,5 +1,7 @@
 #ifndef OBJECT_INCLUDE
 #define OBJECT_INCLUDE
+
+// forward declaration (.h) + circular inclusion (.cpp) for resolve the problem of circular dependency
 class Player;
 class TileMap;
 #include <glm/glm.hpp>
@@ -22,7 +24,7 @@ public:
 	virtual void update(float dt) = 0;
 	virtual void render() = 0;
 };
-#include "Player.h"
+
 #endif;
 
 

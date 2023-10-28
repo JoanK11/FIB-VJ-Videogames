@@ -1,7 +1,7 @@
 #ifndef _PLAYER_INCLUDE
 #define _PLAYER_INCLUDE
-
-#include "TileMap.h"
+// forward declaration (.h) + circular inclusion (.cpp) for resolve the problem of circular dependency
+class TileMap;
 #include "Sprite.h"
 
 
