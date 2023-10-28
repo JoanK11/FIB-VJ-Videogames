@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Game.h"
 #include "Goomba.h"
+#include "Koopa.h"
 
 
 #define SCREEN_X 0
@@ -49,19 +50,28 @@ void Scene::init() {
 	posEnemies.push_back(glm::vec2(51, 11)); posEnemies.push_back(glm::vec2(52, 11));
 	posEnemies.push_back(glm::vec2(80,  3)); posEnemies.push_back(glm::vec2(82,  3));
 	posEnemies.push_back(glm::vec2(97, 11)); posEnemies.push_back(glm::vec2(99, 11));
-	// posEnemies.push_back(glm::vec2(107, 11)); // TORTUGA
 	posEnemies.push_back(glm::vec2(114, 11)); posEnemies.push_back(glm::vec2(116, 11));
 	posEnemies.push_back(glm::vec2(124, 11)); posEnemies.push_back(glm::vec2(126, 11));
 	posEnemies.push_back(glm::vec2(129, 11)); posEnemies.push_back(glm::vec2(131, 11));
 	posEnemies.push_back(glm::vec2(174, 11)); posEnemies.push_back(glm::vec2(176, 11));
 
-	/* Enemies */
-	for (int i = 0; i < 6; ++i) {
+	/* Goombas */
+	for (int i = 0; i < 16; ++i) {
 		Goomba* e = new Goomba;
 		e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		e->setPosition(glm::vec2(posEnemies[i].x * map->getTileSize(), posEnemies[i].y * map->getTileSize()));
 		e->setTileMap(map);
 		enemies.push_back(e);
+	}
+
+	posEnemies.push_back(glm::vec2(107, 11)); posEnemies.push_back(glm::vec2(14, 10)); // Koopas
+	/* Koopas */
+	for (int i = 16; i < 18; ++i) {
+		Koopa* k = new Koopa;
+		k->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		k->setPosition(glm::vec2(posEnemies[i].x * map->getTileSize(), posEnemies[i].y * map->getTileSize()));
+		k->setTileMap(map);
+		enemies.push_back(k);
 	}
 
 	pause = true, keyPausePressed = false;
@@ -116,7 +126,7 @@ void Scene::update(int deltaTime, bool inMenu) {
 
 	/* ENEMIES */
 	for (auto *enemy : enemies) {
-		enemy->update(deltaTime, camera.getXmin());
+		enemy->update(deltaTime, camera.getXmin(), actualMid);
 		enemy->collision(player->getPos(), player->getSize());
 	}
 

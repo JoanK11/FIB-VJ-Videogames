@@ -17,6 +17,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Goomba.h" />
+    <ClInclude Include="Koopa.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="StartMenu.h" />
     <ClInclude Include="IntBox.h" />
@@ -41,6 +42,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="IntBox.cpp" />
+    <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StartMenu.cpp" />
