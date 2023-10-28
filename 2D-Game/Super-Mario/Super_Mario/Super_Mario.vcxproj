@@ -14,7 +14,9 @@
     <ClInclude Include="AnimKeyframes.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Coin.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Goomba.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="StartMenu.h" />
     <ClInclude Include="IntBox.h" />
@@ -35,7 +37,9 @@
   <ItemGroup>
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Coin.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="IntBox.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SoundManager.cpp" />

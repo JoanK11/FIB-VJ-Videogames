@@ -5,6 +5,7 @@
 #include "Text.h"
 #include "TileMap.h"
 #include "ShaderProgram.h"
+#include "SoundManager.h"
 
 class StartMenu {
 
@@ -27,6 +28,7 @@ private:
 	Text text, textKeyboard;
 	glm::ivec2 posPlayer;
 	ShaderProgram texProgram;
+	SoundManager sound;
 
 	bool keyUpPressed, keyDownPressed;
 	bool keyEnterPressed, keyEscPressed;

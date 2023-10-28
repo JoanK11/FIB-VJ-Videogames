@@ -393,6 +393,12 @@ void Player::setPosition(const glm::vec2 &pos) {
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
-
+glm::vec2 Player::getPos() const {
+	return posPlayer;
+}
+glm::vec2 Player::getSize() const {
+	if (superMario) return glm::vec2(32, 64);
+	return glm::vec2(32, 32);
+}
 
 

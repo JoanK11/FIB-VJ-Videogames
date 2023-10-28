@@ -9,6 +9,8 @@
 #include "Projection.h"
 #include "Score.h"
 #include "SoundManager.h"
+#include "Enemy.h"
+#include <vector>
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -30,6 +32,7 @@ private:
 
 private:
 	SoundManager sound;
+	vector<Enemy*> enemies;
 
 
 	TileMap *map;
@@ -37,10 +40,11 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	bool pause, keyPausePressed;
+	bool playingMusic;
 
 	Projection camera;
 	glm::mat4 projection;
-	Score *score;
+	//Score *score;
 	
 };
 

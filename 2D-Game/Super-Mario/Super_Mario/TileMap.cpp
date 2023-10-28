@@ -161,7 +161,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 		y1 = y0;
 	}
 
-	cout << "Left - x: " << x << " / y0: " << y0 << " / y1 : " << y1 << endl;
+	//cout << "Left - x: " << x << " / y0: " << y0 << " / y1 : " << y1 << endl;
 	for (int y = y0; y <= y1; y++) {
 		if (pos.y < 448 && map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * (x + 1) <= 3) {
@@ -264,4 +264,8 @@ bool TileMap::isInside(const glm::ivec2& pos, const glm::ivec2& size) const {
 	bool y = ymin >= 0 && ymax < (mapSize.y)* blockSize;
 	return x && y;
 
+}
+
+bool TileMap::getBlockSize() const {
+	return blockSize;
 }

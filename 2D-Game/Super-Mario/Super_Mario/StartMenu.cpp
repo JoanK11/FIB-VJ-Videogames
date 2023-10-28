@@ -88,12 +88,15 @@ void StartMenu::update(int deltaTime) {
 		if (pos == 0) {
 			visible = !visible;
 			state = 0;
+			sound.playSFX("sfx/here_we_go.wav");
 		}
 		else if (pos == 1) {
 			state = 1;
+			sound.playSFX("sfx/its_me_mario.wav");
 		}
 		else if (pos == 2) {
 			state = 2;
+			sound.playSFX("sfx/mamma_mia.wav");
 		}
 		else if (pos == 3) {
 			exit(0);
