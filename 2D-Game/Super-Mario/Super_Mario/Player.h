@@ -1,9 +1,9 @@
 #ifndef _PLAYER_INCLUDE
 #define _PLAYER_INCLUDE
 
-
-#include "Sprite.h"
 #include "TileMap.h"
+#include "Sprite.h"
+
 
 
 // Player is basically a Sprite that represents the player. As such it has
@@ -19,7 +19,8 @@ public:
 	
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
-	
+	void setSuperMario(bool b);
+	glm::vec2 getPosition();
 private:
 	bool bJumping, bFalling;
 	glm::ivec2 tileMapDispl, posPlayer;

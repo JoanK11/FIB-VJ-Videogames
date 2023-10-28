@@ -15,6 +15,10 @@ TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoo
 }
 
 void TileMap::update(int dt) {
+	int s = items.size();
+	for (int i = 0; i < s; ++i) {
+		items[i]->update(dt);
+	}
 	for (int j = 0; j < mapSize.y; j++)
 	{
 		for (int i = 0; i < mapSize.x; i++)
@@ -25,7 +29,8 @@ void TileMap::update(int dt) {
 	}
 }
 TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
-{
+{	
+	items = vector<Object*>(0, nullptr);
 	ifstream fin;
 	string line;
 	stringstream sstream;
@@ -59,8 +64,8 @@ TileMap::~TileMap()
 
 void TileMap::render(glm::vec2 pos, glm::vec2 size) const
 {
-	//aplicamos el desplazamiento a la camara
-	//hablarlo con joan
+	
+
 	glm::vec2 posOriginal = (pos-position) / float(blockSize);
 	glm::vec2 posFinal = posOriginal + size / float(blockSize);
 
@@ -69,6 +74,10 @@ void TileMap::render(glm::vec2 pos, glm::vec2 size) const
 		for (int i = max((int)posOriginal.x, 0); i <= min((int)posFinal.x,mapSize.x-1); i++) {
 			if (map[j * mapSize.x + i] != nullptr)  map[j * mapSize.x + i]->render();
 		}
+	}
+	int s = items.size();
+	for (int i = 0; i < s; ++i) {
+		items[i]->render();
 	}
 }
 
@@ -145,8 +154,11 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 		fin.get(tile);
 #endif
 	}
+	Object* p = new Mushroom(glm::vec2{ 8 * 32,12 * 32 }, glm::vec2{ 32,32 }, minCoords, this, &program, 2.0);
+	//Object* p = new Coin(glm::vec2{ 8 * 32,11 * 32 },  glm::vec2{ 32,32 }, minCoords, this, &program);
+	items.push_back(p);
 	fin.close();
-	
+
 	return true;
 }
 
@@ -158,6 +170,7 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 
 bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const
 {
+	if (!isInside(pos, size)) return false;
 	int x, y0, y1;
 
 	x = pos.x / blockSize;
@@ -179,6 +192,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 
 bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const
 {
+	if (!isInside(pos, size)) return false;
 	int x, y0, y1;
 
 	x = (pos.x + size.x) / blockSize;
@@ -201,6 +215,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 
 bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
 {
+	if (!isInside(pos, size)) return false;
 	int x0, x1, y;
 
 	x0 = pos.x / blockSize;
@@ -223,6 +238,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 
 bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
 {
+	if (!isInside(pos, size)) return false;
 	int x0, x1, y;
 
 	x0 = pos.x / blockSize;
@@ -251,4 +267,24 @@ Tile* TileMap::getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2
 	glm::vec2 texturePos = glm::vec2(float(obj.first % tilesheetSize.x) / tilesheetSize.x, float(obj.first / tilesheetSize.x) / tilesheetSize.y);
 	if(obj.second) return new Brick(tileC, tileS, texturePos, textureS, s, t);
 	else return new Tile(tileC, tileS, texturePos, textureS, s, t);
+}
+
+void TileMap::collisionWithItems(Player* ply) {
+	int s = items.size();
+	for (int i = 0; i < s; ++i) {
+		glm::vec2 size = { 32.,32. };
+		if (items[i]->collide(ply->getPosition(), size)) items[i]->actionOfObject(ply);
+	}
+}
+
+bool TileMap::isInside(const glm::ivec2& pos, const glm::ivec2& size) const{
+	int xmin = pos.x;
+	int xmax = pos.x + size.x;
+	int ymin = pos.y;
+	int ymax = pos.y + size.y;
+
+	bool x = xmin >= 0 && xmax < (mapSize.x) * blockSize;
+	bool y = ymin >= 0 && ymax < (mapSize.y) * blockSize;
+	return x && y;
+
 }

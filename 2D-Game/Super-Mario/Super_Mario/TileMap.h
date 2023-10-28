@@ -2,7 +2,6 @@
 #define _TILE_MAP_INCLUDE
 
 
-class Object;
 
 #include <glm/glm.hpp>
 #include "Texture.h"
@@ -13,6 +12,10 @@ class Object;
 #include <utility>
 #include "IntBox.h"
 #include <vector>
+#include "Coin.h"
+#include "Object.h"
+#include "Mushroom.h"
+class Player;
 // Class Tilemap is capable of loading a tile map from a text file in a very
 // simple format (see level01.txt for an example). With this information
 // it builds a single VBO that contains all tiles. As a result the render
@@ -41,6 +44,8 @@ public:
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
 	void update(int dt);
+	void collisionWithItems(Player *ply);
+	bool isInside(const glm::ivec2& pos, const glm::ivec2& size) const;
 private:
 	bool loadLevel(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
 	Tile* getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 textureC, glm::vec2 textureS, Texture* t);
@@ -57,7 +62,8 @@ private:
 	std::vector<Object *> items;
 };
 
-#include "Object.h"
+
+
 #endif // _TILE_MAP_INCLUDE
 
 

@@ -2,6 +2,7 @@
 #define COIN_INCLUDE
 #include "Object.h"
 #include "ShaderProgram.h"
+
 class Coin :
     public Object
 {

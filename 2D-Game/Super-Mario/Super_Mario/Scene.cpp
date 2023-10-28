@@ -53,6 +53,7 @@ void Scene::change() {
 
 void Scene::update(int deltaTime) {
 	map->update(deltaTime);
+	map->collisionWithItems(player);
 	currentTime += deltaTime;
 	float actualMid = camera.getXmid();
 	player->update(deltaTime, camera.getXmin(), actualMid);
@@ -63,7 +64,6 @@ void Scene::update(int deltaTime) {
 
 void Scene::render() {
 	glm::mat4 modelview;
-
 	texProgram.use();
 	camera.bindProjection(texProgram);
 	texProgram.setUniformMatrix4f("projection", projection);
@@ -71,6 +71,7 @@ void Scene::render() {
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+	texProgram.setUniform1f("min_height", 100000.f);
 	map->render(camera.getPosition(), camera.getSize());
 	player->render();
 	score->render();

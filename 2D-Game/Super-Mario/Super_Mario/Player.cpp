@@ -16,7 +16,9 @@ enum PlayerAnims {
 	JUMP_LEFT, CHANGE_RIGHT, CHANGE_LEFT, DOWN_SUPER_RIGHT, DOWN_SUPER_LEFT, DEAD
 };
 
-
+glm::vec2 Player::getPosition() {
+	return posPlayer;
+}
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	bJumping = false, bFalling  = false;
 	lastLeft = false, lastRight = false;
@@ -347,6 +349,8 @@ void Player::setPosition(const glm::vec2 &pos) {
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
-
+void Player::setSuperMario(bool b) {
+	superMario = b;
+}
 
 

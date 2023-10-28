@@ -4,7 +4,7 @@ Object::Object(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& til
 	this->size = size;
 	this->tileMapDisplay = tileMapDisplay;
 	map = m;
-	isUsed = false;
+
 }
 
 bool Object::collide(const glm::vec2& plyPos, const glm::vec2& plySize) {
