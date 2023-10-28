@@ -21,6 +21,9 @@
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Goomba.cpp" />
+    <ClCompile Include="Koopa.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
@@ -43,5 +46,8 @@
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Goomba.h" />
+    <ClInclude Include="Koopa.h" />
   </ItemGroup>
 </Project>

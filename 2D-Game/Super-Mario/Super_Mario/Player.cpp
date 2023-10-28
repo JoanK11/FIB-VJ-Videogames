@@ -142,7 +142,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
-void Player::update(int deltaTime, float xmin, float& max) {
+void Player::update(int deltaTime, float xmin, float& xmax) {
 	/* DEAD DETECT */
 	if (posPlayer.y >= 448) {
 		return;
@@ -351,8 +351,8 @@ void Player::update(int deltaTime, float xmin, float& max) {
 	}
 
 	/* Screen Scroll */
-	if (posPlayer.x + 32 + tileMapDispl.x > max) {
-		max = posPlayer.x + 32 + tileMapDispl.x;
+	if (posPlayer.x + 32 + tileMapDispl.x > xmax) {
+		xmax = posPlayer.x + 32 + tileMapDispl.x;
 	}
 	else if (posPlayer.x < xmin && !keyRight) {
 		posPlayer.x = xmin;

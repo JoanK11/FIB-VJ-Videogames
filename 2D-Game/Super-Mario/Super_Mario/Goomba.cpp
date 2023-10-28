@@ -1,7 +1,6 @@
 #include "Goomba.h"
 
-#define FALL_STEP 4
-#define VX 1
+#define DIED_TIME 400.f
 
 enum GoombaAnims {MOVE, DIED};
 
@@ -24,13 +23,24 @@ void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram) {
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
-void Goomba::update(int deltaTime, float xmin) {
+void Goomba::update(int deltaTime, float xmin, float xmax) {
 	if (bDelete) return;
+
+	if (!spawned) {
+		if (posEnemy.x <= xmax + SPAWN_DISTANCE*32) spawned = true;
+		else return;
+	}
+
 	sprite->update(deltaTime);
 
 	if (died) {
-		if (sprite->animation() != DIED)
+		currentTime += deltaTime;
+		if (currentTime >= DIED_TIME) {
+			bDelete = true;
+		}
+		if (sprite->animation() != DIED) {
 			sprite->changeAnimation(DIED);
+		}
 		return;
 	}
 
@@ -75,6 +85,7 @@ int Goomba::collision(const glm::vec2& pos, const glm::vec2& size) {
 		posT <= goombaB && posR >= goombaL && posL <= goombaR) {
 		cout << "Mario has collided from above" << endl;
 		died = true;
+		sound.playSFX("sfx/kick.wav");
 		Score::instance().increaseScore(100);
 		return 1;
 	}
@@ -87,9 +98,4 @@ int Goomba::collision(const glm::vec2& pos, const glm::vec2& size) {
 
 	// No collision
 	return 0;
-}
-
-void Goomba::setPosition(const glm::vec2& pos) {
-	posEnemy = pos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
