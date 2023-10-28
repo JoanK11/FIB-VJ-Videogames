@@ -154,7 +154,8 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 		fin.get(tile);
 #endif
 	}
-	Object* p = new Mushroom(glm::vec2{ 8 * 32,12 * 32 }, glm::vec2{ 32,32 }, minCoords, this, &program, 2.0);
+	Object* p = new Star(glm::vec2{ 8 * 32,12 * 32 }, glm::vec2{ 32,32 }, minCoords, this, &program, 2.0);
+	//Object* p = new Mushroom(glm::vec2{ 8 * 32,12 * 32 }, glm::vec2{ 32,32 }, minCoords, this, &program, 2.0);
 	//Object* p = new Coin(glm::vec2{ 8 * 32,11 * 32 },  glm::vec2{ 32,32 }, minCoords, this, &program);
 	items.push_back(p);
 	fin.close();

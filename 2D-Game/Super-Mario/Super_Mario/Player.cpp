@@ -354,3 +354,7 @@ void Player::setSuperMario(bool b) {
 }
 
 
+void Player::setStarMario(bool b){
+	starMario = b;
+	starMarioTime = 3000;
+}

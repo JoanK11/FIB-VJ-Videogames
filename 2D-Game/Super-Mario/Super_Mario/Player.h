@@ -20,6 +20,7 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	void setSuperMario(bool b);
+	void setStarMario(bool b);
 	glm::vec2 getPosition();
 private:
 	bool bJumping, bFalling;

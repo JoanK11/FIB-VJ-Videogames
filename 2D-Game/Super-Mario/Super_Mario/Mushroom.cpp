@@ -1,5 +1,5 @@
 #include "Mushroom.h"
-#define TIME_ANIMATION 10000
+#define TIME_ANIMATION 1500
 #define FALL_STEP 4
 Mushroom::Mushroom(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMapDisplay, TileMap* m, ShaderProgram* p, float Vx) : Object(pos,size,tileMapDisplay,m){
 	
