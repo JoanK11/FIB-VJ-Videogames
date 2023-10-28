@@ -8,11 +8,10 @@
 #include "Player.h"
 #include "Projection.h"
 #include "Score.h"
-#include "StartMenu.h"
+#include "SoundManager.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
-
 
 class Scene {
 
@@ -30,14 +29,19 @@ private:
 	void initShaders();
 
 private:
+	SoundManager sound;
+
+
 	TileMap *map;
 	Player *player;
 	ShaderProgram texProgram;
 	float currentTime;
+	bool pause, keyPausePressed;
 
 	Projection camera;
 	glm::mat4 projection;
 	Score *score;
+	
 };
 
 

@@ -6,6 +6,7 @@
 void Game::init() {
 	bPlay = true;
 	glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
+	clearInput();
 	scene.init();
 	startMenu.init();
 }
@@ -84,7 +85,15 @@ bool Game::getModifierKey(int key) const {
 	return modifierKeys[key];
 }
 
-
-
+void Game::clearInput() {
+	for (int i = 0; i < 256; ++i) {
+		keys[i] = false;
+		specialKeys[i] = false;
+	}
+	
+	for (int i = 0; i < 3; ++i) {
+		modifierKeys[i] = false;
+	}
+}
 
 

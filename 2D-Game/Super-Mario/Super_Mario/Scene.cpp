@@ -38,6 +38,9 @@ void Scene::init() {
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	score = new Score();
 	score->init();
+
+	sound.playBGM("music/title.mp3", true);
+	pause = true, keyPausePressed = false;
 }
 
 void Scene::restart() {
@@ -57,6 +60,20 @@ void Scene::change() {
 
 void Scene::update(int deltaTime, bool inMenu) {
 	if (inMenu) return;
+
+	/* Pause Game */
+	bool keyPause = Game::instance().getKey(13);
+	if (keyPause && !keyPausePressed) {
+		keyPausePressed = true;
+		sound.playSFX("sfx/pause.wav");
+		if (pause) pause = false;
+		else {
+			pause = true;
+			return;
+		}
+	}
+	keyPausePressed = keyPause;
+	if (pause) return;
 	map->update(deltaTime);
 	currentTime += deltaTime;
 	float actualMid = camera.getXmid();
