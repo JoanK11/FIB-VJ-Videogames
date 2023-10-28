@@ -136,7 +136,7 @@ void StartMenu::render() {
 			text.render("Movement:",   glm::vec2(96, 176),  16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
 			textKeyboard.render("W",   glm::vec2(156, 218), 32, glm::vec4(1, 1, 1, 1));
 			textKeyboard.render("ASD", glm::vec2(120, 254),  32, glm::vec4(1, 1, 1, 1));
-			textKeyboard.render("SHIFT", glm::vec2(120, 302), 32, glm::vec4(1, 1, 1, 1));
+			textKeyboard.render("g", glm::vec2(120, 302), 32, glm::vec4(1, 1, 1, 1));
 
 			/* CHEATS */
 			text.render("Cheats:",     glm::vec2(528, 176), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
@@ -147,6 +147,7 @@ void StartMenu::render() {
 			textKeyboard.render("12",  glm::vec2(544, 324), 32, glm::vec4(1, 1, 1, 1));
 			text.render("Level",       glm::vec2(620, 314), 12, glm::vec4(1, 1, 1, 1));
 			text.render("Esc: Exit", glm::vec2(104, 400), 12, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+			// Esc = "m"
 		}
 		else if (state == 2) {
 			restartShaders();
