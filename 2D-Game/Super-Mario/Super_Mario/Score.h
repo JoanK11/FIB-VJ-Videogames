@@ -14,6 +14,11 @@ class Score {
 
 public:
 
+	static Score& instance() {
+		static Score S;
+		return S;
+	}
+
 	/* OpenGL */
 	void init();
 	void update(int deltaTime);
