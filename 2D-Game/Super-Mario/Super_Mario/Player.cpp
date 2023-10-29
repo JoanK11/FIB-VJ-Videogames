@@ -280,7 +280,7 @@ void Player::update(int deltaTime, float xmin, float& max) {
 			
 				//if (!bJumping) posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
 			}
-			else bJumping = !map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+			else bJumping = !map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y, superMario);
 		}
 
 		if (activeSprite->animation() == MOVE_LEFT || activeSprite->animation() == STAND_LEFT)

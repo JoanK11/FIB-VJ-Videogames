@@ -1,26 +1,14 @@
 #pragma once
 
-#include<glm/glm.hpp>
-#include <GL/glew.h>
-#include <GL/glut.h>
-#include "Texture.h"
-#include "ShaderProgram.h"
-
+#include"Sprite.h"
+#include "Object.h"
 class Tile
 {
 	protected:
 		
 
-		bool isWall;
-
-		Texture* text;
-
-		GLuint vao;
-		GLuint vbo;
-
-		GLuint posLocation;
-		GLuint texCoordLocation;
-
+		Sprite* spr;
+		glm::vec2 pos;
 	
 public:
 	Tile(glm::vec2 tilePosition, glm::vec2 tileSize, glm::vec2 texturePosition, glm::vec2 textureSize, ShaderProgram& shader,  Texture* text);
@@ -28,9 +16,8 @@ public:
 	virtual ~Tile();
 	virtual void update(float dt);
 	virtual void render();
-	
 	virtual bool isTouchable();
-	
+	virtual Object* actionToTouch(bool isSuperMario);
 
 
 };

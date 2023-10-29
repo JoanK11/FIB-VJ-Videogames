@@ -240,6 +240,31 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 	return false;
 }
 
+bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY, bool isSuperMario)
+{
+	if (!isInside(pos, size)) return false;
+	int x0, x1, y;
+
+	x0 = pos.x / blockSize;
+	x1 = (pos.x + size.x - 1) / blockSize;
+	y = (pos.y) / blockSize;
+	for (int x = x0; x <= x1; x++)
+	{
+		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable())
+		{
+			if (*posY - blockSize * (y + 1) <= 4)
+			{
+				Object* obj = map[y * mapSize.x + x]->actionToTouch(isSuperMario);
+				if (obj != nullptr) items.push_back(obj);
+				*posY = blockSize * (y + 1);
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
 {
 	if (!isInside(pos, size)) return false;

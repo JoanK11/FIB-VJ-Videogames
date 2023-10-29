@@ -1,40 +1,27 @@
 #include "Tile.h"
 Tile::Tile(glm::vec2 tilePosition, glm::vec2 tileSize, glm::vec2 texturePosition, glm::vec2 textureSize, ShaderProgram& program, Texture* text) {
 
-	isWall = false;
-
-	float vertices[24] = { tilePosition.x, tilePosition.y, texturePosition.x, texturePosition.y,
-						   tilePosition.x + tileSize.x, tilePosition.y, texturePosition.x + textureSize.x, texturePosition.y,
-						   tilePosition.x + tileSize.x, tilePosition.y + tileSize.y, texturePosition.x + textureSize.x, texturePosition.y + textureSize.y,
-						   tilePosition.x, tilePosition.y, texturePosition.x, texturePosition.y,
-						   tilePosition.x + tileSize.x, tilePosition.y + tileSize.y, texturePosition.x + textureSize.x, texturePosition.y + textureSize.y,
-						   tilePosition.x, tilePosition.y + tileSize.y, texturePosition.x, texturePosition.y + textureSize.y };
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(float), vertices, GL_STATIC_DRAW);
-	posLocation = program.bindVertexAttribute("position", 2, 4 * sizeof(float), 0);
-	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-	glBindVertexArray(0);
-
-	this->text = text;
+	spr = Sprite::createSprite(tileSize, textureSize, text, &program);
+	spr->setNumberAnimations(1);
+	spr->setAnimationSpeed(0, 1);
+	spr->addKeyframe(0, texturePosition);
+	spr->changeAnimation(0);
+	spr->setPosition(tilePosition);
+	pos = tilePosition;
 }
 Tile::Tile(){}
 
 Tile::~Tile() {}
 
 void Tile::render() {
-	glEnable(GL_TEXTURE_2D);
-	text->use();
-	glBindVertexArray(vao);
-	glEnableVertexAttribArray(posLocation);
-	glEnableVertexAttribArray(texCoordLocation);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glDisable(GL_TEXTURE_2D);
+	spr->render();
 
 }
 bool Tile::isTouchable() {
-	return isWall;
+	return false;
 }
 void Tile::update(float dt) {}
+
+Object* Tile::actionToTouch(bool isSuperMario) {
+	return nullptr;
+}

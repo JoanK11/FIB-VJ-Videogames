@@ -44,6 +44,9 @@ public:
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, int* posX) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &, int* posX) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
+	//this is for player
+	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY, bool isSuperMario);
+	//this is for items
 	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
 	void update(int dt);
 	void collisionWithItems(Player *ply);
