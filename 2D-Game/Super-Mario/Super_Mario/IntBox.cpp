@@ -1,7 +1,7 @@
 #include "IntBox.h"
 #define HEIGHT 10
 #define ANIMATION_TIME 250
-IntBox::IntBox(glm::vec2 pos, glm::vec2 size, ShaderProgram* p) {
+IntBox::IntBox(glm::vec2 pos, glm::vec2 size, ShaderProgram* p, Object* obj) {
 	Texture* text = new Texture();
 	text->loadFromFile("images/interrogante.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spr = Sprite::createSprite(glm::ivec2(size.x, size.y), glm::vec2(0.25, 1.0), text, p);
@@ -17,7 +17,7 @@ IntBox::IntBox(glm::vec2 pos, glm::vec2 size, ShaderProgram* p) {
 	spr->setPosition(pos);
 	spr->changeAnimation(0);
 
-	obj = nullptr;
+	this->obj = obj;
 	currentState = IDLE;
 	currentTime = 0;
 }

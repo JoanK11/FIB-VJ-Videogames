@@ -4,6 +4,8 @@
 
 Coin::Coin(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMapDisplay, TileMap* m, ShaderProgram* p):Object(pos,size,tileMapDisplay,m) {
 
+
+	this->pos.y -= this->size.y;
 	Texture* text = new Texture();
 	text->loadFromFile("images/coins.png", TEXTURE_PIXEL_FORMAT_RGBA);
 

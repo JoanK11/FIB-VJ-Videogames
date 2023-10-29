@@ -9,7 +9,6 @@
 #include "Tile.h"
 #include "Brick.h"
 #include <unordered_map>
-#include <utility>
 #include "IntBox.h"
 #include <vector>
 // forward declaration (.h) + circular inclusion (.cpp) for resolve the problem of circular dependency
@@ -29,7 +28,11 @@ class TileMap
 
 private:
 	TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program);
-
+	struct Info{
+		int tilePos;
+		bool isWall;
+		char object;
+	};
 public:
 	// Tile maps can only be created inside an OpenGL context
 	static TileMap *createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program);
@@ -53,10 +56,11 @@ public:
 	bool isInside(const glm::ivec2& pos, const glm::ivec2& size) const;
 private:
 	bool loadLevel(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
-	Tile* getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 textureC, glm::vec2 textureS, Texture* t);
+	Tile* getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS,glm::vec2 tileMapDisplay, glm::vec2 textureC, glm::vec2 textureS, Texture* t, TileMap* map);
+	Object* get_Object(char type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 tileMapDisplay, TileMap* map);
 
 private:
-	unordered_map<string, pair<int,bool>> dicc;
+	unordered_map<string, Info> dicc;
 	int nTiles;
 	glm::ivec2  mapSize, tilesheetSize;
 	glm::vec2 position;

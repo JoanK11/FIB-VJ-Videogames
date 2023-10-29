@@ -47,10 +47,10 @@ TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProg
 	sstream.clear();
 	for (int i = 0; i < size; ++i) {
 		string a;
-		pair<int,bool> b;
+		Info b;
 		getline(fin, line);
 		sstream.str(line);
-		sstream >> a >> b.first >>b.second;
+		sstream >> a >> b.tilePos >> b.isWall >> b.object;
 		sstream.clear();
 		dicc[a] = b;
 
@@ -146,8 +146,8 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 			string type;
 			sstream >> type;
 			//calculamos
-			glm::vec2 pos = glm::vec2(i * blockSize, j * blockSize) + minCoords;
-			Tile* ptr = getTile(type, program, pos, glm::vec2(blockSize, blockSize), tilesheetSize, tileTexSize, &tilesheet);
+			glm::vec2 pos = glm::vec2(i * blockSize, j * blockSize);
+			Tile* ptr = getTile(type, program, pos, glm::vec2(blockSize, blockSize), minCoords,tilesheetSize, tileTexSize, &tilesheet, this);
 
 			map[j * mapSize.x + i] = ptr;
 			++nTiles;
@@ -157,10 +157,10 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 		fin.get(tile);
 #endif
 	}
-	Object* p = new Star(glm::vec2{ 8 * 32,12 * 32 }, glm::vec2{ 32,32 }, minCoords, this, &program, 2.0);
+	//Object* p = new Star(glm::vec2{ 8 * 32,12 * 32 }, glm::vec2{ 32,32 }, minCoords, this, &program, 2.0);
 	//Object* p = new Mushroom(glm::vec2{ 8 * 32,12 * 32 }, glm::vec2{ 32,32 }, minCoords, this, &program, 2.0);
 	//Object* p = new Coin(glm::vec2{ 8 * 32,11 * 32 },  glm::vec2{ 32,32 }, minCoords, this, &program);
-	items.push_back(p);
+	//items.push_back(p);
 	fin.close();
 
 	return true;
@@ -287,17 +287,30 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 
 	return false;
 }
-Tile* TileMap::getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 tileSheetSize,glm::vec2 textureS, Texture* t) {
-	//seleccionamos el tipo de tile
-	if (type == "INT") return new IntBox(tileC, tileS, &s);
-	pair<int,bool> obj = dicc[type];
-	if (obj.first == -1) return nullptr;
-	//calculamos la posicion de la textura
-	glm::vec2 texturePos = glm::vec2(float(obj.first % tilesheetSize.x) / tilesheetSize.x, float(obj.first / tilesheetSize.x) / tilesheetSize.y);
-	if(obj.second) return new Brick(tileC, tileS, texturePos, textureS, s, t);
-	else return new Tile(tileC, tileS, texturePos, textureS, s, t);
+Tile* TileMap::getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 tileMapDisplay, glm::vec2 textureC, glm::vec2 textureS, Texture* t, TileMap* map) {
+	//we select the info object
+	Info obj = dicc[type];
+	if (obj.tilePos == -1) return nullptr;
+	//we look if the tile has an object
+	if (obj.object != 'N') {
+		Object* p = get_Object(obj.object, s, tileC, tileS, tileMapDisplay, map);
+		return new IntBox(tileC + tileMapDisplay, tileS, &s, p);
+	}
+	glm::vec2 texturePos = glm::vec2(float(obj.tilePos % tilesheetSize.x) / tilesheetSize.x, float(obj.tilePos / tilesheetSize.x) / tilesheetSize.y);
+	if(obj.isWall) return new Brick(tileC+tileMapDisplay, tileS, texturePos, textureS, s, t);
+	else return new Tile(tileC + tileMapDisplay, tileS, texturePos, textureS, s, t);
 }
-
+Object* TileMap::get_Object(char type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 tileMapDisplay, TileMap* map) {
+	if (type == 'C') {
+		return new Coin(tileC, tileS, tileMapDisplay, map,&s);
+	}
+	else if (type == 'M') {
+		return new Mushroom(tileC, tileS, tileMapDisplay, map, &s, 2.0);
+	}
+	else if (type == 'S') {
+		return new Star(tileC, tileS, tileMapDisplay, map, &s, 2.0);
+	}
+}
 void TileMap::collisionWithItems(Player* ply) {
 	int s = items.size();
 	for (int i = 0; i < s; ++i) {
