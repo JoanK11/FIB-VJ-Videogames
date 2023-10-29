@@ -5,6 +5,7 @@ class Star :
 {
 private:
 	enum StarState {
+		WAITING,
 		ANIMATION,
 		VALID,
 		USED

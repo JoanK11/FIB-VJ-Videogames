@@ -71,7 +71,6 @@ void Scene::render() {
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-	texProgram.setUniform1f("min_height", 100000.f);
 	map->render(camera.getPosition(), camera.getSize());
 	player->render();
 	score->render();

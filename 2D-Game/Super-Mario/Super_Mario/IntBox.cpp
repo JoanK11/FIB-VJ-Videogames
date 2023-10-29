@@ -1,5 +1,5 @@
 #include "IntBox.h"
-#define HEIGHT 10
+#define HEIGHT 8
 #define ANIMATION_TIME 250
 IntBox::IntBox(glm::vec2 pos, glm::vec2 size, ShaderProgram* p, Object* obj) {
 	Texture* text = new Texture();

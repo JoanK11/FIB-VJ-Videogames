@@ -5,6 +5,7 @@ class Mushroom :
 {
 private:
 	enum MushroomState {
+		WAITING,
 		ANIMATION,
 		VALID, 
 		USED

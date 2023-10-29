@@ -26,7 +26,7 @@ void TileMap::update(int dt) {
 	{
 		for (int i = 0; i < mapSize.x; i++)
 		{
-			if (map[j * mapSize.x + i] != nullptr)  map[j * mapSize.x + i]->update(dt);
+			if (mapBlocks[j * mapSize.x + i] != nullptr)  mapBlocks[j * mapSize.x + i]->update(dt);
 		}
 
 	}
@@ -60,8 +60,10 @@ TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProg
 
 TileMap::~TileMap()
 {
-	if(map != NULL)
-		delete map;
+	if(mapBlocks != NULL)
+		delete mapBlocks;
+	if (mapBackground != NULL)
+		delete mapBackground;
 }
 
 
@@ -75,12 +77,17 @@ void TileMap::render(glm::vec2 pos, glm::vec2 size) const
 	
 	for (int j = max((int)posOriginal.y,0); j <= min((int)posFinal.y,mapSize.y-1); j++) {
 		for (int i = max((int)posOriginal.x, 0); i <= min((int)posFinal.x,mapSize.x-1); i++) {
-			if (map[j * mapSize.x + i] != nullptr)  map[j * mapSize.x + i]->render();
+			if (mapBackground[j * mapSize.x + i] != nullptr)  mapBackground[j * mapSize.x + i]->render();
 		}
 	}
 	int s = items.size();
 	for (int i = 0; i < s; ++i) {
 		items[i]->render();
+	}
+	for (int j = max((int)posOriginal.y, 0); j <= min((int)posFinal.y, mapSize.y - 1); j++) {
+		for (int i = max((int)posOriginal.x, 0); i <= min((int)posFinal.x, mapSize.x - 1); i++) {
+			if (mapBlocks[j * mapSize.x + i] != nullptr)  mapBlocks[j * mapSize.x + i]->render();
+		}
 	}
 }
 
@@ -129,8 +136,8 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 	sstream >> tilesheetSize.x >> tilesheetSize.y;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	
-	map = new Tile*[mapSize.x * mapSize.y];
-
+	mapBackground = new Tile*[mapSize.x * mapSize.y];
+	mapBlocks = new Tile * [mapSize.x * mapSize.y];
 	glm::vec2 halfTexel;
 	halfTexel = glm::vec2(0.5f / tilesheet.width(), 0.5f / tilesheet.height());
 
@@ -149,7 +156,11 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 			glm::vec2 pos = glm::vec2(i * blockSize, j * blockSize);
 			Tile* ptr = getTile(type, program, pos, glm::vec2(blockSize, blockSize), minCoords,tilesheetSize, tileTexSize, &tilesheet, this);
 
-			map[j * mapSize.x + i] = ptr;
+			mapBackground[j * mapSize.x + i] = nullptr;
+			mapBlocks[j * mapSize.x + i] = nullptr;
+			if (dicc[type].isWall) mapBlocks[j * mapSize.x + i] = ptr;
+			else mapBackground[j * mapSize.x + i] = ptr;
+			
 			++nTiles;
 		}
 		sstream.clear();
@@ -182,7 +193,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 	y1 = (pos.y + size.y - 1) / blockSize;
 	for (int y = y0; y <= y1; y++)
 	{
-		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
+		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * (x + 1) <= 3)
 			{
 				*posX = blockSize * (x + 1);
@@ -204,7 +215,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 	y1 = (pos.y + size.y - 1) / blockSize;
 	for (int y = y0; y <= y1; y++)
 	{
-		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable()) {
+		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * x + size.x <= 3)
 			{
 				*posX = blockSize * x - size.x;
@@ -227,7 +238,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 	y = (pos.y + size.y - 1) / blockSize;
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable())
+		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable())
 		{
 			if (*posY - blockSize * y + size.y <= 4)
 			{
@@ -250,11 +261,11 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 	y = (pos.y) / blockSize;
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable())
+		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable())
 		{
 			if (*posY - blockSize * (y + 1) <= 4)
 			{
-				Object* obj = map[y * mapSize.x + x]->actionToTouch(isSuperMario);
+				Object* obj = mapBlocks[y * mapSize.x + x]->actionToTouch(isSuperMario);
 				if (obj != nullptr) items.push_back(obj);
 				*posY = blockSize * (y + 1);
 				return true;
@@ -275,7 +286,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 	y = (pos.y) / blockSize;
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] != nullptr && map[y * mapSize.x + x]->isTouchable())
+		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable())
 		{
 			if (*posY - blockSize * (y + 1) <= 4)
 			{
@@ -290,16 +301,18 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 Tile* TileMap::getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 tileMapDisplay, glm::vec2 textureC, glm::vec2 textureS, Texture* t, TileMap* map) {
 	//we select the info object
 	Info obj = dicc[type];
-	if (obj.tilePos == -1) return nullptr;
+	
 	//we look if the tile has an object
 	if (obj.object != 'N') {
 		Object* p = get_Object(obj.object, s, tileC, tileS, tileMapDisplay, map);
 		return new IntBox(tileC + tileMapDisplay, tileS, &s, p);
 	}
+	if (obj.tilePos == -1) return nullptr;
 	glm::vec2 texturePos = glm::vec2(float(obj.tilePos % tilesheetSize.x) / tilesheetSize.x, float(obj.tilePos / tilesheetSize.x) / tilesheetSize.y);
 	if(obj.isWall) return new Brick(tileC+tileMapDisplay, tileS, texturePos, textureS, s, t);
 	else return new Tile(tileC + tileMapDisplay, tileS, texturePos, textureS, s, t);
 }
+
 Object* TileMap::get_Object(char type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 tileMapDisplay, TileMap* map) {
 	if (type == 'C') {
 		return new Coin(tileC, tileS, tileMapDisplay, map,&s);
@@ -310,6 +323,10 @@ Object* TileMap::get_Object(char type, ShaderProgram& s, glm::vec2 tileC, glm::v
 	else if (type == 'S') {
 		return new Star(tileC, tileS, tileMapDisplay, map, &s, 2.0);
 	}
+	else if (type == 'E') {
+		return nullptr;
+	}
+	return nullptr;
 }
 void TileMap::collisionWithItems(Player* ply) {
 	int s = items.size();

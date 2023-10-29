@@ -1,10 +1,11 @@
-33
+34
 B 0 1 N
 S 1 1 N	
 BR1 2 1 N	
 INTC -1 1 C
 INTS -1 1 S 
-INTM -1 1 M 	 
+INTM -1 1 M
+INTN -1 1 E 	 
 IAN 4 0	N
 MAN 5 0	N
 DAN 6 0	N
@@ -26,7 +27,7 @@ MM 24 0 N
 DM 25 0 N
 IDT 26 1 N
 DDT 27 1 N
-P 28 0 0 N
+P 28 0 N
 IDC 29 0 N
 MDC 30 0 N
 DDC 31 0 N

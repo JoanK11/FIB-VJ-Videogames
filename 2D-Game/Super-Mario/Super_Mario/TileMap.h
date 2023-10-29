@@ -67,7 +67,8 @@ private:
 	int blockSize;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
-	Tile **map;
+	Tile **mapBlocks;
+	Tile** mapBackground;
 	std::vector<Object *> items;
 };
 

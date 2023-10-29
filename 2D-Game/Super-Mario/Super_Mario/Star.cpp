@@ -4,6 +4,7 @@
 #define TIME_ANIMATION 1500
 #define FALL_STEP 4
 #define JUMP_ANGLE_STEP 4
+#define WAITING_TIME 250
 Star::Star(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMapDisplay, TileMap* m, ShaderProgram* p, float Vx) : Object(pos, size, tileMapDisplay, m) {
 
 	this->y_size = size.y;
@@ -20,7 +21,7 @@ Star::Star(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMap
 	spr->addKeyframe(0, glm::vec2(0.75, 0.));
 	spr->changeAnimation(0);
 	currentTime = 0;
-	currentState = ANIMATION;
+	currentState = WAITING;
 	bJumping = true;
 	jumpAngle = 0;
 	startY = pos.y;
@@ -41,7 +42,14 @@ bool Star::collide(const glm::vec2& plyPos, const glm::vec2& plySize) {
 }
 
 void Star::update(float dt) {
-	if (currentState == ANIMATION) {
+	if (currentState == WAITING) {
+		currentTime += dt;
+		if (currentTime >= WAITING_TIME) {
+			currentState = ANIMATION;
+			currentTime = 0;
+		}
+	}
+	else if (currentState == ANIMATION) {
 		currentTime += dt;
 		float y = -y_size * sin(3.141592 / 180. * (90. / TIME_ANIMATION) * currentTime);
 		glm::vec2 p = pos + tileMapDisplay;
@@ -96,10 +104,8 @@ void Star::update(float dt) {
 	}
 }
 void Star::render() {
-	if (currentState == ANIMATION) {
-		program->setUniform1f("min_height", pos.y + tileMapDisplay.y);
+	if (currentState == ANIMATION) {	
 		spr->render();
-		program->setUniform1f("min_height", 100000.f);
 	}
 	else if (currentState == VALID) spr->render();
 
