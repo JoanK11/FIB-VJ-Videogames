@@ -12,8 +12,7 @@
 #define NUM_CHARACTERS (128 - 32)
 
 
-struct CharMetrics
-{
+struct CharMetrics {
 	int tx, ty; 		// Pos x, y inside texture in pixels
 	int sx, sy; 		// Size of char in pixels
 	int ax, ay; 		// Advance for each character in a string sequence
@@ -26,8 +25,7 @@ struct CharMetrics
 // to render text strings
 
 
-class Text
-{
+class Text {
 
 public:
 	Text();

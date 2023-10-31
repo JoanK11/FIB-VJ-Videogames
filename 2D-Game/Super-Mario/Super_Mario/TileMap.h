@@ -44,16 +44,19 @@ public:
 	
 	int getTileSize() const { return blockSize; }
 
-	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, int* posX) const;
-	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &, int* posX) const;
+	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const;
+	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2&, int* posX) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
-	//this is for player
-	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY, bool isSuperMario);
-	//this is for items
 	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
-	void update(int dt);
-	void collisionWithItems(Player *ply);
+	// this is for the player
+	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX, bool superMario) const;
+	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2&, int* posX, bool superMario) const;
+	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY, bool superMario);
+
 	bool isInside(const glm::ivec2& pos, const glm::ivec2& size) const;
+	int getBlockSize() const;
+    void update(int dt);
+	void collisionWithItems(Player *ply);
 private:
 	bool loadLevel(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
 	Tile* getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS,glm::vec2 tileMapDisplay, glm::vec2 textureC, glm::vec2 textureS, Texture* t, TileMap* map);

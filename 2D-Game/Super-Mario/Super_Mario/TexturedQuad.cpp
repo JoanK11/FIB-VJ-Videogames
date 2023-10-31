@@ -29,8 +29,7 @@ TexturedQuad::TexturedQuad(glm::vec2 geom[2], glm::vec2 texCoords[2], ShaderProg
 	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4*sizeof(float), (void *)(2*sizeof(float)));
 }
 
-void TexturedQuad::render(const Texture &tex) const
-{
+void TexturedQuad::render(const Texture &tex) const {
 	glEnable(GL_TEXTURE_2D);
 	tex.use();
 	glBindVertexArray(vao);

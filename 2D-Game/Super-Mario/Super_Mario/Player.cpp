@@ -7,7 +7,7 @@
 #include "TileMap.h"
 
 #define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
+#define JUMP_HEIGHT 132
 #define FALL_STEP 4
 
 
@@ -16,17 +16,16 @@ enum PlayerAnims {
 	JUMP_LEFT, CHANGE_RIGHT, CHANGE_LEFT, DOWN_SUPER_RIGHT, DOWN_SUPER_LEFT, DEAD
 };
 
-glm::vec2 Player::getPosition() {
-	return posPlayer;
-}
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	bJumping = false, bFalling  = false;
-	lastLeft = false, lastRight = false;
 
 	// Mario Types
 	superMario = false, superMarioKey = false;
 	starMario = false,  starMarioKey  = false;
 	starMario = false,  starMarioKey  = false;
+
+	/* Key States */
+	keyJumpPressed = false;
 
 	// Velocity
 	Vx = 0, Vy = 0;
@@ -37,7 +36,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 
 	spritesheet.loadFromFile("images/spriteMario.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.0625, 0.125), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(9);
+	sprite->setNumberAnimations(11);
 		
 		// ----- IDLE -----
 		sprite->setAnimationSpeed(STAND_RIGHT, 8);
@@ -98,7 +97,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	/* ----------------------- */
 
 	superSprite = Sprite::createSprite(glm::ivec2(32, 64), glm::vec2(0.0625, 0.25), &spritesheet, &shaderProgram);
-	superSprite->setNumberAnimations(11);
+	superSprite->setNumberAnimations(9);
 
 		// ----- IDLE -----
 		superSprite->setAnimationSpeed(STAND_RIGHT, 8);
@@ -142,7 +141,12 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
-void Player::update(int deltaTime, float xmin, float& max) {
+void Player::update(int deltaTime, float xmin, float& xmax) {
+	/* DEAD DETECT */
+	if (posPlayer.y >= 448) {
+		return;
+	}
+
 	/* --- Mario Sprites --- */
 	Sprite* activeSprite = sprite;
 	if (superMario)     activeSprite = superSprite;
@@ -150,12 +154,19 @@ void Player::update(int deltaTime, float xmin, float& max) {
 	activeSprite->update(deltaTime);
 
 	/* --- Movement Keys --- */
-	bool keyLeft  = Game::instance().getSpecialKey(GLUT_KEY_LEFT)  || Game::instance().getKey('a') || Game::instance().getKey('A');
+	bool keyLeft  = Game::instance().getSpecialKey(GLUT_KEY_LEFT) || Game::instance().getKey('a') || Game::instance().getKey('A');
 	bool keyRight = Game::instance().getSpecialKey(GLUT_KEY_RIGHT) || Game::instance().getKey('d') || Game::instance().getKey('D');
-	bool keyUp    = Game::instance().getSpecialKey(GLUT_KEY_UP)    || Game::instance().getKey(32)  ||
-		            Game::instance().getKey('w')                   || Game::instance().getKey('W');
-	bool keyDown  = Game::instance().getSpecialKey(GLUT_KEY_DOWN)  || Game::instance().getKey('s') || Game::instance().getKey('S');
-	bool keyRun = Game::instance().getModifierKey(0);
+	bool keyUp    = Game::instance().getSpecialKey(GLUT_KEY_UP) || Game::instance().getKey(32) ||
+		            Game::instance().getKey('w') || Game::instance().getKey('W');
+	bool keyDown  = Game::instance().getSpecialKey(GLUT_KEY_DOWN) || Game::instance().getKey('s') || Game::instance().getKey('S');
+	bool keyRun   = Game::instance().getModifierKey(0);
+
+	/*
+	if (keyLeft) cout << "LEFT" << endl;
+	if (keyRight) cout << "RIGHT" << endl;
+	if (keyUp) cout << "UP" << endl;
+	if (keyDown) cout << "DOWN" << endl;
+	*/
 
 	/* --- Power-Up Keys --- */
 	bool keySuperMario = Game::instance().getKey('m') || Game::instance().getKey('M');
@@ -170,18 +181,23 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		superMario = false, superMarioKey = true;
 		activeSprite->changeAnimation(sprite->animation());
 	}
-	if (!keySuperMario) superMarioKey = false;
+
+	/* PHYSICS */
+	glm::ivec2 dimMario = glm::ivec2(32, 32);
+	if (superMario) dimMario = glm::ivec2(32, 64);
 
 	/* MOVEMENT */
-
 	if (keyLeft) {
 		if (!bJumping && !bFalling && activeSprite->animation() != MOVE_LEFT) {
+			//cout << "l1" << endl;
 			activeSprite->changeAnimation(MOVE_LEFT);
 		}
 		bool colision = false;
 		if (!bJumping && !bFalling && Vx > 0) {
+			//cout << "    l2" << endl;
 			activeSprite->changeAnimation(CHANGE_RIGHT);
-			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) {
+			if (map->collisionMoveRight(posPlayer, dimMario, &posPlayer.x, superMario)) {
+				//cout << "      l3" << endl;
 				Vx = 0;
 				activeSprite->changeAnimation(STAND_RIGHT);
 				colision = true;
@@ -189,30 +205,39 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		}
 
 		if (keyRun) {
-			if (Vx > -5) Vx -= 0.2;
+			if (Vx > -5) Vx -= 0.2f;
 		}
 		else {
-			if (Vx < -3) Vx += 0.2;
-			else if (Vx > -3) Vx -= 0.2;
+			if (Vx < -3) Vx += 0.2f;
+			else if (Vx > -3) Vx -= 0.2f;
 		}
-		
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32),&posPlayer.x)) {
+
+		if (map->collisionMoveLeft(posPlayer, dimMario, &posPlayer.x, superMario)) {
+			//cout << "        l4" << endl;
 			Vx = 0;
 			activeSprite->changeAnimation(STAND_LEFT);
 		}
 		else if (!colision) {
+			//cout << "          l5" << endl;
 			posPlayer.x += Vx;
-		} 
+		}
+
+		// Vx Correction
+		if (Vx < -5) Vx = -5;
+		else if (!keyRun && Vx < -3) Vx = -3;
 	}
 
 	else if (keyRight) {
 		if (!bJumping && !bFalling && activeSprite->animation() != MOVE_RIGHT) {
+			cout << "r1" << endl;
 			activeSprite->changeAnimation(MOVE_RIGHT);
 		}
 		bool colision = false;
 		if (!bJumping && !bFalling && Vx < 0) {
+			cout << "    r2" << endl;
 			activeSprite->changeAnimation(CHANGE_LEFT);
-			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) {
+			if (map->collisionMoveLeft(posPlayer, dimMario, &posPlayer.x, superMario)) {
+				cout << "      r3" << endl;
 				Vx = 0;
 				activeSprite->changeAnimation(STAND_LEFT);
 				colision = true;
@@ -220,29 +245,35 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		}
 
 		if (keyRun) {
-			if (Vx < 5) Vx += 0.2;
+			if (Vx < 5) Vx += 0.2f;
 		}
 		else {
-			if (Vx > 3) Vx -= 0.2;
-			else if (Vx < 3) Vx += 0.2;
+			if (Vx > 3) Vx -= 0.2f;
+			else if (Vx < 3) Vx += 0.2f;
 		}
-		
-		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) {
+
+		if (map->collisionMoveRight(posPlayer, dimMario, &posPlayer.x, superMario)) {
+			cout << "        r4" << endl;
 			Vx = 0;
 			activeSprite->changeAnimation(STAND_RIGHT);
 		}
 		else if (!colision) {
+			cout << "          r5" << endl;
 			posPlayer.x += Vx;
-		} 
+		}
+
+		// Vx Correction
+		if (Vx > 5) Vx = 5;
+		else if (!keyRun && Vx > 3) Vx = 3;
 	}
 
 	else {
-		if (Vx > 0.1) {
-			Vx -= 0.1;
+		if (Vx > 0.1f) {
+			Vx -= 0.1f;
 			posPlayer.x += Vx;
 		}
-		else if (Vx < -0.1) {
-			Vx += 0.1;
+		else if (Vx < -0.1f) {
+			Vx += 0.1f;
 			posPlayer.x += Vx;
 		}
 		else {
@@ -253,15 +284,10 @@ void Player::update(int deltaTime, float xmin, float& max) {
 				activeSprite->changeAnimation(STAND_RIGHT);
 		}
 
-		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) Vx = 0;
-		else if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32), &posPlayer.x)) Vx = 0;
-		/*
-		if (activeSprite->animation() == MOVE_LEFT)
-			activeSprite->changeAnimation(STAND_LEFT);
-		else if (activeSprite->animation() == MOVE_RIGHT)
-			activeSprite->changeAnimation(STAND_RIGHT);*/
+		if (map->collisionMoveRight(posPlayer, dimMario, &posPlayer.x, superMario)) Vx = 0;
+		else if (map->collisionMoveLeft(posPlayer, dimMario, &posPlayer.x, superMario)) Vx = 0;
 	}
-	
+
 	if (keyDown) {
 
 	}
@@ -273,19 +299,23 @@ void Player::update(int deltaTime, float xmin, float& max) {
 			posPlayer.y = startY;
 		}
 		else {
-			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
+			posPlayer.y = int(startY - JUMP_HEIGHT * sin(3.14159f * jumpAngle / 180.f));
 
 			if (jumpAngle > 90) { // is falling down
-				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
-			
+				bFalling = true;
+				bJumping = false;//!map->collisionMoveDown(posPlayer, dimMario, &posPlayer.y);
 				//if (!bJumping) posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
 			}
-			else bJumping = !map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y, superMario);
+
+			else bJumping = !map->collisionMoveUp(posPlayer, dimMario, &posPlayer.y, superMario);// && (!keyJumpPressed;
+
 		}
 
-		if (activeSprite->animation() == MOVE_LEFT || activeSprite->animation() == STAND_LEFT)
+		if (activeSprite->animation() == MOVE_LEFT || activeSprite->animation() == STAND_LEFT ||
+			activeSprite->animation() == CHANGE_LEFT)
 			activeSprite->changeAnimation(JUMP_LEFT);
-		else if (activeSprite->animation() == MOVE_RIGHT || activeSprite->animation() == STAND_RIGHT)
+		else if (activeSprite->animation() == MOVE_RIGHT || activeSprite->animation() == STAND_RIGHT ||
+			activeSprite->animation() == CHANGE_RIGHT)
 			activeSprite->changeAnimation(JUMP_RIGHT);
 	}
 	else {
@@ -304,7 +334,9 @@ void Player::update(int deltaTime, float xmin, float& max) {
 
 		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
 			bFalling = false;
-			if (keyUp) {
+			if (!keyJumpPressed && keyUp) {
+				if (superMario)	sound.playSFX("sfx/jump-super.wav");
+				else sound.playSFX("sfx/jump-small.wav");
 				bJumping = true;
 				jumpAngle = 0;
 				startY = posPlayer.y;
@@ -319,23 +351,36 @@ void Player::update(int deltaTime, float xmin, float& max) {
 		}
 	}
 
-	if (posPlayer.x + 32 + tileMapDispl.x > max) {
-		max = posPlayer.x + 32 + tileMapDispl.x;
+	/* Screen Scroll */
+	if (posPlayer.x + 32 + tileMapDispl.x > xmax) {
+		xmax = posPlayer.x + 32 + tileMapDispl.x;
 	}
 	else if (posPlayer.x < xmin && !keyRight) {
 		posPlayer.x = xmin;
 		Vx = 0;
 	}
+
+	//cout << jumpAngle << endl;
+	/*
+	if (bJumping && bFalling) cout << "bJumping && bFalling" << endl;
+	else if (bJumping) cout << "bJumping" << endl;
+	else if (bFalling) cout << "bFalling" << endl;
+	else cout << "." << endl;
+	*/
+
+	/* Key Updates */
+	keyJumpPressed = keyUp;
+	superMarioKey = keySuperMario;
+
 	/* --- Sprite Update --- */
-	sprite->     setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y     )));
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
 	//te he comentado abajo porque sino te explota el programa
 	//starSprite-> setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
-
-	//cout << Vx << endl;
 }
 
 void Player::render() {
+	//cout << "Pos.x: " << posPlayer.x << " / Pos.y: " << posPlayer.y << endl;
 	if (superMario) superSprite->render();
 	else sprite->render();
 }
@@ -349,8 +394,18 @@ void Player::setPosition(const glm::vec2 &pos) {
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
+
 void Player::setSuperMario(bool b) {
 	superMario = b;
+}
+
+
+glm::vec2 Player::getPos() const {
+	return posPlayer;
+}
+glm::vec2 Player::getSize() const {
+	if (superMario) return glm::vec2(32, 64);
+	return glm::vec2(32, 32);
 }
 
 

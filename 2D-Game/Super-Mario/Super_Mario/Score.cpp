@@ -3,16 +3,22 @@
 #include "Score.h"
 
 void Score::init() {
-	score = 0; coins = 0;
+	score = 0, lastScore = 0, coins = 0;
 	world = make_pair(1, 1);
 	time = 400; lives = 10;
 
-	if (!text.init("fonts/super-mario-bros-nes.ttf"))
+	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
 		cout << "Could not load font!!!" << endl;
+	}
+}
+
+void Score::restart() {
+	score = lastScore;
+	time = 400;
 }
 
 void Score::update(int deltaTime) {
-	time -= (deltaTime/1000.f);
+	time -= (deltaTime/800.f);
 }
 
 void Score::render() {
@@ -36,3 +42,21 @@ void Score::render() {
 	text.render("LIVES", glm::vec2(704, 32), 20, glm::vec4(1, 1, 1, 1));
 	text.render(to_string(lives), glm::vec2(736, 56), 20, glm::vec4(1, 1, 1, 1));
 }
+
+
+void Score::increaseScore(int x) {
+	score += x;
+}
+
+void Score::increaseCoins() {
+	++coins;
+}
+
+void Score::updateWorld(int x, int y) {
+	world = make_pair(x, y);
+}
+
+void Score::decreaseLive() {
+	--lives;
+}
+

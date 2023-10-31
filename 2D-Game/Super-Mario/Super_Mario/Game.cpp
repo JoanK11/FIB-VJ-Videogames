@@ -6,11 +6,15 @@
 void Game::init() {
 	bPlay = true;
 	glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
+	clearInput();
 	scene.init();
+	startMenu.init();
 }
 
 bool Game::update(int deltaTime) {
-	scene.update(deltaTime);
+	startMenu.update(deltaTime);
+	bool inMenu = startMenu.showingMenu();
+	scene.update(deltaTime, inMenu);
 	
 	return bPlay;
 }
@@ -18,11 +22,13 @@ bool Game::update(int deltaTime) {
 void Game::render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	scene.render();
+
+	startMenu.render();
 }
 
 void Game::keyPressed(int key) {
-	if(key == 27) // Escape code
-		bPlay = false;
+	//if (key == 27) // Escape code
+	//	bPlay = false;
 	keys[key] = true;
 
 	int modifiers = glutGetModifiers();
@@ -79,7 +85,15 @@ bool Game::getModifierKey(int key) const {
 	return modifierKeys[key];
 }
 
-
-
+void Game::clearInput() {
+	for (int i = 0; i < 256; ++i) {
+		keys[i] = false;
+		specialKeys[i] = false;
+	}
+	
+	for (int i = 0; i < 3; ++i) {
+		modifierKeys[i] = false;
+	}
+}
 
 

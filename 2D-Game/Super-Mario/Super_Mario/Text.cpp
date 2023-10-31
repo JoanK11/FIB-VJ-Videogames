@@ -19,40 +19,36 @@ Text::Text() {
 	quad = NULL;
 }
 
-Text::~Text()
-{
+Text::~Text() {
 	destroy();
-	if(quad != NULL)
-	{
+	if (quad != NULL) {
 		quad->free();
 		delete quad;
 	}
 }
 
 
-bool Text::init(const char *filename)
-{
+bool Text::init(const char *filename) {
 	FT_Error error;
 	
-	if(!bLibInit)
-	{
+	if (!bLibInit) {
 		error = FT_Init_FreeType(&Text::library);
-		if(error)
+		if (error)
 			return false;
 		bLibInit = true;
 	}
 	error = FT_New_Face(Text::library, filename, 0, &face);
-	if(error)
+	if (error)
 		return false;
 	FT_Set_Pixel_Sizes(face, ATLAS_FONT_SIZE, ATLAS_FONT_SIZE);
 	
-	if(!extractCharSizes(&maxCharWidth, &maxCharHeight))
+	if (!extractCharSizes(&maxCharWidth, &maxCharHeight))
 		return false;
 	fontSize = maxCharHeight;
 	textureSize = 512;
-	if(floor(float(textureSize) / maxCharWidth) * floor(float(textureSize) / maxCharHeight) < (128 - 32))
+	if (floor(float(textureSize) / maxCharWidth) * floor(float(textureSize) / maxCharHeight) < (128 - 32))
 		textureSize = 1024;
-	if(floor(float(textureSize) / maxCharWidth) * floor(float(textureSize) / maxCharHeight) < (128 - 32))
+	if (floor(float(textureSize) / maxCharWidth) * floor(float(textureSize) / maxCharHeight) < (128 - 32))
 		return false;
 	createTextureAtlas();
 	initShaders();
@@ -105,8 +101,7 @@ void Text::render(char c, const glm::vec2 &pixel, int size, const glm::vec4 &col
 	glDisable(GL_BLEND);
 }
 
-void Text::render(const string &str, const glm::vec2 &pixel, int size, const glm::vec4 &color)
-{
+void Text::render(const string &str, const glm::vec2 &pixel, int size, const glm::vec4 &color) {
 	int vp[4];
 	glm::mat4 projection, modelview;
 	glm::vec2 minTexCoord, maxTexCoord, pos = pixel;
@@ -119,8 +114,7 @@ void Text::render(const string &str, const glm::vec2 &pixel, int size, const glm
 	program.setUniformMatrix4f("projection", projection);
 	program.setUniform4f("color", color.r, color.g, color.b, color.a);
 
-	for(unsigned int i=0; i<str.length(); i++)
-	{
+	for (unsigned int i=0; i<str.length(); i++)	{
 		modelview = glm::mat4(1.0f);
 		modelview = glm::translate(modelview, glm::vec3(pos.x + (float(size) / fontSize) * chars[str[i]-32].bl, pos.y - (float(size) / fontSize) * chars[str[i]-32].bt, 0.f));
 		modelview = glm::scale(modelview, (float(size) / fontSize) * glm::vec3(chars[str[i]-32].sx, chars[str[i]-32].sy, 0.f));
@@ -136,21 +130,18 @@ void Text::render(const string &str, const glm::vec2 &pixel, int size, const glm
 	glDisable(GL_BLEND);
 }
 
-void Text::initShaders()
-{
+void Text::initShaders() {
 	Shader vShader, fShader;
 
 	vShader.free();
 	fShader.free();
 	vShader.initFromFile(VERTEX_SHADER, "shaders/text.vert");
-	if(!vShader.isCompiled())
-	{
+	if (!vShader.isCompiled()) {
 		cout << "Vertex Shader Error" << endl;
 		cout << "" << vShader.log() << endl << endl;
 	}
 	fShader.initFromFile(FRAGMENT_SHADER, "shaders/text.frag");
-	if(!fShader.isCompiled())
-	{
+	if (!fShader.isCompiled()) {
 		cout << "Fragment Shader Error" << endl;
 		cout << "" << fShader.log() << endl << endl;
 	}
@@ -158,8 +149,7 @@ void Text::initShaders()
 	program.addShader(vShader);
 	program.addShader(fShader);
 	program.link();
-	if(!program.isLinked())
-	{
+	if (!program.isLinked()) {
 		cout << "Shader Linking Error" << endl;
 		cout << "" << program.log() << endl << endl;
 	}

@@ -3,6 +3,7 @@
 // forward declaration (.h) + circular inclusion (.cpp) for resolve the problem of circular dependency
 class TileMap;
 #include "Sprite.h"
+#include "SoundManager.h"
 
 
 
@@ -19,10 +20,16 @@ public:
 	
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+
 	void setSuperMario(bool b);
 	void setStarMario(bool b);
-	glm::vec2 getPosition();
+
+
+	glm::vec2 getPos() const;
+	glm::vec2 getSize() const;
 private:
+	SoundManager sound;
+
 	bool bJumping, bFalling;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
@@ -31,14 +38,12 @@ private:
 	TileMap *map;
 	float Vx, Vy;
 
-	bool lastLeft, lastRight;
+	bool keyJumpPressed;
 
 	// Mario Types
 	bool superMario, superMarioKey;
 	bool starMario, starMarioKey;
 	int starMarioTime;
-	
-
 };
 
 
