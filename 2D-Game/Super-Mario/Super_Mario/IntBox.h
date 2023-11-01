@@ -20,5 +20,6 @@ public:
     virtual void render();
     virtual bool isTouchable();
     virtual Object* actionToTouch(bool isSuperMario);
+    virtual void restart();
 };
 

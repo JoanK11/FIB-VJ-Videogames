@@ -24,8 +24,15 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram) {
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y - 8)));
 }
+void Koopa::restart(){
+	Enemy::restart();
+	state = NOT_SPAWNED;
+	sprite->changeAnimation(0);
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y - 8)));
+}
 
 void Koopa::update(int deltaTime, float xmin, float xmax) {
+	
 	if (bDelete || state == SHELL_IDLE) return;
 
 	if (state == NOT_SPAWNED) {
@@ -60,10 +67,11 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 	if (!map->collisionMoveDown(posEnemy, glm::ivec2(32, 32), &posEnemy.y));
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y - 32)));
+	if (posEnemy.y >= map->getMapSize().y *map->getBlockSize()) bDelete = true;
 }
 
 int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
-	if (state == DIED) return 0;
+	if (state == DIED && bDelete) return 0;
 
 	// Margin for collision from above
 	float margin = 3.0f;

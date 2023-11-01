@@ -75,3 +75,10 @@ void Mushroom::render() {
 bool Mushroom::collide(const glm::vec2& plyPos, const glm::vec2& plySize) {
 	return currentState == VALID && Object::collide(plyPos, plySize);
 }
+
+void Mushroom::restart() {
+	Object::restart();
+	currentState = WAITING;
+	currentTime = 0;
+	spr->setPosition(pos);
+}

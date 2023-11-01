@@ -15,7 +15,7 @@ enum PlayerAnims {
 	STAND_RIGHT, STAND_LEFT, MOVE_RIGHT, MOVE_LEFT, JUMP_RIGHT, 
 	JUMP_LEFT, CHANGE_RIGHT, CHANGE_LEFT, DOWN_SUPER_RIGHT, DOWN_SUPER_LEFT, DEAD
 };
-
+Player::~Player() {}
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	bJumping = false, bFalling  = false;
 
@@ -142,10 +142,6 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 }
 
 void Player::update(int deltaTime, float xmin, float& xmax) {
-	/* DEAD DETECT */
-	if (posPlayer.y >= 448) {
-		return;
-	}
 
 	/* --- Mario Sprites --- */
 	Sprite* activeSprite = sprite;
@@ -401,7 +397,12 @@ void Player::setSuperMario(bool b) {
 
 
 glm::vec2 Player::getPos() const {
-	return posPlayer;
+	glm::vec2 pos = posPlayer;
+	if (superMario) {
+		pos.y -= 32;
+		return pos;
+	}
+	return pos;
 }
 glm::vec2 Player::getSize() const {
 	if (superMario) return glm::vec2(32, 64);

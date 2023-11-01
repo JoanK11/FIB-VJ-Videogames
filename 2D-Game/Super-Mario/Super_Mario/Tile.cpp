@@ -8,6 +8,7 @@ Tile::Tile(glm::vec2 tilePosition, glm::vec2 tileSize, glm::vec2 texturePosition
 	spr->changeAnimation(0);
 	spr->setPosition(tilePosition);
 	pos = tilePosition;
+	originalPos = pos;
 }
 Tile::Tile(){}
 
@@ -24,4 +25,8 @@ void Tile::update(float dt) {}
 
 Object* Tile::actionToTouch(bool isSuperMario) {
 	return nullptr;
+}
+
+void Tile::restart() {
+	pos = originalPos;
 }

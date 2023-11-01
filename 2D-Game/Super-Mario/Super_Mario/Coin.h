@@ -21,5 +21,6 @@ public:
     virtual bool collide(const glm::vec2& plyPos, const glm::vec2& plySize);
     virtual void update(float dt);
     virtual void render();
+    virtual void restart();
 };
 #endif

@@ -6,6 +6,7 @@ IntBox::IntBox(glm::vec2 pos, glm::vec2 size, ShaderProgram* p, Object* obj) {
 	text->loadFromFile("images/interrogante.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spr = Sprite::createSprite(glm::ivec2(size.x, size.y), glm::vec2(0.25, 1.0), text, p);
 	this->pos = pos;
+	originalPos = pos;
 	spr->setNumberAnimations(2);
 	spr->setAnimationSpeed(0, 6);
 	spr->addKeyframe(0, glm::vec2(0., 0.));
@@ -53,4 +54,12 @@ Object* IntBox::actionToTouch(bool isSuperMario) {
 		return obj;
 	}
 	return nullptr;
+}
+
+void IntBox::restart() {
+	Tile::restart();
+	currentState = IDLE;
+	currentTime = 0;
+	spr->setPosition(pos);
+	spr->changeAnimation(0);
 }

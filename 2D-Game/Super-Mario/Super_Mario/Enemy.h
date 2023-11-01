@@ -21,12 +21,16 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2& pos);
 	virtual int collision(const glm::vec2& pos, const glm::vec2& size);
+	void setOriginalPosition(const glm::vec2& pos);
+	virtual void restart();
 
+	protected:
 	SoundManager sound;
 	Sprite* sprite;
 	Texture spritesheet;
 	glm::ivec2 tileMapDispl, posEnemy;
-	int dir;
+	glm::ivec2 originalPos;
+	int dir, originalDir;
 	TileMap *map;
 	bool bDelete, spawned;
 	float currentTime;

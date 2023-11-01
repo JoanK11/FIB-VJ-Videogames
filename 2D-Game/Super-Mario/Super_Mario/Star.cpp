@@ -27,6 +27,14 @@ Star::Star(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMap
 	startY = pos.y;
 
 }
+void Star::restart() {
+	Object::restart();
+	currentTime = 0;
+	currentState = WAITING;
+	bJumping = true;
+	jumpAngle = 0;
+	startY = pos.y;
+}
 void Star::actionOfObject(Player* ply) {
 	if (currentState == ANIMATION) return;
 	else if (currentState == VALID) {

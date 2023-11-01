@@ -95,7 +95,19 @@ void TileMap::free()
 {
 	
 }
-
+void TileMap::restart() {
+	for (int j = 0; j < mapSize.y; j++)
+	{
+		for (int i = 0; i < mapSize.x; i++)
+		{
+			if (mapBlocks[j * mapSize.x + i] != nullptr) mapBlocks[j * mapSize.x + i]->restart();
+		}
+	}
+	for (Object* i : items) {
+		i->restart();
+	}
+	items = vector<Object*>(0, nullptr);
+}
 bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, ShaderProgram& program)
 {
 	ifstream fin;
@@ -183,8 +195,8 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 // Method collisionMoveDown also corrects Y coordinate if the box is
 // already intersecting a tile below.
 bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const
-{
-	if (!isInside(pos, size)) return false;
+{	
+	if (pos.x < 0.) return false;
 	int x, y0, y1;
 
 	x = pos.x / blockSize;
@@ -206,7 +218,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 
 bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const
 {
-	if (!isInside(pos, size)) return false;
+	if (pos.x + size.x >= mapSize.x * blockSize) return false;
 	int x, y0, y1;
 
 	x = (pos.x + size.x) / blockSize;
@@ -228,7 +240,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 }
 
 bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX, bool superMario) const {
-	if (!isInside(pos, size)) return false;
+	if (pos.x < 0.) return false;
 	int x, y0, y1;
 
 	x = (pos.x-1) / blockSize; // -1 para evitar que cambie entre STAND_LEFT y MOVE_LEFT
@@ -255,7 +267,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 }
 
 bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, int* posX, bool superMario) const {
-	if (!isInside(pos, size)) return false;
+	if (pos.x + size.x >= mapSize.x * blockSize) return false;
 	int x, y0, y1;
 
 	x = (pos.x + size.x) / blockSize;
@@ -284,7 +296,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 
 bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
 {
-	if (!isInside(pos, size)) return false;
+	if (pos.y + size.y >= mapSize.y * blockSize) return false;
 	int x0, x1, y;
 
 	x0 = pos.x / blockSize;
@@ -304,6 +316,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 
 	return false;
 }
+
 bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY, bool superMario){
 	if (!isInside(pos, size)) return false;
 	int x0, x1, y;
@@ -404,4 +417,8 @@ bool TileMap::isInside(const glm::ivec2& pos, const glm::ivec2& size) const{
 
 int TileMap::getBlockSize() const {
 	return blockSize;
+}
+
+glm::ivec2 TileMap::getMapSize() {
+	return mapSize;
 }
