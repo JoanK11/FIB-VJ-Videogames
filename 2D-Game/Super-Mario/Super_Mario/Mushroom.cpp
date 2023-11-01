@@ -4,6 +4,7 @@
 #define TIME_ANIMATION 1250
 #define FALL_STEP 4
 #define WAITING_TIME 250
+
 Mushroom::Mushroom(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMapDisplay, TileMap* m, ShaderProgram* p, float Vx) : Object(pos,size,tileMapDisplay,m){
 	
 	this->y_size = size.y;
@@ -23,7 +24,7 @@ Mushroom::Mushroom(const glm::vec2& pos, const glm::vec2& size, const glm::vec2&
 void Mushroom::actionOfObject(Player* ply) {
 	if (currentState == ANIMATION) return;
 	else if (currentState == VALID) {
-		ply->setSuperMario(true);
+		ply->setSuperMario();
 		currentState = USED;
 	}
 	else return;

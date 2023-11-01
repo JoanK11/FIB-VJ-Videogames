@@ -1,6 +1,6 @@
 #include "Goomba.h"
 
-#define DIED_TIME 400.f
+#define DIED_TIME 300.f
 
 enum GoombaAnims {MOVE, DIED};
 
@@ -77,7 +77,7 @@ void Goomba::update(int deltaTime, float xmin, float xmax) {
 }
 
 int Goomba::collision(const glm::vec2& pos, const glm::vec2& size) {
-	if (died && bDelete) return 0;
+	if (died || bDelete) return 0;
 
 	// Margin for collision from above
 	float margin = 3.0f;

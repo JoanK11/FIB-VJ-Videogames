@@ -38,7 +38,7 @@ void Star::restart() {
 void Star::actionOfObject(Player* ply) {
 	if (currentState == ANIMATION) return;
 	else if (currentState == VALID) {
-		//ply->setStarMario(true);
+		//ply->setStarMario();
 		currentState = USED;
 	}
 	else return;
