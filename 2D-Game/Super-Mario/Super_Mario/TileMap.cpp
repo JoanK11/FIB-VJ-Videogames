@@ -205,7 +205,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 	for (int y = y0; y <= y1; y++)
 	{
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
-			if (*posX - blockSize * (x + 1) <= 3)
+			if (*posX - blockSize * (x + 1) <= 4)
 			{
 				*posX = blockSize * (x + 1);
 				return true;
@@ -227,7 +227,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 	for (int y = y0; y <= y1; y++)
 	{
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
-			if (*posX - blockSize * x + size.x <= 3)
+			if (*posX - blockSize * x + size.x <= 4)
 			{
 				*posX = blockSize * x - size.x;
 				return true;
@@ -256,7 +256,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 	//cout << "Left - x: " << x << " / y0: " << y0 << " / y1 : " << y1 << endl;
 	for (int y = y0; y <= y1; y++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
-			if (*posX - blockSize * (x + 1) <= 3) {
+			if (*posX - blockSize * (x + 1) <= 4) {
 				*posX = blockSize * (x + 1);
 				return true;
 			}
@@ -283,7 +283,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 	//cout << "Right - x: " << x << " / y0: " << y0 << " / y1 : " << y1 << endl;
 	for (int y = y0; y <= y1; y++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
-			if (*posX - blockSize * x + size.x <= 3) {
+			if (*posX - blockSize * x + size.x <= 4) {
 				*posX = blockSize * x - size.x;
 				return true;
 			}
