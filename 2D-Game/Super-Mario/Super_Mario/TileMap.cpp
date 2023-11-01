@@ -207,7 +207,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * (x + 1) <= 4)
 			{
-				*posX = blockSize * (x + 1);
+				*posX = blockSize * (x + 1) +1;
 				return true;
 			}
 		}
@@ -229,7 +229,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * x + size.x <= 4)
 			{
-				*posX = blockSize * x - size.x;
+				*posX = blockSize * x - size.x -1;
 				return true;
 			}
 		}
@@ -241,7 +241,6 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 
 bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX, bool superMario) const {
 	if (pos.x < 0.) return false;
-	if (!isInside(pos, size)) return false;
 	int x, y0, y1;
 
 	x = (pos.x-1) / blockSize; // -1 para evitar que cambie entre STAND_LEFT y MOVE_LEFT
@@ -258,7 +257,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 	for (int y = y0; y <= y1; y++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * (x + 1) <= 4) {
-				*posX = blockSize * (x + 1);
+				*posX = blockSize * (x + 1) + 1;
 				return true;
 			}
 		}
@@ -269,7 +268,6 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 
 bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, int* posX, bool superMario) const {
 	if (pos.x + size.x >= mapSize.x * blockSize) return false;
-	if (!isInside(pos, size)) return false;
 	int x, y0, y1;
 
 	x = (pos.x + size.x) / blockSize;
@@ -286,7 +284,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 	for (int y = y0; y <= y1; y++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * x + size.x <= 4) {
-				*posX = blockSize * x - size.x;
+				*posX = blockSize * x - size.x -1;
 				return true;
 			}
 		}
