@@ -28,6 +28,8 @@ public:
 	void increaseScore(int x);
 	void increaseCoins();
 	void restart();
+	void restartLives();
+	bool gameOver();
 	
 	
 	void updateWorld(int x, int y);

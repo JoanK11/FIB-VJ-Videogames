@@ -24,7 +24,8 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram) {
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y - 8)));
 }
-void Koopa::restart(){
+
+void Koopa::restart() {
 	Enemy::restart();
 	state = NOT_SPAWNED;
 	sprite->changeAnimation(0);
@@ -32,8 +33,7 @@ void Koopa::restart(){
 }
 
 void Koopa::update(int deltaTime, float xmin, float xmax) {
-	
-	if (bDelete || state == SHELL_IDLE) return;
+	if (bDelete || state == SHELL_IDLE || state == DIED) return;
 
 	if (state == NOT_SPAWNED) {
 		if (posEnemy.x <= xmax + SPAWN_DISTANCE * 32) state = MOVING;
@@ -41,11 +41,6 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 	}
 
 	sprite->update(deltaTime);
-
-	if (state == DIED) {
-
-		return;
-	}
 
 	if (posEnemy.x < xmin - 32) {
 		bDelete = true;
@@ -61,7 +56,7 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 		dir = -1;
 	}
 
-	posEnemy.x += (state == MOVING ? VX : 6) * dir;
+	posEnemy.x += (state == MOVING ? VX : 8) * dir;
 
 	posEnemy.y += FALL_STEP;
 	if (!map->collisionMoveDown(posEnemy, glm::ivec2(32, 32), &posEnemy.y));
@@ -71,7 +66,7 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 }
 
 int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
-	if (state == DIED && bDelete) return 0;
+	if (state == NOT_SPAWNED || (state == DIED && bDelete)) return 0;
 
 	// Margin for collision from above
 	float margin = 3.0f;
@@ -86,11 +81,13 @@ int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
 	if (posB + margin >= goombaT && posB - margin <= goombaT &&
 		posT <= goombaB && posR >= goombaL && posL <= goombaR) {
 		cout << "Mario has collided from above" << endl;
-		if (state == MOVING) {
+		if (state == MOVING || state == SHELL_MOVING) {
 			state = SHELL_IDLE, sprite->changeAnimation(SHELL);
 		}
 		else if (state == SHELL_IDLE) {
 			state = SHELL_MOVING;
+			if (pos.x < posEnemy.x) dir = 1;
+			else dir = -1;
 		}
 
 		sound.playSFX("sfx/kick.wav");
@@ -102,7 +99,12 @@ int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
 	if (posB >= goombaT && posT <= goombaB && posR >= goombaL && posL <= goombaR) {
 		cout << "Mario has collided from left or right" << endl;
 
-		if (state == SHELL_IDLE) state = SHELL_MOVING;
+		if (state == SHELL_IDLE) {
+			state = SHELL_MOVING;
+			if (pos.x < posEnemy.x + 16) dir = 1;
+			else dir = -1;
+			return 0;
+		}
 		return -1;
 	}
 

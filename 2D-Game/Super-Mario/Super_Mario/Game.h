@@ -1,9 +1,7 @@
 #ifndef _GAME_INCLUDE
 #define _GAME_INCLUDE
 
-
 #include "Scene.h"
-#include "StartMenu.h"
 
 // la resolución original era 256*240 (512x480). En nuestro caso debería ser mínimo el doble en cada lugar
 #define SCREEN_WIDTH  832
@@ -47,7 +45,6 @@ private:
 	Scene scene;                      // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that we can have access at any time
 	bool modifierKeys[3]; // 0 = shift, 1 = ctrl, 2 = alt
-	StartMenu startMenu;
 };
 
 
