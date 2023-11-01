@@ -6,6 +6,7 @@
 #include <iostream>
 #include "Score.h"
 #include "SoundManager.h"
+
 #define VX 1
 #define SPAWN_DISTANCE 18 // 13 (tiles visibles) + 5 (tiles not visible)
 #define FALL_STEP 4
@@ -24,13 +25,13 @@ public:
 	void setOriginalPosition(const glm::vec2& pos);
 	virtual void restart();
 
-	protected:
+protected:
 	SoundManager sound;
 	Sprite* sprite;
 	Texture spritesheet;
 	glm::ivec2 tileMapDispl, posEnemy;
 	glm::ivec2 originalPos;
-	int dir, originalDir;
+	int dir;
 	TileMap *map;
 	bool bDelete, spawned;
 	float currentTime;

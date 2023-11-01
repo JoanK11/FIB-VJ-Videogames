@@ -60,7 +60,13 @@ bool StartMenu::showingMenu() const {
 }
 
 void StartMenu::openMenu() {
-	visible = true;
+	visible = true, state = 0;
+	pos = 0;
+	posYini = 212, espacio = 48;
+	posPlayer = glm::ivec2(240, posYini - 24);
+
+	keyUpPressed = false, keyDownPressed = false;
+	keyEnterPressed = false, keyEscPressed = false;
 }
 
 void StartMenu::update(int deltaTime) {
@@ -109,7 +115,6 @@ void StartMenu::update(int deltaTime) {
 		state = 0;
 	}
 
-
 	/* Update Key States */
 	if (!keyUp)    keyUpPressed    = false;
 	if (!keyDown)  keyDownPressed  = false;
@@ -121,60 +126,59 @@ void StartMenu::update(int deltaTime) {
 }
 
 void StartMenu::render() {
-	if (visible) {
-		if (state == 0) {
-			/* TEXT */
-			text.render("START GAME", glm::vec2(288, posYini), 18, glm::vec4(1, 1, 1, 1));
-			text.render("INSTRUCTIONS", glm::vec2(288, posYini + espacio), 18, glm::vec4(1, 1, 1, 1));
-			text.render("CREDITS", glm::vec2(288, posYini + 2 * espacio), 18, glm::vec4(1, 1, 1, 1));
-			text.render("EXIT", glm::vec2(288, posYini + 3 * espacio), 18, glm::vec4(1, 1, 1, 1));
+	if (!visible) return;
 
-			/* MUSHROOM CHOOSER */
-			restartShaders();
-			sprite->render();
-		}
-		else if (state == 1) {
-			restartShaders();
-			spriteWall->render();
-			text.render("INSTRUCTIONS", glm::vec2(SCREEN_WIDTH / 2 - 216, 112), 32, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+	if (state == 0) {
+		/* TEXT */
+		text.render("START GAME", glm::vec2(288, posYini), 18, glm::vec4(1, 1, 1, 1));
+		text.render("INSTRUCTIONS", glm::vec2(288, posYini + espacio), 18, glm::vec4(1, 1, 1, 1));
+		text.render("CREDITS", glm::vec2(288, posYini + 2 * espacio), 18, glm::vec4(1, 1, 1, 1));
+		text.render("EXIT", glm::vec2(288, posYini + 3 * espacio), 18, glm::vec4(1, 1, 1, 1));
 
-			/* MOVEMENT */
-			text.render("Movement:",   glm::vec2(96, 176),  16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-			textKeyboard.render("W",   glm::vec2(156, 218), 32, glm::vec4(1, 1, 1, 1));
-			textKeyboard.render("ASD", glm::vec2(120, 254), 32, glm::vec4(1, 1, 1, 1));
-			textKeyboard.render("g",   glm::vec2(120, 302), 32, glm::vec4(1, 1, 1, 1));
-			text.render("Run",         glm::vec2(196, 292), 12, glm::vec4(1, 1, 1, 1));
-			textKeyboard.render("Z",   glm::vec2(120, 350), 32, glm::vec4(1, 1, 1, 1));
-			text.render("Mute",        glm::vec2(160, 340), 12, glm::vec4(1, 1, 1, 1));
+		/* MUSHROOM CHOOSER */
+		restartShaders();
+		sprite->render();
+	}
+	else if (state == 1) {
+		restartShaders();
+		spriteWall->render();
+		text.render("INSTRUCTIONS", glm::vec2(SCREEN_WIDTH / 2 - 216, 112), 32, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
 
-			/* CHEATS */
-			text.render("Cheats:",     glm::vec2(528, 176), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-			textKeyboard.render("M",   glm::vec2(544, 228), 32, glm::vec4(1, 1, 1, 1));
-			text.render("Super Mario", glm::vec2(584, 218), 12, glm::vec4(1, 1, 1, 1));
-			textKeyboard.render("G",   glm::vec2(544, 276), 32, glm::vec4(1, 1, 1, 1));
-			text.render("Star Mario",  glm::vec2(584, 266), 12, glm::vec4(1, 1, 1, 1));
-			textKeyboard.render("12",  glm::vec2(544, 324), 32, glm::vec4(1, 1, 1, 1));
-			text.render("Level",       glm::vec2(620, 314), 12, glm::vec4(1, 1, 1, 1));
-			textKeyboard.render("a",   glm::vec2(544, 372), 32, glm::vec4(1, 1, 1, 1));
-			text.render("Pause",       glm::vec2(600, 362), 12, glm::vec4(1, 1, 1, 1));
-			text.render("Esc: Exit", glm::vec2(104, 400), 12, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-			// Esc = "m"
-		}
-		else if (state == 2) {
-			restartShaders();
-			spriteWall->render();
-			sprite3->render();
-			text.render("CREDITS", glm::vec2(SCREEN_WIDTH / 2 - 128, 112), 32, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-			text.render("Autors:", glm::vec2(88, 176), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-			text.render("* Joan Caballero", glm::vec2(104, 208), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-			text.render("* Jeremy Comino", glm::vec2(104, 232), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-			text.render("Siempre te recordaremos D.E.P.", glm::vec2(164, 264), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-			//text.render("Gracias por ser mi razon de existir", glm::vec2(108, 264), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+		/* MOVEMENT */
+		text.render("Movement:",   glm::vec2(96, 176),  16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+		textKeyboard.render("W",   glm::vec2(156, 218), 32, glm::vec4(1, 1, 1, 1));
+		textKeyboard.render("ASD", glm::vec2(120, 254), 32, glm::vec4(1, 1, 1, 1));
+		textKeyboard.render("g",   glm::vec2(120, 302), 32, glm::vec4(1, 1, 1, 1));
+		text.render("Run",         glm::vec2(196, 292), 12, glm::vec4(1, 1, 1, 1));
+		textKeyboard.render("Z",   glm::vec2(120, 350), 32, glm::vec4(1, 1, 1, 1));
+		text.render("Mute",        glm::vec2(160, 340), 12, glm::vec4(1, 1, 1, 1));
 
-			//textKeyboard.render('E', glm::vec2(104, 404), 32, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-			text.render("Esc: Exit", glm::vec2(104, 400), 12, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-		}
-		
+		/* CHEATS */
+		text.render("Cheats:",     glm::vec2(528, 176), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+		textKeyboard.render("M",   glm::vec2(544, 228), 32, glm::vec4(1, 1, 1, 1));
+		text.render("Super Mario", glm::vec2(584, 218), 12, glm::vec4(1, 1, 1, 1));
+		textKeyboard.render("G",   glm::vec2(544, 276), 32, glm::vec4(1, 1, 1, 1));
+		text.render("Star Mario",  glm::vec2(584, 266), 12, glm::vec4(1, 1, 1, 1));
+		textKeyboard.render("12",  glm::vec2(544, 324), 32, glm::vec4(1, 1, 1, 1));
+		text.render("Level",       glm::vec2(620, 314), 12, glm::vec4(1, 1, 1, 1));
+		textKeyboard.render("a",   glm::vec2(544, 372), 32, glm::vec4(1, 1, 1, 1));
+		text.render("Pause",       glm::vec2(600, 362), 12, glm::vec4(1, 1, 1, 1));
+		text.render("Esc: Exit", glm::vec2(104, 400), 12, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+		// Esc = "m"
+	}
+	else if (state == 2) {
+		restartShaders();
+		spriteWall->render();
+		sprite3->render();
+		text.render("CREDITS", glm::vec2(SCREEN_WIDTH / 2 - 128, 112), 32, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+		text.render("Autors:", glm::vec2(88, 176), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+		text.render("* Joan Caballero", glm::vec2(104, 208), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+		text.render("* Jeremy Comino", glm::vec2(104, 232), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+		text.render("Siempre te recordaremos D.E.P.", glm::vec2(164, 264), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+		//text.render("Gracias por ser mi razon de existir", glm::vec2(108, 264), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+
+		//textKeyboard.render('E', glm::vec2(104, 404), 32, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+		text.render("Esc: Exit", glm::vec2(104, 400), 12, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
 	}
 }
 

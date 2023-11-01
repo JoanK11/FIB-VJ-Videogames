@@ -5,7 +5,7 @@
 void Score::init() {
 	score = 0, lastScore = 0, coins = 0;
 	world = make_pair(1, 1);
-	time = 400; lives = 10;
+	time = 400; lives = 1;
 
 	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
 		cout << "Could not load font!!!" << endl;
@@ -15,6 +15,10 @@ void Score::init() {
 void Score::restart() {
 	score = lastScore;
 	time = 400;
+}
+
+void Score::restartLives() {
+	lives = 1;
 }
 
 void Score::update(int deltaTime) {
@@ -36,11 +40,14 @@ void Score::render() {
 
 	/* TIME */
 	text.render("TIME", glm::vec2(560, 32), 20, glm::vec4(1, 1, 1, 1));
-	text.render(to_string(int(time)), glm::vec2(572, 56), 20, glm::vec4(1, 1, 1, 1));
+	if (lives > 0)
+		text.render(to_string(int(time)), glm::vec2(572, 56), 20, glm::vec4(1, 1, 1, 1));
 
 	/* LIVES */
-	text.render("LIVES", glm::vec2(704, 32), 20, glm::vec4(1, 1, 1, 1));
-	text.render(to_string(lives), glm::vec2(736, 56), 20, glm::vec4(1, 1, 1, 1));
+	if (lives > 0) {
+		text.render("LIVES", glm::vec2(704, 32), 20, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(lives), glm::vec2(736, 56), 20, glm::vec4(1, 1, 1, 1));
+	}
 }
 
 
@@ -59,6 +66,11 @@ void Score::updateWorld(int x, int y) {
 void Score::decreaseLive() {
 	--lives;
 }
+
 double Score::getTime() {
 	return time;
+}
+
+bool Score::gameOver() {
+	return lives == 0;
 }

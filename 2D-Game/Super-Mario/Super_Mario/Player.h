@@ -22,29 +22,57 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 
-	void setSuperMario(bool b);
-	void setStarMario(bool b);
+	void setSuperMario();
+	void setStarMario();
+
+	// Enemy Collisions
+	void jumpEnemy();
+	void collisionEnemy();
+
+	// Check Player Conditions
+	bool isDead();
+	bool isImmune();
+
+	void powerDown();
 
 
 	glm::vec2 getPos() const;
 	glm::vec2 getSize() const;
+
 private:
 	SoundManager sound;
+	Texture spritesheet;
+	Sprite *sprite, *superSprite, *starSprite;
+	TileMap *map;
 
 	bool bJumping, bFalling;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
-	Texture spritesheet;
-	Sprite *sprite, *superSprite, *starSprite;
-	TileMap *map;
+	
+	
 	float Vx, Vy;
+	bool jumpingEnemy;
 
 	bool keyJumpPressed;
 
 	// Mario Types
+	enum MarioStates { NORMAL, SUPER, STAR, DYING };
+	MarioStates state;
 	bool superMario, superMarioKey;
+
+	/* Star Mario */
 	bool starMario, starMarioKey;
 	int starMarioTime;
+
+	/* Power-Up Animation */
+	float timePowerUpAnimation;
+	bool bPowerUpAnimation;
+	int renderPowerUpAnimation;
+
+	/* Power-Down (Immunity) */
+	float timeImmunity;
+	bool bImmunity;
+	int renderImmunity;
 };
 
 
