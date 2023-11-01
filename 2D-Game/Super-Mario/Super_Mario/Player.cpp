@@ -225,15 +225,15 @@ void Player::update(int deltaTime, float xmin, float& xmax) {
 
 	else if (keyRight) {
 		if (!bJumping && !bFalling && activeSprite->animation() != MOVE_RIGHT) {
-			cout << "r1" << endl;
+			//cout << "r1" << endl;
 			activeSprite->changeAnimation(MOVE_RIGHT);
 		}
 		bool colision = false;
 		if (!bJumping && !bFalling && Vx < 0) {
-			cout << "    r2" << endl;
+			//cout << "    r2" << endl;
 			activeSprite->changeAnimation(CHANGE_LEFT);
 			if (map->collisionMoveLeft(posPlayer, dimMario, &posPlayer.x, superMario)) {
-				cout << "      r3" << endl;
+				//cout << "      r3" << endl;
 				Vx = 0;
 				activeSprite->changeAnimation(STAND_LEFT);
 				colision = true;
@@ -249,12 +249,12 @@ void Player::update(int deltaTime, float xmin, float& xmax) {
 		}
 
 		if (map->collisionMoveRight(posPlayer, dimMario, &posPlayer.x, superMario)) {
-			cout << "        r4" << endl;
+			//cout << "        r4" << endl;
 			Vx = 0;
 			activeSprite->changeAnimation(STAND_RIGHT);
 		}
 		else if (!colision) {
-			cout << "          r5" << endl;
+			//cout << "          r5" << endl;
 			posPlayer.x += Vx;
 		}
 
