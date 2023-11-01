@@ -42,8 +42,7 @@ public:
 	void render(glm::vec2 pos, glm::vec2 size) const;
 	void free();
 	
-	int getTileSize() const { return blockSize; }
-
+	glm::ivec2 getMapSize();
 	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const;
 	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2&, int* posX) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
@@ -57,6 +56,7 @@ public:
 	int getBlockSize() const;
     void update(int dt);
 	void collisionWithItems(Player *ply);
+	void restart();
 private:
 	bool loadLevel(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
 	Tile* getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS,glm::vec2 tileMapDisplay, glm::vec2 textureC, glm::vec2 textureS, Texture* t, TileMap* map);

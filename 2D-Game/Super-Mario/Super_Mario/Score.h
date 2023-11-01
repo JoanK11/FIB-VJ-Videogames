@@ -32,7 +32,7 @@ public:
 	
 	void updateWorld(int x, int y);
 	void decreaseLive();
-	
+	double getTime();
 
 private:
 	int score, lastScore;

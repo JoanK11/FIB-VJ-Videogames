@@ -9,7 +9,7 @@ public:
     void update(int deltaTime, float xmin, float xmax);
 
     int collision(const glm::vec2& pos, const glm::vec2& size);
-
+    virtual void restart();
 private:
     enum KoopaStates {
         NOT_SPAWNED, MOVING,

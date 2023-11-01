@@ -4,6 +4,7 @@ Enemy::Enemy() {
 	sprite = NULL;
 	map = NULL;
 	dir = -1;
+	originalDir = -1;
 	bDelete = false, spawned = false;
 	currentTime = 0;
 }
@@ -36,4 +37,12 @@ int Enemy::collision(const glm::vec2& pos, const glm::vec2& size) {
 	cout << "ENEMY COLLISION" << endl;
 	return 0;
 }
-
+void Enemy::setOriginalPosition(const glm::vec2& pos) {
+	originalPos = pos;
+}
+void Enemy::restart() {
+	dir = originalDir;
+	posEnemy = originalPos;
+	bDelete = false, spawned = false;
+	currentTime = 0;
+}

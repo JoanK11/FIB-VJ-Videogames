@@ -59,4 +59,6 @@ void Score::updateWorld(int x, int y) {
 void Score::decreaseLive() {
 	--lives;
 }
-
+double Score::getTime() {
+	return time;
+}

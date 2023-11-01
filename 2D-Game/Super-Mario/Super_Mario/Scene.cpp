@@ -37,7 +37,7 @@ void Scene::init() {
 	map = TileMap::createTileMap("levels/prueba.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getBlockSize(), INIT_PLAYER_Y_TILES * map->getBlockSize()));
 	player->setTileMap(map);
 	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1)));
 	currentTime = 0.0f;
@@ -59,7 +59,8 @@ void Scene::init() {
 	for (int i = 0; i < 16; ++i) {
 		Goomba* e = new Goomba;
 		e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		e->setPosition(glm::vec2(posEnemies[i].x * map->getTileSize(), posEnemies[i].y * map->getTileSize()));
+		e->setPosition(glm::vec2(posEnemies[i].x * map->getBlockSize(), posEnemies[i].y * map->getBlockSize()));
+		e->setOriginalPosition(glm::vec2(posEnemies[i].x * map->getBlockSize(), posEnemies[i].y * map->getBlockSize()));
 		e->setTileMap(map);
 		enemies.push_back(e);
 	}
@@ -69,7 +70,8 @@ void Scene::init() {
 	for (int i = 16; i < 18; ++i) {
 		Koopa* k = new Koopa;
 		k->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		k->setPosition(glm::vec2(posEnemies[i].x * map->getTileSize(), posEnemies[i].y * map->getTileSize()));
+		k->setPosition(glm::vec2(posEnemies[i].x * map->getBlockSize(), posEnemies[i].y * map->getBlockSize()));
+		k->setOriginalPosition(glm::vec2(posEnemies[i].x * map->getBlockSize(), posEnemies[i].y * map->getBlockSize()));
 		k->setTileMap(map);
 		enemies.push_back(k);
 	}
@@ -80,13 +82,19 @@ void Scene::init() {
 
 void Scene::restart() {
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getBlockSize(), INIT_PLAYER_Y_TILES * map->getBlockSize()));
+	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1)));
 	currentTime = 0.0f;
+	map->restart();
+	Score::instance().restart();
+	for (Enemy* e : enemies) {
+		e->restart();
+	}
 }
 
 void Scene::change() {
 	map = TileMap::createTileMap("levels/prueba.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getBlockSize(), INIT_PLAYER_Y_TILES * map->getBlockSize()));
 	player->setTileMap(map);
 	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1)));
 	currentTime = 0.0f;
@@ -137,6 +145,14 @@ void Scene::update(int deltaTime, bool inMenu) {
 	/* CAMERA POSITION UPDATE */
 	if (actualMid != camera.getXmid()) {
 		camera.setMidXPosition(actualMid);
+	}
+
+	glm::vec2 pos = player->getPos();
+	glm::vec2 size = player->getSize();
+	if (pos.y + size.y >= map->getBlockSize() * map->getMapSize().y) {
+		Score::instance().decreaseLive();
+		restart();
+
 	}
 }
 

@@ -38,3 +38,10 @@ void Brick::update(float dt) {
 		}
 	}
 }
+
+void Brick::restart() {
+	Tile::restart();
+	currentTime = 0;
+	currentState = IDLE;
+	spr->setPosition(pos);
+}

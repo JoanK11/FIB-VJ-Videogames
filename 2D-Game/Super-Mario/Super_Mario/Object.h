@@ -15,6 +15,7 @@ protected:
 	Sprite *spr;
 	TileMap *map;
 	glm::ivec2 pos, size;
+	glm::ivec2 originalPos;
 	glm::ivec2 tileMapDisplay;
 public:
 	Object(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMapDisplay, TileMap *m);
@@ -23,6 +24,7 @@ public:
 	virtual bool collide(const glm::vec2& plyPos, const glm::vec2& plySize);
 	virtual void update(float dt) = 0;
 	virtual void render() = 0;
+	virtual void restart();
 };
 
 #endif;

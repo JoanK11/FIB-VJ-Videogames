@@ -3,6 +3,7 @@
 #include "Player.h"
 Object::Object(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMapDisplay, TileMap* m) {
 	this->pos = pos;
+	originalPos = pos;
 	this->size = size;
 	this->tileMapDisplay = tileMapDisplay;
 	map = m;
@@ -24,4 +25,8 @@ bool Object::collide(const glm::vec2& plyPos, const glm::vec2& plySize) {
 	bool b = (miny1 < maxy2) && (miny2 < maxy1);
 
 	return a && b;
+}
+
+void Object::restart() {
+	pos = originalPos;
 }

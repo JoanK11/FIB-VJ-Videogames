@@ -52,3 +52,10 @@ void Coin::render() {
 	}
 }
 
+void Coin::restart() {
+	Object::restart();
+	currentState = NOT_ACHIEVED;
+	currentTime = 0;
+	spr->setPosition(pos);
+}
+

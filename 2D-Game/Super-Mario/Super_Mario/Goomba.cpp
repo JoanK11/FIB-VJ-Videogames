@@ -23,6 +23,13 @@ void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram) {
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
+void Goomba::restart() {
+	Enemy::restart();
+	died = false;
+	sprite->changeAnimation(0);
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+}
+
 void Goomba::update(int deltaTime, float xmin, float xmax) {
 	if (bDelete) return;
 
@@ -66,10 +73,11 @@ void Goomba::update(int deltaTime, float xmin, float xmax) {
 	if (!map->collisionMoveDown(posEnemy, glm::ivec2(32, 32), &posEnemy.y));
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+	if (posEnemy.y >= map->getMapSize().y * map->getBlockSize()) bDelete = true;
 }
 
 int Goomba::collision(const glm::vec2& pos, const glm::vec2& size) {
-	if (died) return 0;
+	if (died && bDelete) return 0;
 
 	// Margin for collision from above
 	float margin = 3.0f;
