@@ -10,7 +10,7 @@
 #define SCREEN_X 0
 #define SCREEN_Y 32
 
-#define INIT_PLAYER_X_TILES 192
+#define INIT_PLAYER_X_TILES 2
 #define INIT_PLAYER_Y_TILES 11
 
 #define TIME_GAME_OVER 7000
