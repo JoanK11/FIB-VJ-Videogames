@@ -80,6 +80,7 @@ void TileMap::render(glm::vec2 pos, glm::vec2 size) const
 			if (mapBackground[j * mapSize.x + i] != nullptr)  mapBackground[j * mapSize.x + i]->render();
 		}
 	}
+	flag->render();
 	int s = items.size();
 	for (int i = 0; i < s; ++i) {
 		items[i]->render();
@@ -107,6 +108,7 @@ void TileMap::restart() {
 		i->restart();
 	}
 	items = vector<Object*>(0, nullptr);
+	flag->restart();
 }
 bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, ShaderProgram& program)
 {
@@ -184,8 +186,14 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 	//Object* p = new Mushroom(glm::vec2{ 8 * 32,12 * 32 }, glm::vec2{ 32,32 }, minCoords, this, &program, 2.0);
 	//Object* p = new Coin(glm::vec2{ 8 * 32,11 * 32 },  glm::vec2{ 32,32 }, minCoords, this, &program);
 	//items.push_back(p);
+	getline(fin, line);
+	sstream.str(line);
+	int ymin, ymax, xlim;
+	sstream >> ymin >> ymax >> xlim;
+	sstream.clear();
+	flag = new Flag(ymin * blockSize, ymax * blockSize, xlim * blockSize, minCoords, &program);
 	fin.close();
-
+	
 	return true;
 }
 
@@ -420,4 +428,11 @@ int TileMap::getBlockSize() const {
 
 glm::ivec2 TileMap::getMapSize() {
 	return mapSize;
+}
+
+bool TileMap::reachFinishLine(const glm::ivec2& pos, const glm::ivec2& size, bool superMario) {
+	return flag->touchTheFlag(pos, size, superMario);
+}
+bool TileMap::animationOfFlag(float dt) {
+	return flag->update(dt);
 }

@@ -26,12 +26,11 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="Koopa.cpp" />
+    <ClCompile Include="Flag.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
     <ClInclude Include="Brick.h" />
-    <ClCompile Include="Mushroom.h" />
-    <ClCompile Include="Star.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="StartMenu.h" />
@@ -53,5 +52,8 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="Koopa.h" />
+    <ClInclude Include="Mushroom.h" />
+    <ClInclude Include="Star.h" />
+    <ClInclude Include="Flag.h" />
   </ItemGroup>
 </Project>
