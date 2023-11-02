@@ -204,13 +204,15 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 // already intersecting a tile below.
 bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const
 {	
-	if (pos.y + size.y >= mapSize.y * blockSize) return false;
+	if (pos.y >= mapSize.y * blockSize) return false;
 	if (pos.x < 0.) return false;
 	int x, y0, y1;
 
 	x = pos.x / blockSize;
 	y0 = pos.y / blockSize;
 	y1 = (pos.y + size.y - 1) / blockSize;
+	y0 = max(0, y0);
+	y1 = min(y1, mapSize.y - 1);
 	for (int y = y0; y <= y1; y++)
 	{
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
@@ -227,13 +229,15 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 
 bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const
 {	
-	if (pos.y + size.y >= mapSize.y * blockSize) return false;
+	if (pos.y  >= mapSize.y * blockSize) return false;
 	if (pos.x + size.x >= mapSize.x * blockSize) return false;
 	int x, y0, y1;
 
 	x = (pos.x + size.x) / blockSize;
 	y0 = pos.y / blockSize;
 	y1 = (pos.y + size.y - 1) / blockSize;
+	y0 = max(0, y0);
+	y1 = min(y1, mapSize.y - 1);
 	for (int y = y0; y <= y1; y++)
 	{
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
@@ -251,7 +255,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 
 bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX, bool superMario) const {
 	//SI NO PONGO ESTAS LINEAS, HAY ACCESOS A NULLPTR
-	if (pos.y + size.y >= mapSize.y * blockSize) return false;
+	if (pos.y  >= mapSize.y * blockSize) return false;
 	if (pos.x < 0.) return false;
 	int x, y0, y1;
 
@@ -264,7 +268,8 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 		y0 = pos.y / blockSize;
 		y1 = (pos.y + size.y - 1) / blockSize;
 	}
-
+	y0 = max(0, y0);
+	y1 = min(y1, mapSize.y - 1);
 	//cout << "Left - x: " << x << " / y0: " << y0 << " / y1 : " << y1 << endl;
 	for (int y = y0; y <= y1; y++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
@@ -279,7 +284,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 }
 
 bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, int* posX, bool superMario) const {
-	if (pos.y + size.y >= mapSize.y * blockSize) return false;
+	if (pos.y  >= mapSize.y * blockSize) return false;
 	if (pos.x + size.x >= mapSize.x * blockSize) return false;
 
 	int x, y0, y1;
@@ -293,7 +298,8 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 		y0 = pos.y / blockSize;
 		y1 = (pos.y + size.y - 1) / blockSize;
 	}
-	
+	y0 = max(0, y0);
+	y1 = min(y1, mapSize.y - 1);
 	//cout << "Right - x: " << x << " / y0: " << y0 << " / y1 : " << y1 << endl;
 	for (int y = y0; y <= y1; y++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
