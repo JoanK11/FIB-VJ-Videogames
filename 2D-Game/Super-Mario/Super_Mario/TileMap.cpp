@@ -204,6 +204,7 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 // already intersecting a tile below.
 bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const
 {	
+	if (pos.y + size.y >= mapSize.y * blockSize) return false;
 	if (pos.x < 0.) return false;
 	int x, y0, y1;
 
@@ -225,7 +226,8 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 }
 
 bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const
-{
+{	
+	if (pos.y + size.y >= mapSize.y * blockSize) return false;
 	if (pos.x + size.x >= mapSize.x * blockSize) return false;
 	int x, y0, y1;
 
@@ -248,6 +250,8 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 }
 
 bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX, bool superMario) const {
+	//SI NO PONGO ESTAS LINEAS, HAY ACCESOS A NULLPTR
+	if (pos.y + size.y >= mapSize.y * blockSize) return false;
 	if (pos.x < 0.) return false;
 	int x, y0, y1;
 
@@ -258,7 +262,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 	}
 	else {
 		y0 = pos.y / blockSize;
-		y1 = y0;
+		y1 = (pos.y + size.y - 1) / blockSize;
 	}
 
 	//cout << "Left - x: " << x << " / y0: " << y0 << " / y1 : " << y1 << endl;
@@ -275,7 +279,9 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 }
 
 bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, int* posX, bool superMario) const {
+	if (pos.y + size.y >= mapSize.y * blockSize) return false;
 	if (pos.x + size.x >= mapSize.x * blockSize) return false;
+
 	int x, y0, y1;
 
 	x = (pos.x + size.x) / blockSize;
@@ -285,7 +291,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 	}
 	else {
 		y0 = pos.y / blockSize;
-		y1 = y0;
+		y1 = (pos.y + size.y - 1) / blockSize;
 	}
 	
 	//cout << "Right - x: " << x << " / y0: " << y0 << " / y1 : " << y1 << endl;

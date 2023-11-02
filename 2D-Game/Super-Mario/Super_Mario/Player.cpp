@@ -335,6 +335,10 @@ void Player::update(int deltaTime, float xmin, float& xmax) {
 		if (map->collisionMoveRight(posPlayer, dimMario, &posPlayer.x, superMario)) Vx = 0;
 		else if (map->collisionMoveLeft(posPlayer, dimMario, &posPlayer.x, superMario)) Vx = 0;
 	}
+	
+	//al aplicar los respectivos velocidades hay que fijarse que no esta intersectado (hecho por jeremy)
+	map->collisionMoveRight(posPlayer, dimMario, &posPlayer.x, superMario);
+	map->collisionMoveLeft(posPlayer, dimMario, &posPlayer.x, superMario);
 
 	if (bJumping) {
 		if (jumpingEnemy) jumpAngle += JUMP_ANGLE_STEP_ENEMY;
