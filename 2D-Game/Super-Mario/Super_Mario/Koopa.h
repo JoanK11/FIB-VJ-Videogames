@@ -10,14 +10,17 @@ public:
 
     int collision(const glm::vec2& pos, const glm::vec2& size);
     virtual void restart();
+    
+    glm::ivec2 getSize() const;
+    bool canKillEnemies() const;
+    void kill();
 
 private:
     enum KoopaStates {
-        NOT_SPAWNED, MOVING,
-        SHELL_IDLE, SHELL_MOVING, DIED
+        NOT_SPAWNED, MOVING, SHELL_IDLE,
+        SHELL_MOVING, DIED, DYING
     };
     KoopaStates state;
-
 };
 
 #endif // _KOOPA_INCLUDE

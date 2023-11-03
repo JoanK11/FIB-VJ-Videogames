@@ -16,7 +16,7 @@ class Player {
 public:
 	virtual ~Player();
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
-	void update(int deltaTime, float xmin, float& xmax);
+	void update(int deltaTime, float xmin, float& xmax, SoundManager& soundScene);
 	void render();
 	
 	void setTileMap(TileMap *tileMap);
@@ -34,6 +34,7 @@ public:
 	bool isImmune();
 
 	void powerDown();
+	bool isStarMario() const;
 
 
 	glm::vec2 getPos() const;
@@ -41,7 +42,7 @@ public:
 
 private:
 	SoundManager sound;
-	Texture spritesheet;
+	Texture spritesheet, starSpritesheet;
 	Sprite *sprite, *superSprite, *starSprite;
 	TileMap *map;
 

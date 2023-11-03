@@ -1,13 +1,13 @@
 #include "Koopa.h"
 
-enum koopaAnims { MOVE_LEFT, MOVE_RIGHT, SHELL };
+enum koopaAnims { MOVE_LEFT, MOVE_RIGHT, SHELL, UPSIDE_DOWN };
 
 void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram) {
 	state = NOT_SPAWNED;
 
 	spritesheet.loadFromFile("images/enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 64), glm::vec2(0.125, 0.5f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(3);
+	sprite->setNumberAnimations(4);
 
 	sprite->setAnimationSpeed(MOVE_LEFT, 2);
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.5f));
@@ -19,6 +19,9 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram) {
 
 	sprite->setAnimationSpeed(SHELL, 1);
 	sprite->addKeyframe(SHELL, glm::vec2(0.5f, 0.5f));
+
+	sprite->setAnimationSpeed(UPSIDE_DOWN, 1);
+	sprite->addKeyframe(UPSIDE_DOWN, glm::vec2(0.75f, 0.5f));
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -42,12 +45,18 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 
 	sprite->update(deltaTime);
 
-	if (posEnemy.x < xmin - 32) {
+	if (posEnemy.x < xmin - 32 || posEnemy.y >= map->getMapSize().y * map->getBlockSize()) {
+		state = DIED;
 		bDelete = true;
 		return;
 	}
 
-	glm::ivec2 dimKoopa = glm::ivec2(32, 24);
+	if (state == DYING) {
+		Enemy::dyingAnimation();
+		return;
+	}
+
+	glm::ivec2 dimKoopa = Koopa::getSize();
 
 	if (map->collisionMoveLeft(posEnemy, glm::ivec2(32, 32), &posEnemy.x, true) && dir < 0) {
 		dir = 1;
@@ -56,7 +65,7 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 		dir = -1;
 	}
 
-	posEnemy.x += (state == MOVING ? VX : 8) * dir;
+	posEnemy.x += (state == MOVING ? VX : 6) * dir;
 
 	posEnemy.y += FALL_STEP;
 	if (!map->collisionMoveDown(posEnemy, glm::ivec2(32, 32), &posEnemy.y));
@@ -66,10 +75,10 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 }
 
 int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
-	if (state == NOT_SPAWNED || (state == DIED && bDelete)) return 0;
+	if (state == NOT_SPAWNED || state == DYING || (state == DIED && bDelete)) return 0;
 
 	// Margin for collision from above
-	float margin = 3.0f;
+	float margin = 2.0f;
 
 	float posL = pos.x, posR = pos.x + size.x;
 	float posT = pos.y, posB = pos.y + size.y;
@@ -80,7 +89,7 @@ int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
 	// Check for collision from above (Koopa turns shell or dies)
 	if (posB + margin >= goombaT && posB - margin <= goombaT &&
 		posT <= goombaB && posR >= goombaL && posL <= goombaR) {
-		cout << "Mario has collided from above" << endl;
+		//cout << "Mario has collided from above" << endl;
 		if (state == MOVING || state == SHELL_MOVING) {
 			state = SHELL_IDLE, sprite->changeAnimation(SHELL);
 		}
@@ -97,7 +106,7 @@ int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
 
 	// Check for collision from the left or right
 	if (posB >= goombaT && posT <= goombaB && posR >= goombaL && posL <= goombaR) {
-		cout << "Mario has collided from left or right" << endl;
+		//cout << "Mario has collided from left or right" << endl;
 
 		if (state == SHELL_IDLE) {
 			state = SHELL_MOVING;
@@ -110,4 +119,23 @@ int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
 
 	// No collision
 	return 0;
+}
+
+glm::ivec2 Koopa::getSize() const {
+	if (state == SHELL_IDLE || state == SHELL_MOVING)
+		return glm::ivec2(32, 30);
+	else return glm::ivec2(32, 48);
+}
+
+bool Koopa::canKillEnemies() const {
+	if (state == SHELL_MOVING) return true;
+	return false;
+}
+
+void Koopa::kill() {
+	state = DYING;
+	jumpAngle = 0; startY = posEnemy.y;
+	sound.playSFX("sfx/kick.wav");
+	Score::instance().increaseScore(100);
+	sprite->changeAnimation(UPSIDE_DOWN);
 }

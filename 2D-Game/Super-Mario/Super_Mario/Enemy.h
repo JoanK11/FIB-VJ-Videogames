@@ -10,6 +10,8 @@
 #define VX 1
 #define SPAWN_DISTANCE 18 // 13 (tiles visibles) + 5 (tiles not visible)
 #define FALL_STEP 4
+#define JUMP_ANGLE_STEP 8
+#define JUMP_HEIGHT_DYING 48
 
 class Enemy {
 
@@ -24,6 +26,15 @@ public:
 	virtual int collision(const glm::vec2& pos, const glm::vec2& size);
 	void setOriginalPosition(const glm::vec2& pos);
 	virtual void restart();
+	void changeDirection();
+	virtual bool canKillEnemies() const;
+
+	virtual void kill();
+
+	void dyingAnimation();
+
+	glm::ivec2 getPos() const;
+	virtual glm::ivec2 getSize() const;
 
 protected:
 	SoundManager sound;
@@ -35,6 +46,7 @@ protected:
 	TileMap *map;
 	bool bDelete, spawned;
 	float currentTime;
+	int startY, jumpAngle;
 
 private:
 	

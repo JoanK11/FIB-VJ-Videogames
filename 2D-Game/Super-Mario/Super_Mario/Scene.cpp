@@ -6,7 +6,6 @@
 #include "Goomba.h"
 #include "Koopa.h"
 
-
 #define SCREEN_X 0
 #define SCREEN_Y 32
 
@@ -185,15 +184,20 @@ void Scene::update(int deltaTime) {
 	float actualMid = camera.getXmid();
 
 	/* --- Player --- */
-	player->update(deltaTime, camera.getXmin(), actualMid);
+	player->update(deltaTime, camera.getXmin(), actualMid, sound);
 
-	/* --- Enemies --- */
+	/* --- Enemies (Update & Collision with Player) --- */
 	for (auto* enemy : enemies) {
 		enemy->update(deltaTime, camera.getXmin(), actualMid);
 
 		if (player->isDead() || player->isImmune()) continue;
 		int col = enemy->collision(player->getPos(), player->getSize());
 
+		if (player->isStarMario() && col != 0) {
+			cout << "Star Mario Collision" << endl;
+			enemy->kill();
+			continue;
+		}
 		if (col > 0) {
 			// Mario Kills Enemy, needs to jump
 			player->jumpEnemy();
@@ -201,6 +205,38 @@ void Scene::update(int deltaTime) {
 		else if (col < 0) {
 			// Enemy kills Mario
 			player->collisionEnemy();
+		}
+	}
+
+	/* Enemies (Collision with other Enemies) */
+	for (int i = 0; i < enemies.size(); ++i) {
+		//if () // Poner un if para saltar más rápido
+		for (int j = i + 1; j < enemies.size(); ++j) {
+			int col = enemies[i]->collision(enemies[j]->getPos(), enemies[j]->getSize());
+
+			if (col < 0) {
+				bool e1 = enemies[i]->canKillEnemies();
+				bool e2 = enemies[j]->canKillEnemies();
+
+				// Passive Collision: We need to change directions of both of them
+				if (!e1 && !e2) {
+					enemies[i]->changeDirection();
+					enemies[j]->changeDirection();
+				}
+				// Kill Collision: enemies[i] kills the enemies[j]
+				else if (e1 && !e2) {
+					enemies[j]->kill();
+				}
+				// Kill Collision: enemies[j] kills the enemies[i]
+				else if (!e1 && e2) {
+					enemies[i]->kill();
+				}
+				// Mutual Kill Collision: both enemies die
+				else {
+					enemies[i]->kill();
+					enemies[j]->kill();
+				}
+			}
 		}
 	}
 
@@ -283,6 +319,3 @@ void Scene::initShaders() {
 	vShader.free();
 	fShader.free();
 }
-
-
-

@@ -10,9 +10,11 @@ public:
 	void update(int deltaTime, float xmin, float xmax);
 
 	int collision(const glm::vec2& pos, const glm::vec2& size);
-	virtual void restart();
+	void restart();
+	void kill();
 private:
 	bool died;
+	bool dying;
 };
 
 #endif _GOOMBA_INCLUDE
