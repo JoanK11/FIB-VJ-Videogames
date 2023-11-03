@@ -347,9 +347,15 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 
 	for (int x = x0; x <= x1; x++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
-			if (*posY - blockSize * (y + 1) <= 4) {
-				if (superMario) *posY = blockSize * (y+2) ; // Jeremy mira el valor correcto del 2 porfa
-				else *posY = blockSize * (y + 1);
+			if (!superMario && *posY - blockSize * (y + 1) <= 4) {
+				 // Jeremy mira el valor correcto del 2 porfa
+				*posY = blockSize * (y + 1);
+				Object* obj = mapBlocks[y * mapSize.x + x]->actionToTouch(superMario);
+				if (obj != nullptr) items.push_back(obj);
+				return true;
+			}
+			else if (superMario && *posY - blockSize * (y + 2) <= 4) {
+			    *posY = blockSize * (y + 2); // Jeremy mira el valor correcto del 2 porfa
 				Object* obj = mapBlocks[y * mapSize.x + x]->actionToTouch(superMario);
 				if (obj != nullptr) items.push_back(obj);
 				return true;
