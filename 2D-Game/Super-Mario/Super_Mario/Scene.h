@@ -53,6 +53,8 @@ private:
 	Projection camera;
 	glm::mat4 projection;
 	//Score *score;
+
+	
 	
 };
 
