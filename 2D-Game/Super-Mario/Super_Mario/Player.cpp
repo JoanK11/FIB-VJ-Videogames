@@ -186,8 +186,20 @@ void Player::update(int deltaTime, float xmin, float& xmax) {
 	glm::ivec2 dimMario = glm::ivec2(32, 32);
 	if (superMario) dimMario = glm::ivec2(32, 64);
 
+	/*CHECKING IF REACHED THE FINISH LINE*/
+	if (map->reachFinishLine(posPlayer, dimMario, superMario)) {
+		//if we reach the flag then we are idle and change animation
+		bJumping = false;
+		map->animationOfFlag(deltaTime);
+		posPlayer.y += FALL_STEP;
+		map->collisionMoveDown(posPlayer, dimMario, &posPlayer.y);
+		sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+		superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
+		return;
+	}
+
 	/* Check Fall Off Map */
-	if (state != DYING && posPlayer.y > 448) {
+	if (state != DYING && posPlayer.y > map ->getMapSize().y * map -> getBlockSize()) {
 		sprite->changeAnimation(DEAD);
 		state = DYING;
 		jumpAngle = 90;
@@ -323,6 +335,10 @@ void Player::update(int deltaTime, float xmin, float& xmax) {
 		if (map->collisionMoveRight(posPlayer, dimMario, &posPlayer.x, superMario)) Vx = 0;
 		else if (map->collisionMoveLeft(posPlayer, dimMario, &posPlayer.x, superMario)) Vx = 0;
 	}
+	
+	//al aplicar los respectivos velocidades hay que fijarse que no esta intersectado (hecho por jeremy)
+	map->collisionMoveRight(posPlayer, dimMario, &posPlayer.x, superMario);
+	map->collisionMoveLeft(posPlayer, dimMario, &posPlayer.x, superMario);
 
 	if (bJumping) {
 		if (jumpingEnemy) jumpAngle += JUMP_ANGLE_STEP_ENEMY;

@@ -55,9 +55,6 @@ void Goomba::update(int deltaTime, float xmin, float xmax) {
 		bDelete = true;
 		return;
 	}
-
-	if (map->collisionMoveLeft(posEnemy, glm::ivec2(32, 32), &posEnemy.x, false)) {
-	}
 		
 
 	if (map->collisionMoveLeft(posEnemy, glm::ivec2(32, 32), &posEnemy.x, false) && dir < 0) {

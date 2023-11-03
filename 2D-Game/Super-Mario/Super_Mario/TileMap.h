@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include "IntBox.h"
 #include <vector>
+#include "Flag.h"
 // forward declaration (.h) + circular inclusion (.cpp) for resolve the problem of circular dependency
 class Coin;
 class Object;
@@ -57,6 +58,8 @@ public:
     void update(int dt);
 	void collisionWithItems(Player *ply);
 	void restart();
+	bool reachFinishLine(const glm::ivec2& pos, const glm::ivec2& size, bool superMario );
+	bool animationOfFlag(float dt);
 private:
 	bool loadLevel(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
 	Tile* getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS,glm::vec2 tileMapDisplay, glm::vec2 textureC, glm::vec2 textureS, Texture* t, TileMap* map);
@@ -73,6 +76,8 @@ private:
 	Tile **mapBlocks;
 	Tile** mapBackground;
 	std::vector<Object *> items;
+	Flag* flag;
+
 };
 
 

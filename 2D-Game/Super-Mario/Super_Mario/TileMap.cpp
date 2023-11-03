@@ -80,6 +80,7 @@ void TileMap::render(glm::vec2 pos, glm::vec2 size) const
 			if (mapBackground[j * mapSize.x + i] != nullptr)  mapBackground[j * mapSize.x + i]->render();
 		}
 	}
+	flag->render();
 	int s = items.size();
 	for (int i = 0; i < s; ++i) {
 		items[i]->render();
@@ -107,6 +108,7 @@ void TileMap::restart() {
 		i->restart();
 	}
 	items = vector<Object*>(0, nullptr);
+	flag->restart();
 }
 bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, ShaderProgram& program)
 {
@@ -184,8 +186,14 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 	//Object* p = new Mushroom(glm::vec2{ 8 * 32,12 * 32 }, glm::vec2{ 32,32 }, minCoords, this, &program, 2.0);
 	//Object* p = new Coin(glm::vec2{ 8 * 32,11 * 32 },  glm::vec2{ 32,32 }, minCoords, this, &program);
 	//items.push_back(p);
+	getline(fin, line);
+	sstream.str(line);
+	int ymin, ymax, xlim;
+	sstream >> ymin >> ymax >> xlim;
+	sstream.clear();
+	flag = new Flag(ymin * blockSize, ymax * blockSize, xlim * blockSize, minCoords, &program);
 	fin.close();
-
+	
 	return true;
 }
 
@@ -196,12 +204,15 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 // already intersecting a tile below.
 bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const
 {	
+	if (pos.y >= mapSize.y * blockSize) return false;
 	if (pos.x < 0.) return false;
 	int x, y0, y1;
 
 	x = pos.x / blockSize;
 	y0 = pos.y / blockSize;
 	y1 = (pos.y + size.y - 1) / blockSize;
+	y0 = max(0, y0);
+	y1 = min(y1, mapSize.y - 1);
 	for (int y = y0; y <= y1; y++)
 	{
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
@@ -217,19 +228,22 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 }
 
 bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const
-{
+{	
+	if (pos.y  >= mapSize.y * blockSize) return false;
 	if (pos.x + size.x >= mapSize.x * blockSize) return false;
 	int x, y0, y1;
 
 	x = (pos.x + size.x) / blockSize;
 	y0 = pos.y / blockSize;
 	y1 = (pos.y + size.y - 1) / blockSize;
+	y0 = max(0, y0);
+	y1 = min(y1, mapSize.y - 1);
 	for (int y = y0; y <= y1; y++)
 	{
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * x + size.x <= 4)
 			{
-				*posX = blockSize * x - size.x;
+				*posX = blockSize * x - size.x ;
 				return true;
 			}
 		}
@@ -240,8 +254,9 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 }
 
 bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX, bool superMario) const {
+	//SI NO PONGO ESTAS LINEAS, HAY ACCESOS A NULLPTR
+	if (pos.y  >= mapSize.y * blockSize) return false;
 	if (pos.x < 0.) return false;
-	if (!isInside(pos, size)) return false;
 	int x, y0, y1;
 
 	x = (pos.x-1) / blockSize; // -1 para evitar que cambie entre STAND_LEFT y MOVE_LEFT
@@ -251,9 +266,10 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 	}
 	else {
 		y0 = pos.y / blockSize;
-		y1 = y0;
+		y1 = (pos.y + size.y - 1) / blockSize;
 	}
-
+	y0 = max(0, y0);
+	y1 = min(y1, mapSize.y - 1);
 	//cout << "Left - x: " << x << " / y0: " << y0 << " / y1 : " << y1 << endl;
 	for (int y = y0; y <= y1; y++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
@@ -268,8 +284,9 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 }
 
 bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, int* posX, bool superMario) const {
+	if (pos.y  >= mapSize.y * blockSize) return false;
 	if (pos.x + size.x >= mapSize.x * blockSize) return false;
-	if (!isInside(pos, size)) return false;
+
 	int x, y0, y1;
 
 	x = (pos.x + size.x) / blockSize;
@@ -279,14 +296,15 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 	}
 	else {
 		y0 = pos.y / blockSize;
-		y1 = y0;
+		y1 = (pos.y + size.y - 1) / blockSize;
 	}
-	
+	y0 = max(0, y0);
+	y1 = min(y1, mapSize.y - 1);
 	//cout << "Right - x: " << x << " / y0: " << y0 << " / y1 : " << y1 << endl;
 	for (int y = y0; y <= y1; y++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * x + size.x <= 4) {
-				*posX = blockSize * x - size.x;
+				*posX = blockSize * x - size.x ;
 				return true;
 			}
 		}
@@ -324,14 +342,20 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 
 	x0 = pos.x / blockSize;
 	x1 = (pos.x + size.x - 1) / blockSize;
-	if (superMario) y = (pos.y - 31) / blockSize; // Jeremy mira el valor correcto del 31 porfa
+	if (superMario) y = (pos.y - 32) / blockSize; // Jeremy mira el valor correcto del 31 porfa
 	else y  = pos.y / blockSize;
 
 	for (int x = x0; x <= x1; x++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
-			if (*posY - blockSize * (y + 1) <= 4) {
-				if (superMario) *posY = blockSize * (y+2); // Jeremy mira el valor correcto del 2 porfa
-				else *posY = blockSize * (y + 1);
+			if (!superMario && *posY - blockSize * (y + 1) <= 4) {
+				 // Jeremy mira el valor correcto del 2 porfa
+				*posY = blockSize * (y + 1);
+				Object* obj = mapBlocks[y * mapSize.x + x]->actionToTouch(superMario);
+				if (obj != nullptr) items.push_back(obj);
+				return true;
+			}
+			else if (superMario && *posY - blockSize * (y + 2) <= 4) {
+			    *posY = blockSize * (y + 2); // Jeremy mira el valor correcto del 2 porfa
 				Object* obj = mapBlocks[y * mapSize.x + x]->actionToTouch(superMario);
 				if (obj != nullptr) items.push_back(obj);
 				return true;
@@ -422,4 +446,11 @@ int TileMap::getBlockSize() const {
 
 glm::ivec2 TileMap::getMapSize() {
 	return mapSize;
+}
+
+bool TileMap::reachFinishLine(const glm::ivec2& pos, const glm::ivec2& size, bool superMario) {
+	return flag->touchTheFlag(pos, size, superMario);
+}
+bool TileMap::animationOfFlag(float dt) {
+	return flag->update(dt);
 }
