@@ -7,6 +7,8 @@
 #include "Mushroom.h"
 #include "Star.h"
 #include "Player.h"
+#include "Goomba.h"
+#include "Koopa.h"
 using namespace std;
 
 
@@ -90,6 +92,9 @@ void TileMap::render(glm::vec2 pos, glm::vec2 size) const
 			if (mapBlocks[j * mapSize.x + i] != nullptr)  mapBlocks[j * mapSize.x + i]->render();
 		}
 	}
+	for (auto* enemy : enemies) {
+		enemy->render();
+	}
 }
 
 void TileMap::free()
@@ -109,6 +114,9 @@ void TileMap::restart() {
 	}
 	items = vector<Object*>(0, nullptr);
 	flag->restart();
+	for (Enemy* e : enemies) {
+		e->restart();
+	}
 }
 bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, ShaderProgram& program)
 {
@@ -192,8 +200,43 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 	sstream >> ymin >> ymax >> xlim;
 	sstream.clear();
 	flag = new Flag(ymin * blockSize, ymax * blockSize, xlim * blockSize, minCoords, &program);
+
+	//enemies
+	getline(fin, line);
+	sstream.str(line);
+	int numberOfEnemies;
+	sstream >> numberOfEnemies;
+	sstream.clear();
+	enemies = vector<Enemy*>(numberOfEnemies, nullptr);
+
+
+	for (int i = 0; i < numberOfEnemies; ++i) {
+		getline(fin, line);
+		sstream.str(line);
+		char type;
+		int x, y;
+		sstream >> type >> x >> y;
+		sstream.clear();
+		if (type == 'G') {
+			Goomba* e = new Goomba;
+			e->init(minCoords, program);
+			e->setPosition(glm::vec2(x * this->getBlockSize(),y * this->getBlockSize()));
+			e->setOriginalPosition(glm::vec2(x * this->getBlockSize(), y * this->getBlockSize()));
+			e->setTileMap(this);
+			enemies[i] = e;
+		}
+		else if (type == 'K') {
+			Koopa* e = new Koopa;
+			e->init(minCoords, program);
+			e->setPosition(glm::vec2(x * this->getBlockSize(), y * this->getBlockSize()));
+			e->setOriginalPosition(glm::vec2(x * this->getBlockSize(), y * this->getBlockSize()));
+			e->setTileMap(this);
+			enemies[i] = e;
+		}
+	}
 	fin.close();
 	
+
 	return true;
 }
 
@@ -218,7 +261,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * (x + 1) <= 4)
 			{
-				*posX = blockSize * (x + 1);
+				*posX = blockSize * (x + 1) + 2;
 				return true;
 			}
 		}
@@ -243,7 +286,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * x + size.x <= 4)
 			{
-				*posX = blockSize * x - size.x ;
+				*posX = blockSize * x - size.x  -2 ;
 				return true;
 			}
 		}
@@ -262,7 +305,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 	x = (pos.x-1) / blockSize; // -1 para evitar que cambie entre STAND_LEFT y MOVE_LEFT
 	if (superMario) { // para no hacer esto se tendria que hacer que pos.y entrase como pos.y - 32
 		y0 = (pos.y - 31) / blockSize;
-		y1 = y0 + 1;
+		y1 = (pos.y + size.y - 32 - 1) / blockSize;
 	}
 	else {
 		y0 = pos.y / blockSize;
@@ -274,7 +317,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 	for (int y = y0; y <= y1; y++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * (x + 1) <= 4) {
-				*posX = blockSize * (x + 1);
+				*posX = blockSize * (x + 1) +2;
 				return true;
 			}
 		}
@@ -292,7 +335,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 	x = (pos.x + size.x) / blockSize;
 	if (superMario) { // para no hacer esto se tendria que hacer que pos.y entrase como pos.y - 32
 		y0 = (pos.y - 31) / blockSize;
-		y1 = y0 + 1;
+		y1 = (pos.y + size.y -32 - 1) / blockSize;
 	}
 	else {
 		y0 = pos.y / blockSize;
@@ -304,7 +347,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 	for (int y = y0; y <= y1; y++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * x + size.x <= 4) {
-				*posX = blockSize * x - size.x ;
+				*posX = blockSize * x - size.x -2;
 				return true;
 			}
 		}
@@ -453,4 +496,60 @@ bool TileMap::reachFinishLine(const glm::ivec2& pos, const glm::ivec2& size, boo
 }
 bool TileMap::animationOfFlag(float dt) {
 	return flag->update(dt);
+}
+
+void TileMap::updateEnemies(int deltaTime, Player* player, float xmin, float xmax) {
+	/* --- Enemies (Update & Collision with Player) --- */
+	for (auto* enemy : enemies) {
+		enemy->update(deltaTime, xmin, xmax);
+
+		if (player->isDead() || player->isImmune()) continue;
+		int col = enemy->collision(player->getPos(), player->getSize());
+
+		if (player->isStarMario() && col != 0) {
+			cout << "Star Mario Collision" << endl;
+			enemy->kill();
+			continue;
+		}
+		if (col > 0) {
+			// Mario Kills Enemy, needs to jump
+			player->jumpEnemy();
+		}
+		else if (col < 0) {
+			// Enemy kills Mario
+			player->collisionEnemy();
+		}
+	}
+
+	/* Enemies (Collision with other Enemies) */
+	for (int i = 0; i < enemies.size(); ++i) {
+		//if () // Poner un if para saltar más rápido
+		for (int j = i + 1; j < enemies.size(); ++j) {
+			int col = enemies[i]->collision(enemies[j]->getPos(), enemies[j]->getSize());
+
+			if (col < 0) {
+				bool e1 = enemies[i]->canKillEnemies();
+				bool e2 = enemies[j]->canKillEnemies();
+
+				// Passive Collision: We need to change directions of both of them
+				if (!e1 && !e2) {
+					enemies[i]->changeDirection();
+					enemies[j]->changeDirection();
+				}
+				// Kill Collision: enemies[i] kills the enemies[j]
+				else if (e1 && !e2) {
+					enemies[j]->kill();
+				}
+				// Kill Collision: enemies[j] kills the enemies[i]
+				else if (!e1 && e2) {
+					enemies[i]->kill();
+				}
+				// Mutual Kill Collision: both enemies die
+				else {
+					enemies[i]->kill();
+					enemies[j]->kill();
+				}
+			}
+		}
+	}
 }

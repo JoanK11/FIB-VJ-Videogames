@@ -35,10 +35,13 @@ public:
 
 	void powerDown();
 	bool isStarMario() const;
+	bool isSuperMario() const;
 
 
 	glm::vec2 getPos() const;
 	glm::vec2 getSize() const;
+
+	void animationOfReachingFinal();
 
 private:
 	SoundManager sound;

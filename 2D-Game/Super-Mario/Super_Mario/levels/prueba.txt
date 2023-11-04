@@ -18,3 +18,22 @@ IM MM GR MM DM W W W W W IAR MAR MAR MAR DAR W IM MM DM W W W W IAR MAR DAR W W 
 S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S W W S S S S S S S S S S S S S S W W W W S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S W W S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S 
 S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S W W S S S S S S S S S S S S S S W W W W S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S W W S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S S 
 2 10 198  ---- ymin ymax xlim of flag
+18 -- Number of enemies
+G 22 11
+G 40 11
+G 51 11
+G 52 11
+G 80 3
+G 82 3
+G 97 11
+G 99 11
+G 114 11
+G 116 11
+G 124 11
+G 126 11
+G 129 11
+G 131 11
+G 174 11 
+G 176 11
+K 107 11
+K 14 10
