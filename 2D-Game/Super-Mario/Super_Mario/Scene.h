@@ -9,7 +9,6 @@
 #include "Projection.h"
 #include "Score.h"
 #include "SoundManager.h"
-#include "Enemy.h"
 #include <vector>
 #include "Text.h"
 #include "StartMenu.h"
@@ -34,7 +33,6 @@ private:
 
 private:
 	SoundManager sound;
-	vector<Enemy*> enemies;
 	StartMenu startMenu;
 
 

@@ -3,13 +3,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 #include "Game.h"
-#include "Goomba.h"
-#include "Koopa.h"
 
 #define SCREEN_X 0
 #define SCREEN_Y 32
 
-#define INIT_PLAYER_X_TILES 192
+#define INIT_PLAYER_X_TILES 2
 #define INIT_PLAYER_Y_TILES 11
 
 #define TIME_GAME_OVER 7000
@@ -20,7 +18,6 @@ Scene::Scene() {
 	player = NULL;
 	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(0.f, 0.f));
 	//score = NULL;
-	enemies = vector<Enemy*>();
 }
 
 Scene::~Scene() {
@@ -28,9 +25,7 @@ Scene::~Scene() {
 	if (player != NULL) delete player;
 	//if (score != NULL) delete score;
 
-	for (auto enemy : enemies) {
-		delete enemy;
-	}
+
 }
 
 void Scene::init() {
@@ -50,36 +45,6 @@ void Scene::init() {
 	/* Start Menu */
 	startMenu.init();
 
-	vector<glm::vec2> posEnemies;
-	posEnemies.push_back(glm::vec2(22, 11)); posEnemies.push_back(glm::vec2(40, 11));
-	posEnemies.push_back(glm::vec2(51, 11)); posEnemies.push_back(glm::vec2(52, 11));
-	posEnemies.push_back(glm::vec2(80,  3)); posEnemies.push_back(glm::vec2(82,  3));
-	posEnemies.push_back(glm::vec2(97, 11)); posEnemies.push_back(glm::vec2(99, 11));
-	posEnemies.push_back(glm::vec2(114, 11)); posEnemies.push_back(glm::vec2(116, 11));
-	posEnemies.push_back(glm::vec2(124, 11)); posEnemies.push_back(glm::vec2(126, 11));
-	posEnemies.push_back(glm::vec2(129, 11)); posEnemies.push_back(glm::vec2(131, 11));
-	posEnemies.push_back(glm::vec2(174, 11)); posEnemies.push_back(glm::vec2(176, 11));
-
-	/* Goombas */
-	for (int i = 0; i < 16; ++i) {
-		Goomba* e = new Goomba;
-		e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		e->setPosition(glm::vec2(posEnemies[i].x * map->getBlockSize(), posEnemies[i].y * map->getBlockSize()));
-		e->setOriginalPosition(glm::vec2(posEnemies[i].x * map->getBlockSize(), posEnemies[i].y * map->getBlockSize()));
-		e->setTileMap(map);
-		enemies.push_back(e);
-	}
-
-	posEnemies.push_back(glm::vec2(107, 11)); posEnemies.push_back(glm::vec2(14, 10)); // Koopas
-	/* Koopas */
-	for (int i = 16; i < 18; ++i) {
-		Koopa* k = new Koopa;
-		k->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		k->setPosition(glm::vec2(posEnemies[i].x * map->getBlockSize(), posEnemies[i].y * map->getBlockSize()));
-		k->setOriginalPosition(glm::vec2(posEnemies[i].x * map->getBlockSize(), posEnemies[i].y * map->getBlockSize()));
-		k->setTileMap(map);
-		enemies.push_back(k);
-	}
 
 	pause = false, keyPausePressed = false;
 	playingMusic = false; gameOver = false;
@@ -107,9 +72,7 @@ void Scene::restart() {
 	Score::instance().restart();
 
 	/* --- Enemies --- */
-	for (Enemy* e : enemies) {
-		e->restart();
-	}
+	
 
 	/* --- Sound --- */
 	sound.stopBGM();
@@ -194,59 +157,7 @@ void Scene::update(int deltaTime) {
 	/* --- Player --- */
 	player->update(deltaTime, camera.getXmin(), actualMid, sound);
 
-	/* --- Enemies (Update & Collision with Player) --- */
-	for (auto* enemy : enemies) {
-		enemy->update(deltaTime, camera.getXmin(), actualMid);
-
-		if (player->isDead() || player->isImmune()) continue;
-		int col = enemy->collision(player->getPos(), player->getSize());
-
-		if (player->isStarMario() && col != 0) {
-			cout << "Star Mario Collision" << endl;
-			enemy->kill();
-			continue;
-		}
-		if (col > 0) {
-			// Mario Kills Enemy, needs to jump
-			player->jumpEnemy();
-		}
-		else if (col < 0) {
-			// Enemy kills Mario
-			player->collisionEnemy();
-		}
-	}
-
-	/* Enemies (Collision with other Enemies) */
-	for (int i = 0; i < enemies.size(); ++i) {
-		//if () // Poner un if para saltar más rápido
-		for (int j = i + 1; j < enemies.size(); ++j) {
-			int col = enemies[i]->collision(enemies[j]->getPos(), enemies[j]->getSize());
-
-			if (col < 0) {
-				bool e1 = enemies[i]->canKillEnemies();
-				bool e2 = enemies[j]->canKillEnemies();
-
-				// Passive Collision: We need to change directions of both of them
-				if (!e1 && !e2) {
-					enemies[i]->changeDirection();
-					enemies[j]->changeDirection();
-				}
-				// Kill Collision: enemies[i] kills the enemies[j]
-				else if (e1 && !e2) {
-					enemies[j]->kill();
-				}
-				// Kill Collision: enemies[j] kills the enemies[i]
-				else if (!e1 && e2) {
-					enemies[i]->kill();
-				}
-				// Mutual Kill Collision: both enemies die
-				else {
-					enemies[i]->kill();
-					enemies[j]->kill();
-				}
-			}
-		}
-	}
+	map->updateEnemies(deltaTime, player, camera.getXmin(), actualMid);
 
 	/* --- Music --- */
 	if (player->isDead()) sound.stopBGM();
@@ -289,10 +200,7 @@ void Scene::render() {
 	/* Player */
 	player->render();
 
-	/* Enemies */
-	for (auto* enemy : enemies) {
-		enemy->render();
-	}
+	
 
 	/* Score */
 	Score::instance().render();
