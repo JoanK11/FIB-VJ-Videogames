@@ -14,6 +14,7 @@ private:
     Object* obj;
     IntBoxState currentState;
     float currentTime;
+
 public:
     IntBox(glm::vec2 pos, glm::vec2 size, ShaderProgram* p, Object* obj);
     virtual void update(float dt);

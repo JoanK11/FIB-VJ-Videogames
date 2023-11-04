@@ -7,6 +7,8 @@ class TileMap;
 #include <glm/glm.hpp>
 #include "Texture.h"
 #include "Sprite.h"
+#include "SoundManager.h"
+#include "Score.h"
 
 
 class Object
@@ -17,6 +19,7 @@ protected:
 	glm::ivec2 pos, size;
 	glm::ivec2 originalPos;
 	glm::ivec2 tileMapDisplay;
+	SoundManager sound;
 public:
 	Object(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMapDisplay, TileMap *m);
 	virtual ~Object() {};

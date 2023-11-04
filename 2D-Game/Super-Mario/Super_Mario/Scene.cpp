@@ -142,6 +142,7 @@ void Scene::update(int deltaTime) {
 		player->animationOfReachingFinal();
 		return;
 	}
+
 	/* --- Time --- */
 	currentTime += deltaTime;
 

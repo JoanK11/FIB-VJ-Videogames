@@ -21,7 +21,7 @@ Mushroom::Mushroom(const glm::vec2& pos, const glm::vec2& size, const glm::vec2&
 	currentState = WAITING;
 
 }
-
+#include <iostream>
 void Mushroom::actionOfObject(Player* ply) {
 	if (currentState == ANIMATION) return;
 	else if (currentState == VALID) {
@@ -29,9 +29,8 @@ void Mushroom::actionOfObject(Player* ply) {
 		currentState = USED;
 	}
 	else return;
-	
-
 }
+
 void Mushroom::update(float dt) {
 	if (currentState == WAITING) {
 		currentTime += dt;
@@ -66,6 +65,7 @@ void Mushroom::update(float dt) {
 		spr->setPosition(pos + tileMapDisplay);
 	}
 }
+
 void Mushroom::render() {
 	if (currentState == ANIMATION) {
 		spr->render();

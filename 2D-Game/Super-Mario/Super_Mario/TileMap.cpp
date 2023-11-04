@@ -383,11 +383,12 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 	if (!isInside(pos, size)) return false;
 	int x0, x1, y;
 
-	x0 = pos.x / blockSize;
-	x1 = (pos.x + size.x - 1) / blockSize;
+	x0 = (pos.x + size.x*0.3f) / blockSize;
+	x1 = (pos.x + 0.7f * size.x - 1) / blockSize;
 	if (superMario) y = (pos.y - 32) / blockSize; // Jeremy mira el valor correcto del 31 porfa
 	else y  = pos.y / blockSize;
 
+	cout << x0 << ", " << x1 << endl;
 	for (int x = x0; x <= x1; x++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (!superMario && *posY - blockSize * (y + 1) <= 4) {
@@ -463,6 +464,7 @@ Object* TileMap::get_Object(char type, ShaderProgram& s, glm::vec2 tileC, glm::v
 	}
 	return nullptr;
 }
+
 void TileMap::collisionWithItems(Player* ply) {
 	int s = items.size();
 	for (int i = 0; i < s; ++i) {
@@ -503,7 +505,7 @@ void TileMap::updateEnemies(int deltaTime, Player* player, float xmin, float xma
 	for (auto* enemy : enemies) {
 		enemy->update(deltaTime, xmin, xmax);
 
-		if (player->isDead() || player->isImmune()) continue;
+		if (player->isDead()) continue;
 		int col = enemy->collision(player->getPos(), player->getSize());
 
 		if (player->isStarMario() && col != 0) {
@@ -515,7 +517,7 @@ void TileMap::updateEnemies(int deltaTime, Player* player, float xmin, float xma
 			// Mario Kills Enemy, needs to jump
 			player->jumpEnemy();
 		}
-		else if (col < 0) {
+		else if (col < 0 && !player->isImmune()) {
 			// Enemy kills Mario
 			player->collisionEnemy();
 		}
