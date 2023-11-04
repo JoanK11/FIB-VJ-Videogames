@@ -218,7 +218,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * (x + 1) <= 4)
 			{
-				*posX = blockSize * (x + 1);
+				*posX = blockSize * (x + 1) + 2;
 				return true;
 			}
 		}
@@ -243,7 +243,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * x + size.x <= 4)
 			{
-				*posX = blockSize * x - size.x ;
+				*posX = blockSize * x - size.x  -2 ;
 				return true;
 			}
 		}
@@ -262,7 +262,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 	x = (pos.x-1) / blockSize; // -1 para evitar que cambie entre STAND_LEFT y MOVE_LEFT
 	if (superMario) { // para no hacer esto se tendria que hacer que pos.y entrase como pos.y - 32
 		y0 = (pos.y - 31) / blockSize;
-		y1 = y0 + 1;
+		y1 = (pos.y + size.y - 32 - 1) / blockSize;
 	}
 	else {
 		y0 = pos.y / blockSize;
@@ -274,7 +274,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 	for (int y = y0; y <= y1; y++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * (x + 1) <= 4) {
-				*posX = blockSize * (x + 1);
+				*posX = blockSize * (x + 1) +2;
 				return true;
 			}
 		}
@@ -292,7 +292,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 	x = (pos.x + size.x) / blockSize;
 	if (superMario) { // para no hacer esto se tendria que hacer que pos.y entrase como pos.y - 32
 		y0 = (pos.y - 31) / blockSize;
-		y1 = y0 + 1;
+		y1 = (pos.y + size.y -32 - 1) / blockSize;
 	}
 	else {
 		y0 = pos.y / blockSize;
@@ -304,7 +304,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 	for (int y = y0; y <= y1; y++) {
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * x + size.x <= 4) {
-				*posX = blockSize * x - size.x ;
+				*posX = blockSize * x - size.x -2;
 				return true;
 			}
 		}

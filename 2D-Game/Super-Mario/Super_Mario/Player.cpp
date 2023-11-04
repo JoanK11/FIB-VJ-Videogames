@@ -252,17 +252,6 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 	glm::ivec2 dimMario = glm::ivec2(32, 32);
 	if (superMario) dimMario = glm::ivec2(32, 64);
 
-	/*CHECKING IF REACHED THE FINISH LINE*/
-	if (map->reachFinishLine(posPlayer, dimMario, superMario)) {
-		//if we reach the flag then we are idle and change animation
-		bJumping = false;
-		map->animationOfFlag(deltaTime);
-		posPlayer.y += FALL_STEP;
-		map->collisionMoveDown(posPlayer, dimMario, &posPlayer.y);
-		sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-		superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
-		return;
-	}
 
 	/* Check Fall Off Map */
 	if (state != DYING && posPlayer.y > map ->getMapSize().y * map -> getBlockSize()) {
@@ -603,4 +592,14 @@ glm::vec2 Player::getSize() const {
 
 bool Player::isStarMario() const {
 	return starMario;
+}
+bool Player::isSuperMario() const {
+	return superMario;
+}
+void Player::animationOfReachingFinal() {
+	bJumping = false;
+	posPlayer.y += FALL_STEP;
+	map->collisionMoveDown(posPlayer, getSize(), &posPlayer.y);
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
 }
