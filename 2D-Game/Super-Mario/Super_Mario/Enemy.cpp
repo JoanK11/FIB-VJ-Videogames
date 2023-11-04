@@ -7,6 +7,11 @@ Enemy::Enemy() {
 	bDelete = false, spawned = false;
 	currentTime = 0;
 	jumpAngle = 0, startY = 0;
+	showingText = false;
+	
+	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
+		cout << "Could not load font!!!" << endl;
+	}
 }
 
 Enemy::~Enemy() {
@@ -15,8 +20,15 @@ Enemy::~Enemy() {
 }
 
 void Enemy::render() {
-	if (bDelete) return;
-	sprite->render();
+	if (!bDelete) sprite->render();
+
+	/*
+	if (showingText) {
+		float y = timeText / TIME_TEXT * 48;
+		if (timeText > TIME_TEXT) showingText = false;
+		text.render("100", glm::vec2(textPos.x, textPos.y + tileMapDispl.y - y), 20, glm::vec4(1, 1, 1, 1));
+	}
+	*/
 }
 
 void Enemy::setTileMap(TileMap *tileMap) {
@@ -55,6 +67,7 @@ void Enemy::restart() {
 	bDelete = false, spawned = false;
 	posEnemy = originalPos;
 	currentTime = 0;
+	showingText = false;
 }
 
 void Enemy::changeDirection() {
@@ -78,3 +91,9 @@ void Enemy::dyingAnimation() {
 }
 
 void Enemy::kill() {}
+
+void Enemy::showText() {
+	showingText = true;
+	timeText = 0;
+	textPos = posEnemy;
+}

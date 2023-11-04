@@ -42,8 +42,8 @@ public:
 
 private:
 	SoundManager sound;
-	Texture spritesheet, starSpritesheet;
-	Sprite *sprite, *superSprite, *starSprite;
+	Texture spritesheet, starSpritesheet, superStarSpritesheet;
+	Sprite *sprite, *superSprite, *starSprite, *superStarSprite;
 	TileMap *map;
 
 	bool bJumping, bFalling;
@@ -74,6 +74,8 @@ private:
 	float timeImmunity;
 	bool bImmunity;
 	int renderImmunity;
+
+	int jumpDuration;
 };
 
 

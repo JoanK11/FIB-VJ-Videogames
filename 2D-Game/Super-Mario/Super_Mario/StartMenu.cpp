@@ -37,14 +37,6 @@ void StartMenu::init() {
 	spriteWall->changeAnimation(0);
 	spriteWall->setPosition(glm::vec2(64, 64));
 
-	spritesheet2.loadFromFile("images/cabrevj.png", TEXTURE_PIXEL_FORMAT_RGBA); // bertus.png
-	sprite3 = Sprite::createSprite(glm::ivec2(128, 128), glm::vec2(1, 1), &spritesheet2, &texProgram);
-	sprite3->setNumberAnimations(1);
-	sprite3->setAnimationSpeed(MUSHROOM, 1);
-	sprite3->addKeyframe(MUSHROOM, glm::vec2(0.f, 0.f));
-	sprite3->changeAnimation(0);
-	sprite3->setPosition(glm::vec2(346, 280));
-
 	/* TEXT */
 	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
 		cout << "Could not load font super-mario-bros-nes!!!" << endl;
@@ -169,13 +161,10 @@ void StartMenu::render() {
 	else if (state == 2) {
 		restartShaders();
 		spriteWall->render();
-		sprite3->render();
 		text.render("CREDITS", glm::vec2(SCREEN_WIDTH / 2 - 128, 112), 32, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
 		text.render("Autors:", glm::vec2(88, 176), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
 		text.render("* Joan Caballero", glm::vec2(104, 208), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
 		text.render("* Jeremy Comino", glm::vec2(104, 232), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-		text.render("Siempre te recordaremos D.E.P.", glm::vec2(164, 264), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-		//text.render("Gracias por ser mi razon de existir", glm::vec2(108, 264), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
 
 		//textKeyboard.render('E', glm::vec2(104, 404), 32, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
 		text.render("Esc: Exit", glm::vec2(104, 400), 12, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));

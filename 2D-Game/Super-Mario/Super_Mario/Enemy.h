@@ -6,12 +6,14 @@
 #include <iostream>
 #include "Score.h"
 #include "SoundManager.h"
+#include "Text.h"
 
 #define VX 1
 #define SPAWN_DISTANCE 18 // 13 (tiles visibles) + 5 (tiles not visible)
 #define FALL_STEP 4
 #define JUMP_ANGLE_STEP 8
 #define JUMP_HEIGHT_DYING 48
+#define TIME_TEXT 1000
 
 class Enemy {
 
@@ -33,6 +35,10 @@ public:
 
 	void dyingAnimation();
 
+	void showText();
+
+
+
 	glm::ivec2 getPos() const;
 	virtual glm::ivec2 getSize() const;
 
@@ -40,6 +46,7 @@ protected:
 	SoundManager sound;
 	Sprite* sprite;
 	Texture spritesheet;
+
 	glm::ivec2 tileMapDispl, posEnemy;
 	glm::ivec2 originalPos;
 	int dir;
@@ -48,8 +55,12 @@ protected:
 	float currentTime;
 	int startY, jumpAngle;
 
+	Text text;
+	glm::ivec2 textPos;
+	float timeText;
+	bool showingText;
+
 private:
-	
 };
 
 #endif _ENEMY_INCLUDE

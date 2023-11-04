@@ -19,14 +19,12 @@ Scene::Scene() {
 	map = NULL;
 	player = NULL;
 	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(0.f, 0.f));
-	//score = NULL;
 	enemies = vector<Enemy*>();
 }
 
 Scene::~Scene() {
 	if (map != NULL) delete map;
 	if (player != NULL) delete player;
-	//if (score != NULL) delete score;
 
 	for (auto enemy : enemies) {
 		delete enemy;
@@ -190,7 +188,7 @@ void Scene::update(int deltaTime) {
 	for (auto* enemy : enemies) {
 		enemy->update(deltaTime, camera.getXmin(), actualMid);
 
-		if (player->isDead() || player->isImmune()) continue;
+		if (player->isDead()) continue;
 		int col = enemy->collision(player->getPos(), player->getSize());
 
 		if (player->isStarMario() && col != 0) {
@@ -202,7 +200,7 @@ void Scene::update(int deltaTime) {
 			// Mario Kills Enemy, needs to jump
 			player->jumpEnemy();
 		}
-		else if (col < 0) {
+		else if (col < 0 && !player->isImmune()) {
 			// Enemy kills Mario
 			player->collisionEnemy();
 		}
@@ -278,13 +276,13 @@ void Scene::render() {
 	/* Map */
 	map->render(camera.getPosition(), camera.getSize());
 
-	/* Player */
-	player->render();
-
 	/* Enemies */
 	for (auto* enemy : enemies) {
 		enemy->render();
 	}
+
+	/* Player */
+	player->render();
 
 	/* Score */
 	Score::instance().render();

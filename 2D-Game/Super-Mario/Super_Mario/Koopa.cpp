@@ -36,6 +36,8 @@ void Koopa::restart() {
 }
 
 void Koopa::update(int deltaTime, float xmin, float xmax) {
+	if (showingText) timeText += deltaTime;
+
 	if (bDelete || state == SHELL_IDLE || state == DIED) return;
 
 	if (state == NOT_SPAWNED) {
@@ -58,10 +60,10 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 
 	glm::ivec2 dimKoopa = Koopa::getSize();
 
-	if (map->collisionMoveLeft(posEnemy, glm::ivec2(32, 32), &posEnemy.x, true) && dir < 0) {
+	if (map->collisionMoveLeft(posEnemy, glm::ivec2(32, 32), &posEnemy.x, true)) {
 		dir = 1;
 	}
-	else if (map->collisionMoveRight(posEnemy, glm::ivec2(32, 32), &posEnemy.x, true) && dir > 0) {
+	else if (map->collisionMoveRight(posEnemy, glm::ivec2(32, 32), &posEnemy.x, true)) {
 		dir = -1;
 	}
 
@@ -78,7 +80,7 @@ int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
 	if (state == NOT_SPAWNED || state == DYING || (state == DIED && bDelete)) return 0;
 
 	// Margin for collision from above
-	float margin = 2.0f;
+	float margin = 0.5f;
 
 	float posL = pos.x, posR = pos.x + size.x;
 	float posT = pos.y, posB = pos.y + size.y;
@@ -101,6 +103,7 @@ int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
 
 		sound.playSFX("sfx/kick.wav");
 		Score::instance().increaseScore(100);
+		Enemy::showText();
 		return 1;
 	}
 
@@ -138,4 +141,5 @@ void Koopa::kill() {
 	sound.playSFX("sfx/kick.wav");
 	Score::instance().increaseScore(100);
 	sprite->changeAnimation(UPSIDE_DOWN);
+	showText();
 }

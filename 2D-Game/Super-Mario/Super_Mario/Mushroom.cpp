@@ -21,6 +21,7 @@ Mushroom::Mushroom(const glm::vec2& pos, const glm::vec2& size, const glm::vec2&
 	currentState = WAITING;
 
 }
+
 void Mushroom::actionOfObject(Player* ply) {
 	if (currentState == ANIMATION) return;
 	else if (currentState == VALID) {
