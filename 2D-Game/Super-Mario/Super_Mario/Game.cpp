@@ -22,8 +22,8 @@ void Game::render() {
 }
 
 void Game::keyPressed(int key) {
-	//if (key == 27) // Escape code
-	//	bPlay = false;
+	if (key >= int('A') && key <= int('Z')) key += 32;
+
 	keys[key] = true;
 
 	int modifiers = glutGetModifiers();
@@ -33,6 +33,8 @@ void Game::keyPressed(int key) {
 }
 
 void Game::keyReleased(int key) {
+	if (key >= int('A') && key <= int('Z')) key += 32;
+
 	keys[key] = false;
 
 	int modifiers = glutGetModifiers();

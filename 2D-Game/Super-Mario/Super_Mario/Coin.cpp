@@ -1,7 +1,6 @@
 #include "Coin.h"
 #include "Player.h"
-#include "Score.h"
-#define ANIMATION_TIME 1500.f
+#define ANIMATION_TIME 800.f
 
 Coin::Coin(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMapDisplay, TileMap* m, ShaderProgram* p):Object(pos,size,tileMapDisplay,m) {
 
@@ -23,11 +22,13 @@ Coin::Coin(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMap
 }
 
 void Coin::actionOfObject(Player* ply) {
-	//we add xx quantity to the score
 	Score::instance().increaseCoins();
+	Score::instance().increaseScore(100);
+	sound.playSFX("sfx/coin.wav");
 	//we change the currentState for making
 	currentState = ANIMATION;
 }
+
 bool Coin::collide(const glm::vec2& plyPos, const glm::vec2& plySize) {
 	if (currentState == NOT_ACHIEVED) return true;
 	return false;
@@ -37,7 +38,7 @@ void Coin::update(float dt) {
 
 		currentTime += dt;
 		spr->update(dt);
-		float ys = -64 * sin(3.1415 / ANIMATION_TIME * currentTime);
+		float ys = -64 * sin(3.1415f / ANIMATION_TIME * currentTime);
 		glm::vec2 p = pos + tileMapDisplay;
 		p.y = p.y + ys;
 		spr->setPosition(p);

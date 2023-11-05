@@ -36,6 +36,8 @@ void Goomba::restart() {
 }
 
 void Goomba::update(int deltaTime, float xmin, float xmax) {
+	if (showingText) timeText += deltaTime;
+
 	if (bDelete) return;
 
 	/* Spawn Enemy */
@@ -92,7 +94,7 @@ int Goomba::collision(const glm::vec2& pos, const glm::vec2& size) {
 	if (died || dying || bDelete || !spawned) return 0;
 
 	// Margin for collision from above
-	float margin = 2.0f;
+	float margin = 0.5f;
 
 	float posL = pos.x, posR = pos.x + size.x;
 	float posT = pos.y, posB = pos.y + size.y;
@@ -107,6 +109,7 @@ int Goomba::collision(const glm::vec2& pos, const glm::vec2& size) {
 		died = true;
 		sound.playSFX("sfx/kick.wav");
 		Score::instance().increaseScore(100);
+		Enemy::showText();
 		return 1;
 	}
 
@@ -126,4 +129,5 @@ void Goomba::kill() {
 	sound.playSFX("sfx/kick.wav");
 	Score::instance().increaseScore(100);
 	sprite->changeAnimation(UPSIDE_DOWN);
+	showText();
 }

@@ -17,13 +17,11 @@ Scene::Scene() {
 	map = NULL;
 	player = NULL;
 	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(0.f, 0.f));
-	//score = NULL;
 }
 
 Scene::~Scene() {
 	if (map != NULL) delete map;
 	if (player != NULL) delete player;
-	//if (score != NULL) delete score;
 
 
 }
@@ -175,7 +173,10 @@ void Scene::update(int deltaTime) {
 		player->animationOfReachingFinal();
 		return;
 	}
+
 	checkWorldKeys();
+
+
 	/* --- Time --- */
 	currentTime += deltaTime;
 
@@ -189,6 +190,7 @@ void Scene::update(int deltaTime) {
 	/* --- Player --- */
 	player->update(deltaTime, camera.getXmin(), actualMid, sound);
 
+	/* --- Enemies --- */
 	map->updateEnemies(deltaTime, player, camera.getXmin(), actualMid);
 
 	/* --- Music --- */
@@ -231,8 +233,6 @@ void Scene::render() {
 
 	/* Player */
 	player->render();
-
-	
 
 	/* Score */
 	Score::instance().render();

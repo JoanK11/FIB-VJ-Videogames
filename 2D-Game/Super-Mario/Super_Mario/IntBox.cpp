@@ -22,6 +22,7 @@ IntBox::IntBox(glm::vec2 pos, glm::vec2 size, ShaderProgram* p, Object* obj) {
 	currentState = IDLE;
 	currentTime = 0;
 }
+
 void IntBox::update(float dt) {
 	if (currentState == IDLE) {
 		spr->update((int)dt);

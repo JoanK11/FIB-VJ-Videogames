@@ -23,8 +23,8 @@ private:
 	bool visible;
 	int pos;
 	int posYini, espacio;
-	Texture spritesheet, spritesheet2;
-	Sprite *sprite, * spriteWall, *sprite3;
+	Texture spritesheet;
+	Sprite *sprite, * spriteWall;
 	Text text, textKeyboard;
 	glm::ivec2 posPlayer;
 	ShaderProgram texProgram;
