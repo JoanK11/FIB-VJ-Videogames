@@ -30,7 +30,10 @@ Scene::~Scene() {
 
 void Scene::init() {
 	initShaders();
-	map = TileMap::createTileMap("levels/prueba.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	maps = vector<TileMap*>(2, nullptr);
+	maps[0] = TileMap::createTileMap("levels/world1.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	maps[1] = TileMap::createTileMap("levels/world2.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = maps[0];
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getBlockSize(), INIT_PLAYER_Y_TILES * map->getBlockSize()));
@@ -58,8 +61,11 @@ void Scene::restart() {
 	currentTime = 0.0f;
 
 	/* --- Player --- */
+	delete player;
+	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getBlockSize(), INIT_PLAYER_Y_TILES * map->getBlockSize()));
+	player->setTileMap(map);
 
 	/* --- Camera --- */
 	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1)));
@@ -71,7 +77,6 @@ void Scene::restart() {
 	Score::instance().decreaseLive();
 	Score::instance().restart();
 
-	/* --- Enemies --- */
 	
 
 	/* --- Sound --- */
@@ -86,11 +91,37 @@ void Scene::restart() {
 }
 
 void Scene::change() {
-	map = TileMap::createTileMap("levels/prueba.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	currentTime = 0.0f;
+
+	/* --- Player --- */
+	bool isSuperMario = player->isSuperMario();
+	delete player;
+	player = new Player();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getBlockSize(), INIT_PLAYER_Y_TILES * map->getBlockSize()));
 	player->setTileMap(map);
+	player->setInitialStateSuperMario(isSuperMario);
+	/* --- Camera --- */
 	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1)));
-	currentTime = 0.0f;
+
+	/* --- Map --- */
+	map->restart();
+
+	/* --- Score --- */
+	
+	Score::instance().restart();
+
+
+
+	/* --- Sound --- */
+	sound.stopBGM();
+	if (Score::instance().gameOver()) {
+		sound.playSFX("sfx/game_over.wav");
+		gameOver = true;
+		timeGameOver = 0;
+		Game::instance().clearInput();
+	}
+	else sound.playBGM("music/title.mp3", true);
 }
 
 void Scene::update(int deltaTime) {
@@ -144,6 +175,7 @@ void Scene::update(int deltaTime) {
 		player->animationOfReachingFinal();
 		return;
 	}
+	checkWorldKeys();
 	/* --- Time --- */
 	currentTime += deltaTime;
 
@@ -234,4 +266,18 @@ void Scene::initShaders() {
 	texProgram.bindFragmentOutput("outColor");
 	vShader.free();
 	fShader.free();
+}
+void Scene::checkWorldKeys() {
+	bool world1 = Game::instance().getKey('1');
+	bool world2 = Game::instance().getKey('2');
+	if (world1 && map != maps[0]) {
+		map = maps[0];
+		Score::instance().updateWorld(1, 1);
+		change();
+	}
+	else if (world2 && map != maps[1]) {
+		map = maps[1];
+		Score::instance().updateWorld(2, 1);
+		change();
+	}
 }

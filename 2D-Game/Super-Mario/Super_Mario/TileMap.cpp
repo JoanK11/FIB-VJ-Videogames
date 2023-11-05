@@ -162,8 +162,8 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 	mapBlocks = new Tile * [mapSize.x * mapSize.y];
 	glm::vec2 halfTexel;
 	halfTexel = glm::vec2(0.5f / tilesheet.width(), 0.5f / tilesheet.height());
-
-
+	nTiles = 0;
+	sstream.clear();
 
 	for(int j=0; j<mapSize.y; j++)
 	{
@@ -243,7 +243,7 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 
 
 // Collision tests for axis aligned bounding boxes.
-// Method collisionMoveDown also corrects Y coordinate if the box is
+// Method collisionMoveLeft also corrects Y coordinate if the box is
 // already intersecting a tile below.
 bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX) const
 {	
@@ -286,7 +286,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 		if (mapBlocks[y * mapSize.x + x] != nullptr && mapBlocks[y * mapSize.x + x]->isTouchable()) {
 			if (*posX - blockSize * x + size.x <= 4)
 			{
-				*posX = blockSize * x - size.x  -2 ;
+				*posX = blockSize * x - size.x  -1 ;
 				return true;
 			}
 		}
@@ -304,8 +304,8 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, i
 
 	x = (pos.x-1) / blockSize; // -1 para evitar que cambie entre STAND_LEFT y MOVE_LEFT
 	if (superMario) { // para no hacer esto se tendria que hacer que pos.y entrase como pos.y - 32
-		y0 = (pos.y - 31) / blockSize;
-		y1 = (pos.y + size.y - 32 - 1) / blockSize;
+		y0 = (pos.y - 32) / blockSize;
+		y1 = (pos.y + size.y - 32 -1) / blockSize;
 	}
 	else {
 		y0 = pos.y / blockSize;
@@ -334,7 +334,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 
 	x = (pos.x + size.x) / blockSize;
 	if (superMario) { // para no hacer esto se tendria que hacer que pos.y entrase como pos.y - 32
-		y0 = (pos.y - 31) / blockSize;
+		y0 = (pos.y - 32) / blockSize;
 		y1 = (pos.y + size.y -32 - 1) / blockSize;
 	}
 	else {
@@ -379,6 +379,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 	return false;
 }
 
+
 bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY, bool superMario){
 	if (!isInside(pos, size)) return false;
 	int x0, x1, y;
@@ -397,8 +398,8 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 				if (obj != nullptr) items.push_back(obj);
 				return true;
 			}
-			else if (superMario && *posY - blockSize * (y + 2) <= 4) {
-			    *posY = blockSize * (y + 2); // Jeremy mira el valor correcto del 2 porfa
+			else if (superMario && *posY - blockSize * (y + 1) -32 <= 4) {
+			    *posY = blockSize * (y + 1) +32; // Jeremy mira el valor correcto del 2 porfa
 				Object* obj = mapBlocks[y * mapSize.x + x]->actionToTouch(superMario);
 				if (obj != nullptr) items.push_back(obj);
 				return true;
@@ -433,6 +434,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 
 	return false;
 }
+
 Tile* TileMap::getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS, glm::vec2 tileMapDisplay, glm::vec2 textureC, glm::vec2 textureS, Texture* t, TileMap* map) {
 	//we select the info object
 	Info obj = dicc[type];

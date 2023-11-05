@@ -36,7 +36,7 @@ public:
 	void powerDown();
 	bool isStarMario() const;
 	bool isSuperMario() const;
-
+	void setInitialStateSuperMario(bool superMario);
 
 	glm::vec2 getPos() const;
 	glm::vec2 getSize() const;

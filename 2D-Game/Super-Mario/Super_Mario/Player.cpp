@@ -24,7 +24,11 @@ enum PlayerAnims {
 	CROUCHED_RIGHT, CROUCHED_LEFT
 };
 
-Player::~Player() {}
+Player::~Player() {
+	delete sprite;
+	delete superSprite;
+	delete starSprite;
+}
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	bJumping = false, bFalling = false; jumpingEnemy = false;
@@ -32,7 +36,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	// Mario Types
 	superMario = false, superMarioKey = false;
 	starMario = false,  starMarioKey  = false;
-	starMario = false,  starMarioKey  = false;
+	
 	state = NORMAL;
 
 	/* Key States */
@@ -599,7 +603,10 @@ bool Player::isSuperMario() const {
 void Player::animationOfReachingFinal() {
 	bJumping = false;
 	posPlayer.y += FALL_STEP;
-	map->collisionMoveDown(posPlayer, getSize(), &posPlayer.y);
+	map->collisionMoveDown(posPlayer, glm::ivec2(32,32), &posPlayer.y);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
+}
+void Player::setInitialStateSuperMario(bool superMario) {
+	this->superMario = superMario;
 }

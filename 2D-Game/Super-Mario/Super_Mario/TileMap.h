@@ -50,6 +50,7 @@ public:
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
 	// this is for the player
+	
 	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, int* posX, bool superMario) const;
 	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2&, int* posX, bool superMario) const;
 	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY, bool superMario);

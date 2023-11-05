@@ -30,7 +30,7 @@ public:
 
 private:
 	void initShaders();
-
+	void checkWorldKeys();
 private:
 	SoundManager sound;
 	StartMenu startMenu;
@@ -51,7 +51,7 @@ private:
 	Projection camera;
 	glm::mat4 projection;
 	//Score *score;
-
+	vector<TileMap*> maps;
 	
 	
 };

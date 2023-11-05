@@ -1,6 +1,7 @@
 #include "Coin.h"
 #include "Player.h"
-#define ANIMATION_TIME 3000.f
+#include "Score.h"
+#define ANIMATION_TIME 1500.f
 
 Coin::Coin(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMapDisplay, TileMap* m, ShaderProgram* p):Object(pos,size,tileMapDisplay,m) {
 
@@ -11,7 +12,7 @@ Coin::Coin(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMap
 
 	spr = Sprite::createSprite(size, glm::vec2(0.25, 1.), text, p);
 	spr->setNumberAnimations(1);
-	spr->setAnimationSpeed(0, 4);
+	spr->setAnimationSpeed(0, 10);
 	spr->addKeyframe(0, glm::vec2(0., 0.));
 	spr->addKeyframe(0, glm::vec2(0.25, 0.));
 	spr->addKeyframe(0, glm::vec2(0.50, 0.));
@@ -23,7 +24,7 @@ Coin::Coin(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMap
 
 void Coin::actionOfObject(Player* ply) {
 	//we add xx quantity to the score
-
+	Score::instance().increaseCoins();
 	//we change the currentState for making
 	currentState = ANIMATION;
 }
@@ -36,7 +37,7 @@ void Coin::update(float dt) {
 
 		currentTime += dt;
 		spr->update(dt);
-		float ys = -96 * sin(3.1415 / ANIMATION_TIME * currentTime);
+		float ys = -64 * sin(3.1415 / ANIMATION_TIME * currentTime);
 		glm::vec2 p = pos + tileMapDisplay;
 		p.y = p.y + ys;
 		spr->setPosition(p);
