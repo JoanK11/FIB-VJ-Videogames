@@ -9,6 +9,7 @@ Mushroom::Mushroom(const glm::vec2& pos, const glm::vec2& size, const glm::vec2&
 	
 	this->y_size = size.y;
 	this->Vx = Vx;
+	this->originalVx = Vx;
 	Texture* text = new Texture();
 	text->loadFromFile("images/mushroom.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spr = Sprite::createSprite(size, glm::vec2(1.0, 1.0), text, p);
@@ -80,6 +81,7 @@ bool Mushroom::collide(const glm::vec2& plyPos, const glm::vec2& plySize) {
 
 void Mushroom::restart() {
 	Object::restart();
+	Vx = originalVx;
 	currentState = WAITING;
 	currentTime = 0;
 	spr->setPosition(pos);

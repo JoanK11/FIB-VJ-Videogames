@@ -10,7 +10,7 @@ private:
 		VALID, 
 		USED
 	};
-	float Vx;
+	float Vx, originalVx;
 	float y_size;
 	float currentTime;
 	MushroomState currentState;

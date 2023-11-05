@@ -9,6 +9,7 @@ Star::Star(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMap
 
 	this->y_size = size.y;
 	this->Vx = Vx;
+	this->originalVx = Vx;
 	Texture* text = new Texture();
 	text->loadFromFile("images/stars.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spr = Sprite::createSprite(size, glm::vec2(0.25, 1.0), text, p);
@@ -29,6 +30,7 @@ Star::Star(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMap
 }
 void Star::restart() {
 	Object::restart();
+	Vx = originalVx;
 	currentTime = 0;
 	currentState = WAITING;
 	bJumping = true;
