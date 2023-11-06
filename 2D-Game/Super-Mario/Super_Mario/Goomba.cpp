@@ -11,7 +11,6 @@ void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram) {
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.125, 0.25	), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(3);
 		
-		
 		sprite->setAnimationSpeed(MOVE, 2);
 		sprite->addKeyframe(MOVE, glm::vec2(0.f, 0.f));
 		sprite->addKeyframe(MOVE, glm::vec2(0.125f, 0.f));
@@ -121,6 +120,10 @@ int Goomba::collision(const glm::vec2& pos, const glm::vec2& size) {
 
 	// No collision
 	return 0;
+}
+
+bool Goomba::canCollide() {
+	return !(died || dying || bDelete || !spawned);
 }
 
 void Goomba::kill() {
