@@ -1,20 +1,12 @@
 #include "SoundManager.h"
-#include <fstream>
-#include <iostream> 
 using namespace irrklang;
 
 SoundManager::SoundManager() {
 	music = NULL;
 	sfx = NULL;
 
-	std::ofstream nullStream("/dev/null");
-	std::streambuf* originalCoutStreamBuffer = std::cout.rdbuf();
-	std::cout.rdbuf(nullStream.rdbuf());
-
 	// start the sound engine with default parameters
 	soundEngine = createIrrKlangDevice();
-
-	std::cout.rdbuf(originalCoutStreamBuffer);
 }
 
 SoundManager::~SoundManager() {

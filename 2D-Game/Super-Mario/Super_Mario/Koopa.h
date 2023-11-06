@@ -7,6 +7,7 @@ class Koopa : public Enemy {
 public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
     void update(int deltaTime, float xmin, float xmax);
+    void render(glm::vec2& cameraPos);
 
     int collision(const glm::vec2& pos, const glm::vec2& size);
     virtual void restart();

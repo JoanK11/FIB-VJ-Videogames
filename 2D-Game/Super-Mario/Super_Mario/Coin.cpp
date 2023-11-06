@@ -47,7 +47,7 @@ void Coin::update(float dt) {
 		}
 	}
 }
-void Coin::render() {
+void Coin::render(glm::vec2& cameraPos) {
 	if (currentState == ANIMATION) {
 		spr->render();
 

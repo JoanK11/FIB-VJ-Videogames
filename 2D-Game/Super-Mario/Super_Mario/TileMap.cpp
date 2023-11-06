@@ -76,17 +76,23 @@ void TileMap::render(glm::vec2 pos, glm::vec2 size, ShaderProgram& texProgram) c
 	glm::vec2 posOriginal = (pos-position) / float(blockSize);
 	glm::vec2 posFinal = posOriginal + size / float(blockSize);
 
-	
+	// Static Tiles
 	for (int j = max((int)posOriginal.y,0); j <= min((int)posFinal.y,mapSize.y-1); j++) {
 		for (int i = max((int)posOriginal.x, 0); i <= min((int)posFinal.x,mapSize.x-1); i++) {
 			if (mapBackground[j * mapSize.x + i] != nullptr)  mapBackground[j * mapSize.x + i]->render();
 		}
 	}
-	flag->render();
+
+	// Dynamic Items
+	flag->render(pos);
 	int s = items.size();
 	for (int i = 0; i < s; ++i) {
-		items[i]->render();
+		texProgram.use();
+		items[i]->render(pos);
 	}
+	texProgram.use();
+
+	// Dynamic Tiles
 	for (int j = max((int)posOriginal.y, 0); j <= min((int)posFinal.y, mapSize.y - 1); j++) {
 		for (int i = max((int)posOriginal.x, 0); i <= min((int)posFinal.x, mapSize.x - 1); i++) {
 			if (mapBlocks[j * mapSize.x + i] != nullptr)  mapBlocks[j * mapSize.x + i]->render();
@@ -96,7 +102,6 @@ void TileMap::render(glm::vec2 pos, glm::vec2 size, ShaderProgram& texProgram) c
 	for (auto* enemy : enemies) {
 		texProgram.use();
 		enemy->render(pos);
-		cout << "Cam pos x: " << pos.x << endl;
 	}
 }
 
