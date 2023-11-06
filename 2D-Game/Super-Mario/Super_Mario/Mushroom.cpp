@@ -26,7 +26,7 @@ Mushroom::Mushroom(const glm::vec2& pos, const glm::vec2& size, const glm::vec2&
 void Mushroom::actionOfObject(Player* ply) {
 	if (currentState == ANIMATION) return;
 	else if (currentState == VALID) {
-		ply->setSuperMario();
+		if (!ply->isSuperMario()) ply->setSuperMario();
 		currentState = USED;
 	}
 	else return;
@@ -41,6 +41,10 @@ void Mushroom::update(float dt) {
 		}
 	}
 	else if (currentState == ANIMATION) {
+		if (currentTime == 0) {
+			Score::instance().increaseScore(1000);
+			sound.playSFX("sfx/powerup-appears.wav");
+		}
 		currentTime += dt;
 		float y = -y_size * sin(3.141592 / 180. * (90. / TIME_ANIMATION) * currentTime);
 		glm::vec2 p = pos + tileMapDisplay;
@@ -50,7 +54,6 @@ void Mushroom::update(float dt) {
 			pos.y += y;
 			currentState = VALID;
 		}
-
 	}
 	else if (currentState == VALID) {
 		if (!map->isInside(pos, size)) {

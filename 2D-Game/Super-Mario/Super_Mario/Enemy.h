@@ -22,7 +22,7 @@ public:
 	~Enemy();
 
 	virtual void update(int deltaTime, float xmin, float xmax);
-	void render();
+	void render(glm::vec2& cameraPos);
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2& pos);
 	virtual int collision(const glm::vec2& pos, const glm::vec2& size);

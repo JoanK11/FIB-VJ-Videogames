@@ -19,16 +19,16 @@ Enemy::~Enemy() {
 	if (map != NULL) delete map;
 }
 
-void Enemy::render() {
+void Enemy::render(glm::vec2& cameraPos) {
 	if (!bDelete) sprite->render();
 
-	/*
+	
 	if (showingText) {
 		float y = timeText / TIME_TEXT * 48;
 		if (timeText > TIME_TEXT) showingText = false;
-		text.render("100", glm::vec2(textPos.x, textPos.y + tileMapDispl.y - y), 20, glm::vec4(1, 1, 1, 1));
+		text.render("100", glm::vec2(textPos.x + cameraPos.x, textPos.y + tileMapDispl.y - y), 20, glm::vec4(1, 1, 1, 1));
 	}
-	*/
+	
 }
 
 void Enemy::setTileMap(TileMap *tileMap) {

@@ -9,6 +9,11 @@ public:
 	SoundManager();
 	~SoundManager();
 
+	static SoundManager& instance() {
+		static SoundManager S;
+		return S;
+	}
+
 	void playBGM(const char* filename, bool playLooped);
 	void stopBGM();
 	void pauseBGM();

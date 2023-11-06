@@ -69,7 +69,7 @@ TileMap::~TileMap()
 }
 
 
-void TileMap::render(glm::vec2 pos, glm::vec2 size) const
+void TileMap::render(glm::vec2 pos, glm::vec2 size, ShaderProgram& texProgram) const
 {
 	
 
@@ -92,8 +92,11 @@ void TileMap::render(glm::vec2 pos, glm::vec2 size) const
 			if (mapBlocks[j * mapSize.x + i] != nullptr)  mapBlocks[j * mapSize.x + i]->render();
 		}
 	}
+
 	for (auto* enemy : enemies) {
-		enemy->render();
+		texProgram.use();
+		enemy->render(pos);
+		cout << "Cam pos x: " << pos.x << endl;
 	}
 }
 

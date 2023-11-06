@@ -41,7 +41,7 @@ public:
 
 	~TileMap();
 
-	void render(glm::vec2 pos, glm::vec2 size) const;
+	void render(glm::vec2 pos, glm::vec2 size, ShaderProgram& texProgram) const;
 	void free();
 	
 	glm::ivec2 getMapSize();

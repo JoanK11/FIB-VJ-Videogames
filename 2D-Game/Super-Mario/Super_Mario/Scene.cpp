@@ -229,9 +229,10 @@ void Scene::render() {
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
 	/* Map */
-	map->render(camera.getPosition(), camera.getSize());
+	map->render(camera.getPosition(), camera.getSize(), texProgram);
 
 	/* Player */
+	texProgram.use();
 	player->render();
 
 	/* Score */
