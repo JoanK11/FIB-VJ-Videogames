@@ -309,8 +309,14 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 		starMario = false, starMarioKey = true;
 		soundScene.stopBGM();
 		soundScene.playBGM("music/title.mp3", true);
-		if (superMario) activeSprite->changeAnimation(superSprite->animation());
-		else activeSprite->changeAnimation(sprite->animation());
+		if (superMario) {
+			activeSprite->changeAnimation(superSprite->animation());
+			state = SUPER;
+		}
+		else {
+			activeSprite->changeAnimation(sprite->animation());
+			state = NORMAL;
+		}
 	}
 
 	/* PHYSICS */
@@ -633,7 +639,11 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 
 	//if (bJumping) std::cout << "bJumping" << endl;
 	//if (bFalling) std::cout << "bFalling" << endl;
+	// 
+	if (bImmunity) std::cout << "bImmunity" << endl;
+	if (starMario) std::cout << "starMario" << endl;
 	//std::cout << endl;
+	cout << posPlayer.x << " , " << posPlayer.y << " , " << endl;
 }
 
 void Player::render() {

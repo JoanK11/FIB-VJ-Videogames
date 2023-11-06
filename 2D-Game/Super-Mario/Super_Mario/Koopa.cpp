@@ -124,6 +124,10 @@ int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
 	return 0;
 }
 
+bool Koopa::canCollide() {
+	return !(state == NOT_SPAWNED || state == DYING || (state == DIED && bDelete));
+}
+
 glm::ivec2 Koopa::getSize() const {
 	if (state == SHELL_IDLE || state == SHELL_MOVING)
 		return glm::ivec2(32, 30);

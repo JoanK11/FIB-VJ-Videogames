@@ -527,8 +527,9 @@ void TileMap::updateEnemies(int deltaTime, Player* player, float xmin, float xma
 
 	/* Enemies (Collision with other Enemies) */
 	for (int i = 0; i < enemies.size(); ++i) {
-		//if () // Poner un if para saltar más rápido
+		if (!enemies[i]->canCollide()) continue;
 		for (int j = i + 1; j < enemies.size(); ++j) {
+			if (!enemies[j]->canCollide()) continue;
 			int col = enemies[i]->collision(enemies[j]->getPos(), enemies[j]->getSize());
 
 			if (col < 0) {

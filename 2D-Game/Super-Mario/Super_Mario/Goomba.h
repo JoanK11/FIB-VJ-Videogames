@@ -12,6 +12,7 @@ public:
 	int collision(const glm::vec2& pos, const glm::vec2& size);
 	void restart();
 	void kill();
+	bool canCollide();
 private:
 	bool died;
 	bool dying;

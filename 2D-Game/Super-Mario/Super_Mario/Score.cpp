@@ -50,7 +50,6 @@ void Score::render() {
 	}
 }
 
-
 void Score::increaseScore(int x) {
 	score += x;
 }
