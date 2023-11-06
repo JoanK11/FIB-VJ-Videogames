@@ -19,20 +19,24 @@ bool Brick::isTouchable() {
 }
 
 Object* Brick:: actionToTouch(bool isSuperMario) {
-	if (isSuperMario) currentState = DESTROYED;
+	if (isSuperMario) {
+		currentState = DESTROYED;
+		SoundManager::instance().playSFX("sfx/breakblock.wav");
+	}
 	else currentState = ANIMATION;
 	return nullptr;
 }
 
 void Brick::update(float dt) {
 	if (currentState == ANIMATION) {
+		if (currentTime == 0) SoundManager::instance().playSFX("sfx/bump.wav");
 		currentTime += dt;
 		float y = -HEIGHT * sin(3.141592 / ANIMATION_TIME * currentTime);
 		glm::vec2 p = pos;
 		p.y += y;
 		spr->setPosition(p);
 		if (currentTime > ANIMATION_TIME) {
-			currentTime = 0.;
+			currentTime = 0;
 			currentState = IDLE;
 			spr->setPosition(pos);
 		}

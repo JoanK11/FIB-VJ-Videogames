@@ -127,6 +127,11 @@ void Text::render(const string &str, const glm::vec2 &pixel, int size, const glm
 		pos.x += (float(size) / fontSize) * chars[str[i]-32].ax;
 	}
 
+	// Restart
+	//modelview = glm::mat4(1.0f);
+	//program.setUniformMatrix4f("modelview", modelview);
+
+
 	glDisable(GL_BLEND);
 }
 
