@@ -79,8 +79,7 @@ void Sprite::addKeyframe(int animId, const glm::vec2 &displacement) {
 }
 
 void Sprite::changeAnimation(int animId) {
-	if(animId < int(animations.size()))
-	{
+	if (animId < int(animations.size())) {
 		currentAnimation = animId;
 		currentKeyframe = 0;
 		timeAnimation = 0.f;

@@ -4,7 +4,7 @@
 #define HORIZONTAL_DISPLAY 18
 #define TUBE_DISPLAY 10
 #define MAX_PUNTUATION 5000.0
-#define VELOCITY 2.
+#define VELOCITY 4.
 
 Flag::Flag(int ymin, int ymax, int xlim, const glm::vec2& tileMapDisplay, ShaderProgram* p) {
 	this->ymin = ymin;
@@ -31,7 +31,6 @@ Flag::Flag(int ymin, int ymax, int xlim, const glm::vec2& tileMapDisplay, Shader
 }
 
 bool Flag::touchTheFlag(const glm::ivec2& pos, const glm::ivec2& size, bool superMario) {
-	
 	bool condition = pos.x + size.x >= xlim + TUBE_DISPLAY;
 	if (!condition) return false;
 	if (currentState == IDLE && condition) {
@@ -43,7 +42,7 @@ bool Flag::touchTheFlag(const glm::ivec2& pos, const glm::ivec2& size, bool supe
 		score = (int)(percentage * MAX_PUNTUATION);
 		showText(glm::vec2(pos.x, yPlayer));
 		Score::instance().increaseScore(score);
-
+		sound.playSFX("sfx/flagpole.wav");
 		return true;
 	}
 	return true;

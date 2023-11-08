@@ -35,11 +35,13 @@ public:
 	void updateWorld(int x, int y);
 	void decreaseLive();
 	double getTime();
+	void timeToScore();
 
 private:
 	int score, lastScore;
 	int coins;
 	pair<int, int> world;
+	bool bGameOver;
 	double time;
 	int lives;
 	Text text;

@@ -41,7 +41,7 @@ public:
 	glm::vec2 getPos() const;
 	glm::vec2 getSize() const;
 
-	void animationOfReachingFinal();
+	void animationOfReachingFinal(int deltaTime);
 
 private:
 	SoundManager sound;

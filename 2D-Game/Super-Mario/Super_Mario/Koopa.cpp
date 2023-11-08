@@ -46,7 +46,6 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 	}
 
 	sprite->update(deltaTime);
-	cout << "update" << endl;
 
 	if (posEnemy.x < xmin - 32 || posEnemy.y >= map->getMapSize().y * map->getBlockSize()) {
 		state = DIED;

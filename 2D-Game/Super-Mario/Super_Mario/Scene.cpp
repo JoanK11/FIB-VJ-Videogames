@@ -7,10 +7,11 @@
 #define SCREEN_X 0
 #define SCREEN_Y 32
 
-#define INIT_PLAYER_X_TILES 2
-#define INIT_PLAYER_Y_TILES 11
+#define INIT_PLAYER_X_TILES 187
+#define INIT_PLAYER_Y_TILES 2
 
 #define TIME_GAME_OVER 7000
+#define TIME_GAME_WIN 7000
 
 
 Scene::Scene() {
@@ -22,8 +23,6 @@ Scene::Scene() {
 Scene::~Scene() {
 	if (map != NULL) delete map;
 	if (player != NULL) delete player;
-
-
 }
 
 void Scene::init() {
@@ -49,6 +48,7 @@ void Scene::init() {
 
 	pause = false, keyPausePressed = false;
 	playingMusic = false; gameOver = false;
+	gameWin = false;
 
 	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
 		cout << "Could not load font!!!" << endl;
@@ -76,10 +76,9 @@ void Scene::restart() {
 	Score::instance().restart();
 
 
-
 	/* --- Sound --- */
 	sound.stopBGM();
-	if (Score::instance().gameOver()) {
+	if (Score::instance().gameOver() && !gameWin) {
 		sound.playSFX("sfx/game_over.wav");
 		gameOver = true;
 		timeGameOver = 0;
@@ -106,14 +105,11 @@ void Scene::change() {
 	map->restart();
 
 	/* --- Score --- */
-
 	Score::instance().restartTime();
-
-
 
 	/* --- Sound --- */
 	sound.stopBGM();
-	if (Score::instance().gameOver()) {
+	if (Score::instance().gameOver() && !gameWin) {
 		sound.playSFX("sfx/game_over.wav");
 		gameOver = true;
 		timeGameOver = 0;
@@ -128,6 +124,8 @@ void Scene::update(int deltaTime) {
 	bool inMenu = startMenu.showingMenu();
 	if (inMenu) return;
 
+	if (Score::instance().getTime() == 0) gameOver = true;
+
 	/* --- Game Over --- */
 	if (gameOver) {
 		timeGameOver += deltaTime;
@@ -139,6 +137,21 @@ void Scene::update(int deltaTime) {
 			Score::instance().restartLives();
 		}
 		return;
+	}
+
+	if (Game::instance().getKey('b')) gameWin = true;
+
+	/* Game Win */
+	if (gameWin) {
+		timeGameWin += deltaTime;
+		if (timeGameWin > TIME_GAME_WIN) {
+			gameWin = false;
+			startMenu.openMenu();
+			playingMusic = false;
+			glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
+			Score::instance().restartLives();
+
+		}
 	}
 
 	/* --- Pause --- */
@@ -159,41 +172,50 @@ void Scene::update(int deltaTime) {
 	keyPausePressed = keyPause;
 	if (pause) return;
 
-
-
 	/* --- Music --- */
 	if (!playingMusic) {
 		sound.playBGM("music/title.mp3", true);
 		playingMusic = true;
 	}
 
-	/*CHECKING IF REACHED THE FINISH LINE*/
+	/* CHECKING IF REACHED THE FINISH LINE */
 	if (map->reachFinishLine(player->getPos(), player->getSize(), player->isSuperMario())) {
+		sound.stopBGM();
 		if (!map->animationOfFlag(deltaTime)) {
-			player->animationOfReachingFinal();
+			player->animationOfReachingFinal(deltaTime);
 		}
 		else {
 			if (!map->reachEntranceCaste(player->getPos())) {
 				player->reachCastleAnimation(deltaTime);
 			}
+			else if (Score::instance().getTime() > 0) {
+				Score::instance().timeToScore();
+				sound.playSFX("sfx/getting_points.wav");
+			}
 			else {
+				sound.playSFX("sfx/coin.wav");
+				// Move to next stage
 				if (map == maps[0]) {
 					map = maps[1];
 					Score::instance().updateWorld(2, 1);
 					change();
 				}
 				else {
+					// Win Game
 					map = maps[0];
 					Score::instance().updateWorld(1, 1);
+					sound.stopBGM();
+					gameWin = true;
+					timeGameWin = 0;
+					Game::instance().clearInput();
 					restart();
 					Score::instance().restartLives();
-					startMenu.openMenu();
 				}
 			}
 		}
-
-			return;
+		return;
 	}
+
 	checkWorldKeys();
 
 
@@ -226,12 +248,19 @@ void Scene::update(int deltaTime) {
 
 	/* --- Restart --- */
 	glm::vec2 pos = player->getPos();
-	if (pos.y > 1200) { //if (pos.y + size.y >= map->getBlockSize() * map->getMapSize().y) {
+	if (pos.y > 1200) {
 		restart();
 	}
 }
 
 void Scene::render() {
+	if (gameWin && !startMenu.showingMenu()) {
+		glClearColor(0, 0, 0, 1.0f);
+		text.render("THANK YOU MARIO!", glm::vec2(SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
+		text.render("YOUR QUEST IS OVER.", glm::vec2(SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / +25), 20, glm::vec4(1, 1, 1, 1));
+		return;
+	}
+
 	if (gameOver && !startMenu.showingMenu()) {
 		glClearColor(0, 0, 0, 1.0f);
 		text.render("GAME OVER", glm::vec2(SCREEN_WIDTH/2-90, SCREEN_HEIGHT/2), 20, glm::vec4(1, 1, 1, 1));
@@ -252,8 +281,10 @@ void Scene::render() {
 	map->render(camera.getPosition(), camera.getSize(), texProgram);
 
 	/* Player */
-	texProgram.use();
-	player->render();
+	if (!map->reachEntranceCaste(player->getPos())) {
+		texProgram.use();
+		player->render();
+	}
 
 	/* Score */
 	Score::instance().render();
