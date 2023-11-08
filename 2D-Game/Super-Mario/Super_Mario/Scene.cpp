@@ -7,8 +7,8 @@
 #define SCREEN_X 0
 #define SCREEN_Y 32
 
-#define INIT_PLAYER_X_TILES 187
-#define INIT_PLAYER_Y_TILES 2
+#define INIT_PLAYER_X_TILES 2
+#define INIT_PLAYER_Y_TILES 11
 
 #define TIME_GAME_OVER 7000
 #define TIME_GAME_WIN 7000
@@ -50,7 +50,7 @@ void Scene::init() {
 	playingMusic = false; gameOver = false;
 	gameWin = false;
 	timeUp = false;
-	timeUpTime = 0.;
+	timeUpTime = 0;
 	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
 		cout << "Could not load font!!!" << endl;
 	}
@@ -78,7 +78,7 @@ void Scene::restart() {
 
 	/* --- Sound --- */
 	sound.stopBGM();
-	if (Score::instance().gameOver() && !gameWin) {
+	if (Score::instance().gameOver()) {
 		sound.playSFX("sfx/game_over.wav");
 		map = maps[0];
 		map->restart();
@@ -131,10 +131,8 @@ void Scene::update(int deltaTime) {
 	bool inMenu = startMenu.showingMenu();
 	if (inMenu) return;
 
-	// JOAN if (Score::instance().getTime() == 0) gameOver = true;
-
 	/* --- Game Over --- */
-	if (gameOver && !gameWin) {
+	if (gameOver) {
 		timeGameOver += deltaTime;
 		if (timeGameOver > TIME_GAME_OVER) {
 			gameOver = false, pause = false;
@@ -153,12 +151,19 @@ void Scene::update(int deltaTime) {
 		timeGameWin += deltaTime;
 		if (timeGameWin > TIME_GAME_WIN) {
 			gameWin = false;
+			map = maps[0];
+			Score::instance().updateWorld(1, 1);
 			startMenu.openMenu();
 			playingMusic = false;
 			glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
 			Score::instance().restartLives();
-
+			Game::instance().clearInput();
+			restart();
+			Score::instance().restartLives();
+			pause = false, keyPausePressed = false;
+			gameOver = false; playingMusic = false;
 		}
+		return;
 	}
 
 	/* --- Pause --- */
@@ -209,18 +214,8 @@ void Scene::update(int deltaTime) {
 				}
 				else {
 					// Win Game
-					map = maps[0];
-					Score::instance().updateWorld(1, 1);
-					sound.stopBGM();
 					gameWin = true;
 					timeGameWin = 0;
-					Game::instance().clearInput();
-					restart();
-					Score::instance().restartLives();
-					startMenu.openMenu();
-					pause = false, keyPausePressed = false;
-					gameOver = false; playingMusic = false;
-					sound.stopBGM();
 				}
 			}
 		}
@@ -285,8 +280,8 @@ void Scene::update(int deltaTime) {
 void Scene::render() {
 	if (gameWin && !startMenu.showingMenu()) {
 		glClearColor(0, 0, 0, 1.0f);
-		text.render("THANK YOU MARIO!", glm::vec2(SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
-		text.render("YOUR QUEST IS OVER.", glm::vec2(SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / +25), 20, glm::vec4(1, 1, 1, 1));
+		text.render("THANK YOU MARIO!", glm::vec2(SCREEN_WIDTH / 2 - 170, SCREEN_HEIGHT / 2 + 10), 20, glm::vec4(1, 1, 1, 1));
+		text.render("YOUR QUEST IS OVER.", glm::vec2(SCREEN_WIDTH / 2 - 210, SCREEN_HEIGHT / 2 + 40), 20, glm::vec4(1, 1, 1, 1));
 		return;
 	}
 

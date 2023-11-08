@@ -53,7 +53,7 @@ private:
 	int timeGameWin;
 
 	bool timeUp;
-	float timeUpTime;
+	int timeUpTime;
 
 	Projection camera;
 	glm::mat4 projection;
