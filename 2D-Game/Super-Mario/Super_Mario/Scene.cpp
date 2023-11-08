@@ -7,8 +7,8 @@
 #define SCREEN_X 0
 #define SCREEN_Y 32
 
-#define INIT_PLAYER_X_TILES 187
-#define INIT_PLAYER_Y_TILES 2
+#define INIT_PLAYER_X_TILES 195
+#define INIT_PLAYER_Y_TILES 11
 
 #define TIME_GAME_OVER 7000
 #define TIME_GAME_WIN 7000
@@ -159,6 +159,7 @@ void Scene::update(int deltaTime) {
 			Score::instance().restartLives();
 
 		}
+		return;
 	}
 
 	/* --- Pause --- */
@@ -211,13 +212,11 @@ void Scene::update(int deltaTime) {
 					// Win Game
 					map = maps[0];
 					Score::instance().updateWorld(1, 1);
-					sound.stopBGM();
 					gameWin = true;
 					timeGameWin = 0;
 					Game::instance().clearInput();
 					restart();
 					Score::instance().restartLives();
-					startMenu.openMenu();
 					pause = false, keyPausePressed = false;
 					gameOver = false; playingMusic = false;
 					sound.stopBGM();
@@ -285,8 +284,8 @@ void Scene::update(int deltaTime) {
 void Scene::render() {
 	if (gameWin && !startMenu.showingMenu()) {
 		glClearColor(0, 0, 0, 1.0f);
-		text.render("THANK YOU MARIO!", glm::vec2(SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
-		text.render("YOUR QUEST IS OVER.", glm::vec2(SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / +25), 20, glm::vec4(1, 1, 1, 1));
+		text.render("THANK YOU MARIO!", glm::vec2(SCREEN_WIDTH / 2 - 190, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
+		text.render("YOUR QUEST IS OVER.", glm::vec2(SCREEN_WIDTH / 2 - 220, (SCREEN_HEIGHT / +25) +10), 20, glm::vec4(1, 1, 1, 1));
 		return;
 	}
 
