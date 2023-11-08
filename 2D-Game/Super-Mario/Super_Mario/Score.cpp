@@ -5,7 +5,7 @@
 void Score::init() {
 	score = 0, lastScore = 0, coins = 0;
 	world = make_pair(1, 1);
-	time = 400; lives = 10;
+	time = 400; lives = 3;
 
 	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
 		cout << "Could not load font!!!" << endl;
@@ -18,7 +18,7 @@ void Score::restart() {
 }
 
 void Score::restartLives() {
-	lives = 1;
+	lives = 3;
 }
 
 void Score::update(int deltaTime) {
