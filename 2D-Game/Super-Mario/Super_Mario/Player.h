@@ -24,6 +24,7 @@ public:
 
 	void setSuperMario();
 	void setStarMario();
+	void setDying();
 
 	// Enemy Collisions
 	void jumpEnemy();

@@ -24,25 +24,29 @@ public:
 
 	void init();
 	void restart();
-	void change();
+	void worldChange();
 	void update(int deltaTime);
 	void render();
 
 private:
 	void initShaders();
 	void checkWorldKeys();
-private:
+
+
+	void setGameOver();
+	void setChangingScene();
+
 	SoundManager sound;
 	StartMenu startMenu;
-
 
 	TileMap *map;
 	Player *player;
 	ShaderProgram texProgram;
 	Text text;
 	float currentTime;
+
+	/* Game Pause */
 	bool pause, keyPausePressed;
-	bool playingMusic;
 
 	/* Game Over */
 	bool gameOver;
@@ -52,15 +56,15 @@ private:
 	bool gameWin;
 	int timeGameWin;
 
-	bool timeUp;
-	int timeUpTime;
+	/* Scene Change */
+	bool changingScene;
+	int timeChangingScene;
 
 	Projection camera;
 	glm::mat4 projection;
-	//Score *score;
 	vector<TileMap*> maps;
 
-
+	int timeStageClear;
 };
 
 

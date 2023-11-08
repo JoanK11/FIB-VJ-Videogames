@@ -18,7 +18,6 @@ void Score::init() {
 void Score::restart() {
 	score = lastScore;
 	time = START_TIME;
-	coins = 0;
 }
 
 void Score::restartTime() {
@@ -36,7 +35,9 @@ void Score::update(int deltaTime) {
 void Score::render() {
 	/* SCORE */
 	text.render("SCORE", glm::vec2(32, 32), 20, glm::vec4(1, 1, 1, 1));
-	text.render(to_string(score), glm::vec2(78, 56), 20, glm::vec4(1, 1, 1, 1));
+	string str_score = to_string(score);
+	while (str_score.length() < 5) str_score = '0' + str_score;
+	text.render(str_score, glm::vec2(32, 56), 20, glm::vec4(1, 1, 1, 1));
 
 	/* COINS */
 	text.render("COINS", glm::vec2(208, 32), 20, glm::vec4(1, 1, 1, 1));
@@ -48,8 +49,7 @@ void Score::render() {
 
 	/* TIME */
 	text.render("TIME", glm::vec2(560, 32), 20, glm::vec4(1, 1, 1, 1));
-	if (lives > 0)
-		text.render(to_string(int(time)), glm::vec2(572, 56), 20, glm::vec4(1, 1, 1, 1));
+	text.render(to_string(int(time)), glm::vec2(572, 56), 20, glm::vec4(1, 1, 1, 1));
 
 	/* LIVES */
 	text.render("LIVES", glm::vec2(704, 32), 20, glm::vec4(1, 1, 1, 1));
@@ -62,6 +62,10 @@ void Score::increaseScore(int x) {
 
 void Score::increaseCoins() {
 	++coins;
+}
+
+pair<int, int> Score::getWorld() const {
+	return world;
 }
 
 void Score::updateWorld(int x, int y) {

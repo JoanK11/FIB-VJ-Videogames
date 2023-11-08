@@ -63,7 +63,7 @@ public:
 	bool reachFinishLine(const glm::ivec2& pos, const glm::ivec2& size, bool superMario );
 	bool animationOfFlag(float dt);
 	void updateEnemies(int deltaTime, Player* player, float xmin, float xmax);
-	bool reachEntranceCaste(const glm::vec2& pos);
+	bool reachEntranceCastle(const glm::vec2& pos);
 
 	bool colisionDown(const glm::ivec2& pos, const glm::ivec2& size)const;
 private:

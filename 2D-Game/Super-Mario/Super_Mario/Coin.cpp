@@ -23,7 +23,7 @@ Coin::Coin(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMap
 
 void Coin::actionOfObject(Player* ply) {
 	Score::instance().increaseCoins();
-	Score::instance().increaseScore(100);
+	Score::instance().increaseScore(200);
 	sound.playSFX("sfx/coin.wav");
 	//we change the currentState for making
 	currentState = ANIMATION;

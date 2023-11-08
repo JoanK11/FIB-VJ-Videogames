@@ -49,9 +49,9 @@ void Scene::init() {
 
 
 	pause = false, keyPausePressed = false;
-	playingMusic = false; gameOver = false;
-	gameWin = false;
-	timeStageClear = 0;
+	gameOver = false;
+	gameWin = false, changingScene = true;
+	timeStageClear = 0, timeChangingScene = 0;
 	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
 		cout << "Could not load font!!!" << endl;
 	}
@@ -84,7 +84,7 @@ void Scene::restart() {
 	else if (!gameWin) sound.playBGM("music/title.mp3", true);
 }
 
-void Scene::change() {
+void Scene::worldChange() {
 	currentTime = 0.0f;
 
 	/* --- Player --- */
@@ -110,7 +110,8 @@ void Scene::change() {
 	if (Score::instance().gameOver()) {
 		setGameOver();
 	}
-	else if (!gameWin) sound.playBGM("music/title.mp3", true);
+
+	setChangingScene();
 }
 
 void Scene::update(int deltaTime) {
@@ -125,7 +126,6 @@ void Scene::update(int deltaTime) {
 		if (timeGameOver > TIME_GAME_OVER) {
 			gameOver = false, pause = false;
 			startMenu.openMenu();
-			playingMusic = false;
 			glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
 			Score::instance().init();
 		}
@@ -140,7 +140,6 @@ void Scene::update(int deltaTime) {
 		if (timeGameWin > TIME_GAME_WIN) {
 			pause = false;
 			startMenu.openMenu();
-			playingMusic = false;
 			glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
 			map = maps[0];
 			map->restart();
@@ -158,12 +157,15 @@ void Scene::update(int deltaTime) {
 		if (timeChangingScene > TIME_CHANGING_SCENE) {
 			changingScene = false;
 			timeChangingScene = 0;
+			sound.playBGM("music/title.mp3", true);
+			glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
 		}
+		return;
 	}
 
 	/* --- Pause --- */
 	bool keyPause = Game::instance().getKey(13);
-	if (keyPause && !keyPausePressed && playingMusic) {
+	if (keyPause && !keyPausePressed) {
 		keyPausePressed = true;
 		sound.playSFX("sfx/pause.wav");
 		if (pause) {
@@ -178,12 +180,6 @@ void Scene::update(int deltaTime) {
 	}
 	keyPausePressed = keyPause;
 	if (pause) return;
-
-	/* --- Music --- */
-	if (!playingMusic) {
-		sound.playBGM("music/title.mp3", true);
-		playingMusic = true;
-	}
 
 	/* CHECKING IF REACHED THE FINISH LINE */
 	if (map->reachFinishLine(player->getPos(), player->getSize(), player->isSuperMario())) {
@@ -207,7 +203,7 @@ void Scene::update(int deltaTime) {
 				if (map == maps[0]) {
 					map = maps[1];
 					Score::instance().updateWorld(2, 1);
-					change();
+					worldChange();
 				}
 				else {
 					// Win Game
@@ -277,13 +273,12 @@ void Scene::render() {
 		return;
 	}
 
-	else if (changingScene) {
+	else if (changingScene && !startMenu.showingMenu()) {
 		glClearColor(0, 0, 0, 1.0f);
-		text.render("WORLD", glm::vec2(SCREEN_WIDTH / 2 - 40, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
+		text.render("WORLD", glm::vec2(SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
 		pair<int, int> world = Score::instance().getWorld();
 		string str_world = to_string(world.first) + '-' + to_string(world.second);
-		text.render("WORLD", glm::vec2(SCREEN_WIDTH / 2 - 40, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
-		text.render(str_world, glm::vec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
+		text.render(str_world, glm::vec2(SCREEN_WIDTH / 2 + 24, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
 		Score::instance().render();
 		return;
 	}
@@ -347,12 +342,12 @@ void Scene::checkWorldKeys() {
 	if (world1 && map != maps[0]) {
 		map = maps[0];
 		Score::instance().updateWorld(1, 1);
-		change();
+		worldChange();
 	}
 	else if (world2 && map != maps[1]) {
 		map = maps[1];
 		Score::instance().updateWorld(2, 1);
-		change();
+		worldChange();
 	}
 }
 

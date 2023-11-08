@@ -68,6 +68,7 @@ Object* Brick:: actionToTouch(bool isSuperMario) {
 	if (isSuperMario) {
 		currentState = ANIMATION_DESTROYED;
 		SoundManager::instance().playSFX("sfx/breakblock.wav");
+		Score::instance().increaseScore(50);
 	}
 	else currentState = ANIMATION;
 	return nullptr;

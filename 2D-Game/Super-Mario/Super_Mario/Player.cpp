@@ -734,6 +734,15 @@ void Player::jumpEnemy() {
 	startY = posPlayer.y;
 }
 
+void Player::setDying() {
+	if (state == DYING) return;
+	sprite->changeAnimation(DEAD);
+	state = DYING;
+	jumpAngle = 0;
+	startY = posPlayer.y;
+	sound.playSFX("sfx/mario_dies.wav");
+}
+
 void Player::collisionEnemy() {
 	if (state == NORMAL) {
 		sprite->changeAnimation(DEAD);
@@ -803,7 +812,7 @@ void Player::setInitialStateSuperMario(bool superMario) {
 void Player::reachCastleAnimation(float dt) {
 	if (auxFirstTime) {
 		auxFirstTime = false;
-		sound.playSFX("sfx/stage_clear3.wav");
+		sound.playSFX("sfx/stage_clear.wav");
 		sprite->changeAnimation(MOVE_RIGHT);
 		superSprite->changeAnimation(MOVE_RIGHT);
 		starSprite->changeAnimation(MOVE_RIGHT);

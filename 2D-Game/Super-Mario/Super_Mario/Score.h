@@ -35,6 +35,7 @@ public:
 	void updateWorld(int x, int y);
 	void decreaseLive();
 	double getTime();
+	pair<int, int> getWorld() const;
 	void timeToScore();
 
 private:

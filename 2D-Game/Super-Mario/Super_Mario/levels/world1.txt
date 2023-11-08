@@ -2,7 +2,7 @@ TILEMAP
 212 14 							-- Size of tile map in tiles
 32 							-- Tile size & block size
 images/tileSheet.png 	-- Tilesheet
-16 2 								-- Number of tiles in tilesheet
+16 4 								-- Number of tiles in tilesheet
 W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W 
 W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W IAN MAN MAN DAN W W W W W W W W W W W W W W W W W W W W W W W W W W W IAN MAN DAN W W W W W W W W W W W W W W IAN MAN MAN DAN W W W W W W W W W W W W W W W W W W W W W W W W W W W IAN MAN DAN W W W W W W W W W W W W W W IAN MAN MAN DAN W W W W W W W W W W W W W W W W W W W W W W W W W W W IAN MAN DAN W W W W W W W W W W W W W W IAN MAN MAN DAN W W W W W W W W W W W W W W BOL W W W W W W W W W W W W W 
 W W W W W W W W IAN MAN DAN W W W W W W W W W W W W W W W W IAN MAN MAN MAN DAN W W W W IDN MDN MDN DDN W W W W W W W W W W W W W W W W W W W W W W W W W W W IDN MDN DDN W W W W W IAN MAN MAN MAN DAN W W W W IDN MDN MDN DDN W W W W W W W W W W W W W W W W IAN MAN DAN W W W W W W W W IDN MDN DDN W W W W W IAN MAN MAN MAN DAN W W W W IDN MDN MDN DDN W W W W W W W W W W W W W W W W IAN MAN DAN W W W W W W W W IDN MDN DDN W W W W W IAN MAN MAN MAN DAN W W W W IDN MDN MDN DDN W W W W W W W W W W W W W W P W IAN MAN DAN W W W W W W W W W 

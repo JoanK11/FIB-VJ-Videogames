@@ -105,10 +105,8 @@ void TileMap::render(glm::vec2 pos, glm::vec2 size, ShaderProgram& texProgram) c
 	}
 }
 
-void TileMap::free()
-{
-	
-}
+void TileMap::free() {}
+
 void TileMap::restart() {
 	for (int j = 0; j < mapSize.y; j++)
 	{
@@ -569,7 +567,7 @@ void TileMap::updateEnemies(int deltaTime, Player* player, float xmin, float xma
 	}
 }
 
-bool TileMap::reachEntranceCaste(const glm::vec2& pos) {
+bool TileMap::reachEntranceCastle(const glm::vec2& pos) {
 	return pos.x / blockSize >= blockOfEntranceCaste;
 }
 

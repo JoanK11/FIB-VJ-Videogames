@@ -37,6 +37,7 @@ void Star::restart() {
 	jumpAngle = 0;
 	startY = pos.y;
 }
+
 void Star::actionOfObject(Player* ply) {
 	if (currentState == ANIMATION) return;
 	else if (currentState == VALID) {
