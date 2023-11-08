@@ -47,7 +47,8 @@ private:
 	/* Game Over */
 	bool gameOver;
 	float timeGameOver;
-
+	bool timeUp;
+	float timeUpTime;
 	Projection camera;
 	glm::mat4 projection;
 	//Score *score;

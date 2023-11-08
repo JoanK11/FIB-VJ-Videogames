@@ -49,7 +49,8 @@ void Scene::init() {
 
 	pause = false, keyPausePressed = false;
 	playingMusic = false; gameOver = false;
-
+	timeUp = false;
+	timeUpTime = 0.;
 	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
 		cout << "Could not load font!!!" << endl;
 	}
@@ -166,12 +167,31 @@ void Scene::update(int deltaTime) {
 	if (pause) return;
 
 
+	timeUp = Score::instance().getTime() <= 0;
+	if (timeUp) {
+		if (timeUpTime == 0) {
+			sound.playSFX("sfx/game_over.wav");
+			sound.stopBGM();
+			playingMusic = false;
+		}
+		timeUpTime += deltaTime;
+		if (timeUpTime >= TIME_GAME_OVER) {
+
+			glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
+			restart();
+			timeUp = false;
+			timeUpTime = 0.;
+		}
+		return;
+	}
+
 	/* --- Music --- */
 	if (!playingMusic) {
 		sound.playBGM("music/title.mp3", true);
 		playingMusic = true;
 	}
 
+	
 	/*CHECKING IF REACHED THE FINISH LINE*/
 	if (map->reachFinishLine(player->getPos(), player->getSize(), player->isSuperMario())) {
 		if (!map->animationOfFlag(deltaTime)) {
@@ -247,7 +267,12 @@ void Scene::render() {
 		Score::instance().render();
 		return;
 	}
-
+	if (timeUp && !startMenu.showingMenu()) {
+		glClearColor(0, 0, 0, 1.0f);
+		text.render("TIME UP", glm::vec2(SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
+		Score::instance().render();
+		return;
+	}
 	glm::mat4 modelview;
 	texProgram.use();
 	camera.bindProjection(texProgram);
