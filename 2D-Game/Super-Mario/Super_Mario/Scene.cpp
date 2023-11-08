@@ -7,7 +7,7 @@
 #define SCREEN_X 0
 #define SCREEN_Y 32
 
-#define INIT_PLAYER_X_TILES 192
+#define INIT_PLAYER_X_TILES 2
 #define INIT_PLAYER_Y_TILES 11
 
 #define TIME_GAME_OVER 7000
@@ -107,7 +107,7 @@ void Scene::change() {
 
 	/* --- Score --- */
 	
-	Score::instance().restart();
+	Score::instance().restartTime();
 
 
 
@@ -169,11 +169,31 @@ void Scene::update(int deltaTime) {
 
 	/*CHECKING IF REACHED THE FINISH LINE*/
 	if (map->reachFinishLine(player->getPos(), player->getSize(), player->isSuperMario())) {
-		map->animationOfFlag(deltaTime);
-		player->animationOfReachingFinal();
-		return;
+		if (!map->animationOfFlag(deltaTime)) {
+			player->animationOfReachingFinal();
+		}
+		else {
+			if (!map->reachEntranceCaste(player->getPos())) {
+				player->reachCastleAnimation(deltaTime);
+			}
+			else {
+				if (map == maps[0]) {
+					map = maps[1];
+					Score::instance().updateWorld(2, 1);
+					change();
+				}
+				else {
+					map = maps[0];
+					Score::instance().updateWorld(1, 1);
+					restart();
+					Score::instance().restartLives();
+					startMenu.openMenu();
+				}
+			}
+		}
+			
+			return;
 	}
-
 	checkWorldKeys();
 
 

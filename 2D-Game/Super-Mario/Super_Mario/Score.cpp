@@ -15,10 +15,13 @@ void Score::init() {
 void Score::restart() {
 	score = lastScore;
 	time = 400;
+	coins = 0;
 }
-
+void Score::restartTime() {
+	time = 400;
+}
 void Score::restartLives() {
-	lives = 1;
+	lives = 10;
 }
 
 void Score::update(int deltaTime) {

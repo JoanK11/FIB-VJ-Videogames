@@ -30,7 +30,7 @@ public:
 	void restart();
 	void restartLives();
 	bool gameOver();
-	
+	void restartTime();
 	
 	void updateWorld(int x, int y);
 	void decreaseLive();
