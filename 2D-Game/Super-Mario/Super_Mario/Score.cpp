@@ -2,14 +2,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Score.h"
 
-#define START_TIME 2
-#define START_LIVES 1
+#define START_TIME 10
+#define START_LIVES 3
 
 void Score::init() {
 	score = 0, lastScore = 0, coins = 0;
 	world = make_pair(1, 1);
 	time = START_TIME; lives = START_LIVES;
-	bGameOver = false;
 
 	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
 		cout << "Could not load font!!!" << endl;
@@ -20,7 +19,6 @@ void Score::restart() {
 	score = lastScore;
 	time = START_TIME;
 	coins = 0;
-	bGameOver = false;
 }
 
 void Score::restartTime() {
@@ -32,7 +30,7 @@ void Score::restartLives() {
 
 void Score::update(int deltaTime) {
 	time -= (deltaTime/800.f);
-	if (time < 0) bGameOver = true, time = 0;
+	if (time < 0) time = 0;
 }
 
 void Score::render() {
@@ -68,11 +66,11 @@ void Score::increaseCoins() {
 
 void Score::updateWorld(int x, int y) {
 	world = make_pair(x, y);
+	lastScore = score;
 }
 
 void Score::decreaseLive() {
 	--lives;
-	if (lives == 0) bGameOver = true;
 }
 
 double Score::getTime() {
@@ -80,7 +78,7 @@ double Score::getTime() {
 }
 
 bool Score::gameOver() {
-	return bGameOver;
+	return lives == 0;
 }
 
 void Score::timeToScore() {

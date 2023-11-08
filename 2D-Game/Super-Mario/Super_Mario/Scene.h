@@ -46,13 +46,12 @@ private:
 
 	/* Game Over */
 	bool gameOver;
-	int timeGameOverJoan;
+	int timeGameOver;
 
 	/* Game Win */
 	bool gameWin;
 	int timeGameWin;
 
-	float timeGameOver;
 	bool timeUp;
 	float timeUpTime;
 

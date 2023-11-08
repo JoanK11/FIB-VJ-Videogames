@@ -41,7 +41,6 @@ private:
 	int score, lastScore;
 	int coins;
 	pair<int, int> world;
-	bool bGameOver;
 	double time;
 	int lives;
 	Text text;

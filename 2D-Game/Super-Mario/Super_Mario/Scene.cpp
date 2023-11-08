@@ -73,7 +73,6 @@ void Scene::restart() {
 	map->restart();
 
 	/* --- Score --- */
-	Score::instance().decreaseLive();
 	Score::instance().restart();
 
 
@@ -102,6 +101,7 @@ void Scene::change() {
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getBlockSize(), INIT_PLAYER_Y_TILES * map->getBlockSize()));
 	player->setTileMap(map);
 	player->setInitialStateSuperMario(isSuperMario);
+
 	/* --- Camera --- */
 	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1)));
 
@@ -113,7 +113,7 @@ void Scene::change() {
 
 	/* --- Sound --- */
 	sound.stopBGM();
-	if (Score::instance().gameOver() && !gameWin) {
+	if (Score::instance().gameOver()) {
 		sound.playSFX("sfx/game_over.wav");
 		map = maps[0];
 		map->restart();
@@ -134,7 +134,7 @@ void Scene::update(int deltaTime) {
 	// JOAN if (Score::instance().getTime() == 0) gameOver = true;
 
 	/* --- Game Over --- */
-	if (gameOver) {
+	if (gameOver && !gameWin) {
 		timeGameOver += deltaTime;
 		if (timeGameOver > TIME_GAME_OVER) {
 			gameOver = false, pause = false;
@@ -249,6 +249,23 @@ void Scene::update(int deltaTime) {
 	/* --- Music --- */
 	if (player->isDead()) sound.stopBGM();
 
+	timeUp = Score::instance().getTime() <= 0;
+	if (timeUp) {
+		if (timeUpTime == 0) {
+			sound.stopBGM();
+			sound.playSFX("sfx/game_over.wav");
+			playingMusic = false;
+		}
+		timeUpTime += deltaTime;
+		if (timeUpTime >= TIME_GAME_OVER) {
+			glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
+			restart();
+			timeUp = false;
+			timeUpTime = 0.;
+		}
+		return;
+	}
+
 	/* --- Score --- */
 	if (!player->isDead()) Score::instance().update(deltaTime);
 
@@ -260,6 +277,7 @@ void Scene::update(int deltaTime) {
 	/* --- Restart --- */
 	glm::vec2 pos = player->getPos();
 	if (pos.y > 1200) {
+		Score::instance().decreaseLive();
 		restart();
 	}
 }
@@ -272,18 +290,20 @@ void Scene::render() {
 		return;
 	}
 
-	if (gameOver && !startMenu.showingMenu()) {
+	else if (gameOver && !startMenu.showingMenu()) {
 		glClearColor(0, 0, 0, 1.0f);
 		text.render("GAME OVER", glm::vec2(SCREEN_WIDTH/2-90, SCREEN_HEIGHT/2), 20, glm::vec4(1, 1, 1, 1));
 		Score::instance().render();
 		return;
 	}
+
 	if (timeUp && !startMenu.showingMenu()) {
 		glClearColor(0, 0, 0, 1.0f);
 		text.render("TIME UP", glm::vec2(SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
 		Score::instance().render();
 		return;
 	}
+
 	glm::mat4 modelview;
 	texProgram.use();
 	camera.bindProjection(texProgram);
