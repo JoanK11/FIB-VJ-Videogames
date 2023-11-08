@@ -4,6 +4,7 @@
 #include "Score.h"
 #include "Text.h"
 #include "Texture.h"
+#include "SoundManager.h"
 
 #define TIME_TEXT 1500
 
@@ -19,6 +20,7 @@ private:
 		END
 	};
 	FlagState currentState;
+	SoundManager sound;
 
 	Text text;
 	glm::ivec2 textPos;

@@ -35,6 +35,7 @@ public:
 	void updateWorld(int x, int y);
 	void decreaseLive();
 	double getTime();
+	void timeToScore();
 
 private:
 	int score, lastScore;

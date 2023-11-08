@@ -25,7 +25,7 @@ const float JUMP_HEIGHT_INCREMENT = 16.0f; // Height increase per second
 enum PlayerAnims {
 	STAND_RIGHT, STAND_LEFT, MOVE_RIGHT, MOVE_LEFT, JUMP_RIGHT, 
 	JUMP_LEFT, CHANGE_RIGHT, CHANGE_LEFT, DEAD,
-	CROUCHED_RIGHT, CROUCHED_LEFT
+	CROUCHED_RIGHT, CROUCHED_LEFT, FLAG_LEFT, FLAG_RIGHT
 };
 
 Player::~Player() {
@@ -56,7 +56,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 
 	spritesheet.loadFromFile("images/spriteMario.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.0625, 0.125), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(9);
+	sprite->setNumberAnimations(13);
 		
 		// ----- IDLE -----
 		sprite->setAnimationSpeed(STAND_RIGHT, 8);
@@ -99,7 +99,15 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 		// DEAD
 		sprite->setAnimationSpeed(DEAD, 1);
 		sprite->addKeyframe(DEAD, glm::vec2(0.3750f, 0.f));
-		
+
+		// FLAG
+		sprite->setAnimationSpeed(FLAG_RIGHT, 2);
+		sprite->addKeyframe(FLAG_RIGHT, glm::vec2(0.4375f, 0.f));
+		sprite->addKeyframe(FLAG_RIGHT, glm::vec2(0.5f, 0.f));
+
+		sprite->setAnimationSpeed(FLAG_LEFT, 2);
+		sprite->addKeyframe(FLAG_LEFT, glm::vec2(0.4375f, 0.125f));
+		sprite->addKeyframe(FLAG_LEFT, glm::vec2(0.5f, 0.125f));
 		
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -110,7 +118,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	/* ----------------------- */
 
 	superSprite = Sprite::createSprite(glm::ivec2(32, 64), glm::vec2(0.0625, 0.25), &spritesheet, &shaderProgram);
-	superSprite->setNumberAnimations(11);
+	superSprite->setNumberAnimations(13);
 
 		// ----- IDLE -----
 		superSprite->setAnimationSpeed(STAND_RIGHT, 1);
@@ -157,6 +165,15 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 		superSprite->setAnimationSpeed(CROUCHED_LEFT, 1);
 		superSprite->addKeyframe(CROUCHED_LEFT, glm::vec2(0.3750f, 0.5f));
 
+		// FLAG
+		superSprite->setAnimationSpeed(FLAG_RIGHT, 2);
+		superSprite->addKeyframe(FLAG_RIGHT, glm::vec2(0.4375f, 0.25f));
+		superSprite->addKeyframe(FLAG_RIGHT, glm::vec2(0.5f, 0.5f));
+
+		superSprite->setAnimationSpeed(FLAG_LEFT, 2);
+		superSprite->addKeyframe(FLAG_LEFT, glm::vec2(0.4375f, 0.25f));
+		superSprite->addKeyframe(FLAG_LEFT, glm::vec2(0.5f, 0.5f));
+
 	superSprite->changeAnimation(0);
 	superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
 
@@ -166,7 +183,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 
 	starSpritesheet.loadFromFile("images/spriteStarMario.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	starSprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.0625f, 0.125f), &starSpritesheet, &shaderProgram);
-	starSprite->setNumberAnimations(9);
+	starSprite->setNumberAnimations(13);
 
 	/* Idle */
 	starSprite->setAnimationSpeed(STAND_RIGHT, 4);
@@ -204,6 +221,14 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	starSprite->setAnimationSpeed(DEAD, 4);
 	for (int i = 0; i < 4; ++i) starSprite->addKeyframe(DEAD, glm::vec2(0.3750f, 0.125f * i));
 
+	// Flag
+	starSprite->setAnimationSpeed(FLAG_RIGHT, 8);
+	for (int i = 0; i < 4; ++i) starSprite->addKeyframe(FLAG_RIGHT, glm::vec2(0.4375f, 0.125f * i));
+	for (int i = 0; i < 4; ++i) starSprite->addKeyframe(FLAG_RIGHT, glm::vec2(0.5f, 0.125f * i));
+	starSprite->setAnimationSpeed(FLAG_LEFT, 8);
+	for (int i = 0; i < 4; ++i) starSprite->addKeyframe(FLAG_LEFT, glm::vec2(0.4375f, 0.5f + 0.125f * i));
+	for (int i = 0; i < 4; ++i) starSprite->addKeyframe(FLAG_LEFT, glm::vec2(0.5f, 0.5f + 0.125f * i));
+
 	starSprite->changeAnimation(0);
 	starSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 
@@ -213,7 +238,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 
 	superStarSpritesheet.loadFromFile("images/spriteSuperStarMario.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	superStarSprite = Sprite::createSprite(glm::ivec2(32, 64), glm::vec2(0.0625f, 0.125f), &superStarSpritesheet, &shaderProgram);
-	superStarSprite->setNumberAnimations(11);
+	superStarSprite->setNumberAnimations(13);
 
 	/* Idle */
 	superStarSprite->setAnimationSpeed(STAND_RIGHT, 4);
@@ -258,6 +283,14 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	superStarSprite->setAnimationSpeed(CROUCHED_LEFT, 4);
 	for (int i = 0; i < 4; ++i) superStarSprite->addKeyframe(CROUCHED_LEFT, glm::vec2(0.375f, 0.5f + 0.125f*i));
 
+	// Flag
+	superStarSprite->setAnimationSpeed(FLAG_RIGHT, 8);
+	for (int i = 0; i < 4; ++i) superStarSprite->addKeyframe(FLAG_RIGHT, glm::vec2(0.4375f, 0.125f * i));
+	for (int i = 0; i < 4; ++i) superStarSprite->addKeyframe(FLAG_RIGHT, glm::vec2(0.5f, 0.125f * i));
+	superStarSprite->setAnimationSpeed(FLAG_LEFT, 8);
+	for (int i = 0; i < 4; ++i) superStarSprite->addKeyframe(FLAG_LEFT, glm::vec2(0.4375f, 0.5f + 0.125f * i));
+	for (int i = 0; i < 4; ++i) superStarSprite->addKeyframe(FLAG_LEFT, glm::vec2(0.5f, 0.5f + 0.125f * i));
+
 	superStarSprite->changeAnimation(0);
 	superStarSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
 }
@@ -283,13 +316,13 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 	bool keyStarMario = Game::instance().getKey('g') || Game::instance().getKey('G');
 
 	/* Sprite Selection (Super Mario) */
-	if (!superMario && !superMarioKey && keySuperMario && !bPowerUpAnimation && !bImmunity) {
+	if (!superMario && !superMarioKey && keySuperMario && !bPowerUpAnimation && !bImmunity && state != DYING) {
 		superMarioKey = true;
 		if (starMario) superStarSprite->changeAnimation(activeSprite->animation());
 		else superSprite->changeAnimation(activeSprite->animation());
 		setSuperMario();
 	}
-	else if (superMario && !superMarioKey && keySuperMario && !bPowerUpAnimation) {
+	else if (superMario && !superMarioKey && keySuperMario && !bPowerUpAnimation && state != DYING) {
 		superMarioKey = true;
 		if (starMario) activeSprite->changeAnimation(starSprite->animation());
 		else activeSprite->changeAnimation(sprite->animation());
@@ -298,7 +331,7 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 
 	/* Sprite Selection (Star Mario) */
 	if (starMario) starMarioTime += deltaTime;
-	if (!starMario && !starMarioKey && keyStarMario && !bPowerUpAnimation && !bImmunity) {
+	if (!starMario && !starMarioKey && keyStarMario && !bPowerUpAnimation && !bImmunity && state != DYING) {
 		starMarioKey = true;
 		soundScene.stopBGM();
 		soundScene.playBGM("music/star_mario.mp3", true);
@@ -306,7 +339,7 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 		else starSprite->changeAnimation(activeSprite->animation());
 		setStarMario();
 	}
-	else if (starMario && (starMarioTime > TIME_STAR_MARIO || (!starMarioKey && keyStarMario && !bPowerUpAnimation))) {
+	else if (starMario && state != DYING && (starMarioTime > TIME_STAR_MARIO || (!starMarioKey && keyStarMario && !bPowerUpAnimation))) {
 		starMario = false, starMarioKey = true;
 		soundScene.stopBGM();
 		soundScene.playBGM("music/title.mp3", true);
@@ -742,27 +775,41 @@ bool Player::isStarMario() const {
 bool Player::isSuperMario() const {
 	return superMario;
 }
-void Player::animationOfReachingFinal() {
+void Player::animationOfReachingFinal(int deltaTime) {
 	bJumping = false;
 	posPlayer.y += FALL_STEP;
+
+	/* Sprite Updates */
+	sprite->update(deltaTime); superSprite->update(deltaTime);
+	starSprite->update(deltaTime);superStarSprite->update(deltaTime);
+
+	/* Sprite Animation Selection */
+	if (sprite->animation() != FLAG_RIGHT) sprite->changeAnimation(FLAG_RIGHT);
+	if (superSprite->animation() != FLAG_RIGHT) superSprite->changeAnimation(FLAG_RIGHT);
+	if (starSprite->animation() != FLAG_RIGHT) starSprite->changeAnimation(FLAG_RIGHT);
+	if (superStarSprite->animation() != FLAG_RIGHT) superStarSprite->changeAnimation(FLAG_RIGHT);
+
 	map->collisionMoveDown(posPlayer, glm::ivec2(32,32), &posPlayer.y);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
 	starSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	superStarSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
 }
+
 void Player::setInitialStateSuperMario(bool superMario) {
 	this->superMario = superMario;
 }
+
 void Player::reachCastleAnimation(float dt) {
 	if (auxFirstTime) {
 		auxFirstTime = false;
+		sound.playSFX("sfx/stage_clear3.wav");
 		sprite->changeAnimation(MOVE_RIGHT);
 		superSprite->changeAnimation(MOVE_RIGHT);
 		starSprite->changeAnimation(MOVE_RIGHT);
 		superStarSprite->changeAnimation(MOVE_RIGHT);
-
 	}
+
 	sprite->update(dt);
 	superSprite->update(dt);
 	starSprite->update(dt);

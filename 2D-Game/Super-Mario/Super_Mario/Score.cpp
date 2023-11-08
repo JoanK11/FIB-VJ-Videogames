@@ -2,10 +2,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Score.h"
 
+#define START_TIME 10
+#define START_LIVES 3
+
 void Score::init() {
 	score = 0, lastScore = 0, coins = 0;
 	world = make_pair(1, 1);
-	time = 400; lives = 10;
+	time = START_TIME; lives = START_LIVES;
 
 	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
 		cout << "Could not load font!!!" << endl;
@@ -14,18 +17,20 @@ void Score::init() {
 
 void Score::restart() {
 	score = lastScore;
-	time = 400;
+	time = START_TIME;
 	coins = 0;
 }
+
 void Score::restartTime() {
-	time = 400;
+	time = START_TIME;
 }
 void Score::restartLives() {
-	lives = 10;
+	lives = START_LIVES;
 }
 
 void Score::update(int deltaTime) {
 	time -= (deltaTime/800.f);
+	if (time < 0) time = 0;
 }
 
 void Score::render() {
@@ -47,10 +52,8 @@ void Score::render() {
 		text.render(to_string(int(time)), glm::vec2(572, 56), 20, glm::vec4(1, 1, 1, 1));
 
 	/* LIVES */
-	if (lives > 0) {
-		text.render("LIVES", glm::vec2(704, 32), 20, glm::vec4(1, 1, 1, 1));
-		text.render(to_string(lives), glm::vec2(736, 56), 20, glm::vec4(1, 1, 1, 1));
-	}
+	text.render("LIVES", glm::vec2(704, 32), 20, glm::vec4(1, 1, 1, 1));
+	text.render(to_string(lives), glm::vec2(736, 56), 20, glm::vec4(1, 1, 1, 1));
 }
 
 void Score::increaseScore(int x) {
@@ -63,6 +66,7 @@ void Score::increaseCoins() {
 
 void Score::updateWorld(int x, int y) {
 	world = make_pair(x, y);
+	lastScore = score;
 }
 
 void Score::decreaseLive() {
@@ -75,4 +79,11 @@ double Score::getTime() {
 
 bool Score::gameOver() {
 	return lives == 0;
+}
+
+void Score::timeToScore() {
+	if (time == 0) return;
+	--time;
+	if (time < 0) time = 0;
+	score += 50;
 }

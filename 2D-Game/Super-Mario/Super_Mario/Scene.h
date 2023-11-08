@@ -46,17 +46,22 @@ private:
 
 	/* Game Over */
 	bool gameOver;
-	float timeGameOver;
+	int timeGameOver;
+
+	/* Game Win */
+	bool gameWin;
+	int timeGameWin;
+
 	bool timeUp;
 	float timeUpTime;
+
 	Projection camera;
 	glm::mat4 projection;
 	//Score *score;
 	vector<TileMap*> maps;
-	
-	
+
+
 };
 
 
 #endif // _SCENE_INCLUDE
-

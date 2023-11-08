@@ -507,6 +507,7 @@ glm::ivec2 TileMap::getMapSize() {
 bool TileMap::reachFinishLine(const glm::ivec2& pos, const glm::ivec2& size, bool superMario) {
 	return flag->touchTheFlag(pos, size, superMario);
 }
+
 bool TileMap::animationOfFlag(float dt) {
 	return flag->update(dt);
 }
