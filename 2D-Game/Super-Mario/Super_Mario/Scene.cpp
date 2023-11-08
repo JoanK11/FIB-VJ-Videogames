@@ -81,6 +81,9 @@ void Scene::restart() {
 	sound.stopBGM();
 	if (Score::instance().gameOver()) {
 		sound.playSFX("sfx/game_over.wav");
+		map = maps[0];
+		map->restart();
+		player->setTileMap(map);
 		gameOver = true;
 		timeGameOver = 0;
 		Game::instance().clearInput();
@@ -115,6 +118,9 @@ void Scene::change() {
 	sound.stopBGM();
 	if (Score::instance().gameOver()) {
 		sound.playSFX("sfx/game_over.wav");
+		map = maps[0];
+		map->restart();
+		player->setTileMap(map);
 		gameOver = true;
 		timeGameOver = 0;
 		Game::instance().clearInput();
@@ -127,7 +133,6 @@ void Scene::update(int deltaTime) {
 	startMenu.update(deltaTime);
 	bool inMenu = startMenu.showingMenu();
 	if (inMenu) return;
-
 	/* --- Game Over --- */
 	if (gameOver) {
 		timeGameOver += deltaTime;
@@ -140,6 +145,7 @@ void Scene::update(int deltaTime) {
 		}
 		return;
 	}
+
 
 	/* --- Pause --- */
 	bool keyPause = Game::instance().getKey(13);
@@ -159,7 +165,6 @@ void Scene::update(int deltaTime) {
 	keyPausePressed = keyPause;
 	if (pause) return;
 
-	
 
 	/* --- Music --- */
 	if (!playingMusic) {
@@ -188,12 +193,16 @@ void Scene::update(int deltaTime) {
 					restart();
 					Score::instance().restartLives();
 					startMenu.openMenu();
+					pause = false, keyPausePressed = false;
+					gameOver = false; playingMusic = false;
+					sound.stopBGM();
 				}
 			}
 		}
 			
 			return;
 	}
+
 	checkWorldKeys();
 
 
