@@ -55,6 +55,7 @@ private:
 	
 	
 	float Vx, Vy;
+	float gravity;
 	bool jumpingEnemy;
 
 	bool keyJumpPressed;

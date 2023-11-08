@@ -113,7 +113,7 @@ void Star::update(float dt) {
 		spr->setPosition(pos + tileMapDisplay);
 	}
 }
-void Star::render() {
+void Star::render(glm::vec2& cameraPos) {
 	if (currentState == ANIMATION) {	
 		spr->render();
 	}

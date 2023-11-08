@@ -48,6 +48,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 
 	// Velocity
 	Vx = 0, Vy = 0;
+	gravity = 0;
 
 	/* ----------------------- */
 	/* -------- MARIO -------- */
@@ -471,9 +472,10 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 			jumpAngle += JUMP_ANGLE_STEP;
 		}
 
-		if (jumpAngle == 180) {
+		if (jumpAngle >= 180) {
 			bJumping = false; jumpingEnemy = false;
 			posPlayer.y = startY;
+			gravity = 0;
 		}
 		else {
 			if (jumpingEnemy) posPlayer.y = int(startY - JUMP_HEIGHT_ENEMY * sin(3.14159f * jumpAngle / 180.f));
@@ -482,6 +484,7 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 			if (jumpAngle > 90) { // is falling down
 				bFalling = true;
 				bJumping = false;
+				if (gravity < 4) gravity += 0.5f;
 			}
 
 			else bJumping = !map->collisionMoveUp(posPlayer, dimMario, &posPlayer.y, superMario);
@@ -640,10 +643,10 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 	//if (bJumping) std::cout << "bJumping" << endl;
 	//if (bFalling) std::cout << "bFalling" << endl;
 	// 
-	if (bImmunity) std::cout << "bImmunity" << endl;
-	if (starMario) std::cout << "starMario" << endl;
+	//if (bImmunity) std::cout << "bImmunity" << endl;
+	//if (starMario) std::cout << "starMario" << endl;
 	//std::cout << endl;
-	cout << posPlayer.x << " , " << posPlayer.y << " , " << endl;
+	//cout << posPlayer.x << " , " << posPlayer.y << " , " << endl;
 }
 
 void Player::render() {
@@ -745,6 +748,8 @@ void Player::animationOfReachingFinal() {
 	map->collisionMoveDown(posPlayer, glm::ivec2(32,32), &posPlayer.y);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
+	starSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	superStarSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
 }
 void Player::setInitialStateSuperMario(bool superMario) {
 	this->superMario = superMario;

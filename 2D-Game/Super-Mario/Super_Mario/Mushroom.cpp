@@ -22,10 +22,11 @@ Mushroom::Mushroom(const glm::vec2& pos, const glm::vec2& size, const glm::vec2&
 	currentState = WAITING;
 
 }
-#include <iostream>
+
 void Mushroom::actionOfObject(Player* ply) {
 	if (currentState == ANIMATION) return;
 	else if (currentState == VALID) {
+		showText();
 		if (!ply->isSuperMario()) ply->setSuperMario();
 		currentState = USED;
 	}
@@ -33,6 +34,8 @@ void Mushroom::actionOfObject(Player* ply) {
 }
 
 void Mushroom::update(float dt) {
+	if (showingText) timeText += dt;
+
 	if (currentState == WAITING) {
 		currentTime += dt;
 		if (currentTime >= WAITING_TIME) {
@@ -70,12 +73,17 @@ void Mushroom::update(float dt) {
 	}
 }
 
-void Mushroom::render() {
+void Mushroom::render(glm::vec2& cameraPos) {
 	if (currentState == ANIMATION) {
 		spr->render();
 	}
 	else if (currentState == VALID) spr->render();
-		
+	
+	if (showingText) {
+		float y = timeText / TIME_TEXT * 48;
+		if (timeText > TIME_TEXT) showingText = false, timeText = 0;
+		text.render("1000", glm::vec2(textPos.x - cameraPos.x, textPos.y + tileMapDisplay.y - y), 14, glm::vec4(1, 1, 1, 1));
+	}
 }
 
 bool Mushroom::collide(const glm::vec2& plyPos, const glm::vec2& plySize) {
