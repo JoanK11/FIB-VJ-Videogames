@@ -1,6 +1,7 @@
 #include "Object.h"
 #include "TileMap.h"
 #include "Player.h"
+#include <iostream>
 
 Object::Object(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& tileMapDisplay, TileMap* m) {
 	this->pos = pos;
@@ -8,6 +9,11 @@ Object::Object(const glm::vec2& pos, const glm::vec2& size, const glm::vec2& til
 	this->size = size;
 	this->tileMapDisplay = tileMapDisplay;
 	map = m;
+	showingText = false;
+
+	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
+		cout << "Could not load font!!!" << endl;
+	}
 
 }
 
@@ -30,4 +36,10 @@ bool Object::collide(const glm::vec2& plyPos, const glm::vec2& plySize) {
 
 void Object::restart() {
 	pos = originalPos;
+}
+
+void Object::showText() {
+	showingText = true;
+	timeText = 0;
+	textPos = pos;
 }

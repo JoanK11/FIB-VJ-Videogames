@@ -9,11 +9,11 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram) {
 	sprite = Sprite::createSprite(glm::ivec2(32, 64), glm::vec2(0.125, 0.5f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(4);
 
-	sprite->setAnimationSpeed(MOVE_LEFT, 2);
+	sprite->setAnimationSpeed(MOVE_LEFT, 4);
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.5f));
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.125f, 0.5f));
 
-	sprite->setAnimationSpeed(MOVE_RIGHT, 2);
+	sprite->setAnimationSpeed(MOVE_RIGHT, 4);
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25f, 0.5f));
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.375f, 0.5f));
 
@@ -46,6 +46,7 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 	}
 
 	sprite->update(deltaTime);
+	cout << "update" << endl;
 
 	if (posEnemy.x < xmin - 32 || posEnemy.y >= map->getMapSize().y * map->getBlockSize()) {
 		state = DIED;
@@ -126,6 +127,14 @@ int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
 
 bool Koopa::canCollide() {
 	return !(state == NOT_SPAWNED || state == DYING || (state == DIED && bDelete));
+}
+
+void Koopa::render(glm::vec2& cameraPos) {
+	if (state == MOVING) {
+		if (dir < 0 && sprite->animation() != MOVE_LEFT) sprite->changeAnimation(MOVE_LEFT);
+		else if (dir > 0 && sprite->animation() != MOVE_RIGHT) sprite->changeAnimation(MOVE_RIGHT);
+	}
+	Enemy::render(cameraPos);
 }
 
 glm::ivec2 Koopa::getSize() const {

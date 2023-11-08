@@ -10,6 +10,9 @@ private:
 	glm::mat4 projectionMatrix;
 	glm::vec2 displacement;
 public:
+
+
+
 	Projection();
 	Projection(const glm::vec2& position, const glm::vec2& size);
 	bool surpassLeft(const glm::vec2& playerPos, const glm::vec2& PlayerSize) const;
