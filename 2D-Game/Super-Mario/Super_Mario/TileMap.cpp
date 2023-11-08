@@ -572,3 +572,16 @@ void TileMap::updateEnemies(int deltaTime, Player* player, float xmin, float xma
 bool TileMap::reachEntranceCaste(const glm::vec2& pos) {
 	return pos.x / blockSize >= blockOfEntranceCaste;
 }
+
+bool TileMap::colisionDown(const glm::ivec2& pos, const glm::ivec2& size)const {
+
+	int x0 = pos.x / blockSize;
+	int x1 = (pos.x + size.x - 1) / blockSize;
+	int yDown = (pos.y + size.y - 1) / blockSize + 1;
+	if (yDown >= mapSize.y) return false;
+	for (int i = x0; i <= x1; ++i) {
+		if (mapBlocks[yDown * mapSize.x + i] != nullptr && mapBlocks[yDown * mapSize.x + i]->isMoving()) return true;
+	
+	}
+	return false;
+}

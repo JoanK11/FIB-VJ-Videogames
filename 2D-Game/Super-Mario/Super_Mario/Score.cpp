@@ -2,7 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Score.h"
 
-#define START_TIME 10
+#define START_TIME 400
 #define START_LIVES 3
 
 void Score::init() {

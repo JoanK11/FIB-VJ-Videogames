@@ -30,3 +30,7 @@ Object* Tile::actionToTouch(bool isSuperMario) {
 void Tile::restart() {
 	pos = originalPos;
 }
+
+bool Tile::isMoving() {
+	return false;
+}

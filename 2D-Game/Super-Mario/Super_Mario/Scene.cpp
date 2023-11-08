@@ -7,11 +7,13 @@
 #define SCREEN_X 0
 #define SCREEN_Y 32
 
-#define INIT_PLAYER_X_TILES 2
-#define INIT_PLAYER_Y_TILES 11
+#define INIT_PLAYER_X_TILES 187
+#define INIT_PLAYER_Y_TILES 2
 
 #define TIME_GAME_OVER 7000
-#define TIME_GAME_WIN 7000
+#define TIME_GAME_WIN 5000
+#define TIME_STAGE_CLEAR 7000
+#define TIME_CHANGING_SCENE 3000
 
 
 Scene::Scene() {
@@ -49,8 +51,7 @@ void Scene::init() {
 	pause = false, keyPausePressed = false;
 	playingMusic = false; gameOver = false;
 	gameWin = false;
-	timeUp = false;
-	timeUpTime = 0;
+	timeStageClear = 0;
 	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
 		cout << "Could not load font!!!" << endl;
 	}
@@ -75,19 +76,12 @@ void Scene::restart() {
 	/* --- Score --- */
 	Score::instance().restart();
 
-
 	/* --- Sound --- */
 	sound.stopBGM();
 	if (Score::instance().gameOver()) {
-		sound.playSFX("sfx/game_over.wav");
-		map = maps[0];
-		map->restart();
-		player->setTileMap(map);
-		gameOver = true;
-		timeGameOver = 0;
-		Game::instance().clearInput();
+		setGameOver();
 	}
-	else sound.playBGM("music/title.mp3", true);
+	else if (!gameWin) sound.playBGM("music/title.mp3", true);
 }
 
 void Scene::change() {
@@ -114,15 +108,9 @@ void Scene::change() {
 	/* --- Sound --- */
 	sound.stopBGM();
 	if (Score::instance().gameOver()) {
-		sound.playSFX("sfx/game_over.wav");
-		map = maps[0];
-		map->restart();
-		player->setTileMap(map);
-		gameOver = true;
-		timeGameOver = 0;
-		Game::instance().clearInput();
+		setGameOver();
 	}
-	else sound.playBGM("music/title.mp3", true);
+	else if (!gameWin) sound.playBGM("music/title.mp3", true);
 }
 
 void Scene::update(int deltaTime) {
@@ -139,7 +127,7 @@ void Scene::update(int deltaTime) {
 			startMenu.openMenu();
 			playingMusic = false;
 			glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
-			Score::instance().restartLives();
+			Score::instance().init();
 		}
 		return;
 	}
@@ -150,20 +138,27 @@ void Scene::update(int deltaTime) {
 	if (gameWin) {
 		timeGameWin += deltaTime;
 		if (timeGameWin > TIME_GAME_WIN) {
-			gameWin = false;
-			map = maps[0];
-			Score::instance().updateWorld(1, 1);
+			pause = false;
 			startMenu.openMenu();
 			playingMusic = false;
 			glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
-			Score::instance().restartLives();
-			Game::instance().clearInput();
+			map = maps[0];
+			map->restart();
 			restart();
-			Score::instance().restartLives();
-			pause = false, keyPausePressed = false;
-			gameOver = false; playingMusic = false;
+			gameWin = false;
+			Game::instance().clearInput();
+			Score::instance().init();
 		}
 		return;
+	}
+
+	/* Changing Scene */
+	if (changingScene) {
+		timeChangingScene += deltaTime;
+		if (timeChangingScene > TIME_CHANGING_SCENE) {
+			changingScene = false;
+			timeChangingScene = 0;
+		}
 	}
 
 	/* --- Pause --- */
@@ -197,15 +192,17 @@ void Scene::update(int deltaTime) {
 			player->animationOfReachingFinal(deltaTime);
 		}
 		else {
-			if (!map->reachEntranceCaste(player->getPos())) {
+			timeStageClear += deltaTime;
+			if (!map->reachEntranceCastle(player->getPos())) {
 				player->reachCastleAnimation(deltaTime);
 			}
 			else if (Score::instance().getTime() > 0) {
 				Score::instance().timeToScore();
 				sound.playSFX("sfx/getting_points.wav");
 			}
-			else {
+			else if (timeStageClear > TIME_STAGE_CLEAR) {
 				sound.playSFX("sfx/coin.wav");
+				timeStageClear = 0;
 				// Move to next stage
 				if (map == maps[0]) {
 					map = maps[1];
@@ -244,21 +241,9 @@ void Scene::update(int deltaTime) {
 	/* --- Music --- */
 	if (player->isDead()) sound.stopBGM();
 
-	timeUp = Score::instance().getTime() <= 0;
-	if (timeUp) {
-		if (timeUpTime == 0) {
-			sound.stopBGM();
-			sound.playSFX("sfx/game_over.wav");
-			playingMusic = false;
-		}
-		timeUpTime += deltaTime;
-		if (timeUpTime >= TIME_GAME_OVER) {
-			glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
-			restart();
-			timeUp = false;
-			timeUpTime = 0.;
-		}
-		return;
+	if (Score::instance().getTime() <= 0) {
+		sound.stopBGM();
+		player->setDying();
 	}
 
 	/* --- Score --- */
@@ -292,9 +277,13 @@ void Scene::render() {
 		return;
 	}
 
-	if (timeUp && !startMenu.showingMenu()) {
+	else if (changingScene) {
 		glClearColor(0, 0, 0, 1.0f);
-		text.render("TIME UP", glm::vec2(SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
+		text.render("WORLD", glm::vec2(SCREEN_WIDTH / 2 - 40, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
+		pair<int, int> world = Score::instance().getWorld();
+		string str_world = to_string(world.first) + '-' + to_string(world.second);
+		text.render("WORLD", glm::vec2(SCREEN_WIDTH / 2 - 40, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
+		text.render(str_world, glm::vec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
 		Score::instance().render();
 		return;
 	}
@@ -312,7 +301,7 @@ void Scene::render() {
 	map->render(camera.getPosition(), camera.getSize(), texProgram);
 
 	/* Player */
-	if (!map->reachEntranceCaste(player->getPos())) {
+	if (!map->reachEntranceCastle(player->getPos())) {
 		texProgram.use();
 		player->render();
 	}
@@ -350,9 +339,11 @@ void Scene::initShaders() {
 	vShader.free();
 	fShader.free();
 }
+
 void Scene::checkWorldKeys() {
 	bool world1 = Game::instance().getKey('1');
 	bool world2 = Game::instance().getKey('2');
+
 	if (world1 && map != maps[0]) {
 		map = maps[0];
 		Score::instance().updateWorld(1, 1);
@@ -363,4 +354,19 @@ void Scene::checkWorldKeys() {
 		Score::instance().updateWorld(2, 1);
 		change();
 	}
+}
+
+void Scene::setGameOver() {
+	sound.playSFX("sfx/game_over.wav");
+	map = maps[0];
+	map->restart();
+	player->setTileMap(map);
+	gameOver = true;
+	timeGameOver = 0;
+	Game::instance().clearInput();
+}
+
+void Scene::setChangingScene() {
+	changingScene = true;
+	timeChangingScene = 0;
 }

@@ -20,7 +20,7 @@ public:
 	virtual bool isTouchable();
 	virtual Object* actionToTouch(bool isSuperMario);
 	virtual void restart();
-
+	virtual bool isMoving();
 
 };
 
