@@ -115,6 +115,7 @@ void StartMenu::update(int deltaTime) {
 
 	posPlayer.y = posYini - 24 + espacio * pos;
 	sprite->setPosition(posPlayer);
+	Game::instance().clearInput();
 }
 
 void StartMenu::render() {

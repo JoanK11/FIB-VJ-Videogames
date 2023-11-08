@@ -49,7 +49,8 @@ void Scene::init() {
 	pause = false, keyPausePressed = false;
 	playingMusic = false; gameOver = false;
 	gameWin = false;
-
+	timeUp = false;
+	timeUpTime = 0.;
 	if (!text.init("fonts/super-mario-bros-nes.ttf")) {
 		cout << "Could not load font!!!" << endl;
 	}
@@ -80,6 +81,9 @@ void Scene::restart() {
 	sound.stopBGM();
 	if (Score::instance().gameOver() && !gameWin) {
 		sound.playSFX("sfx/game_over.wav");
+		map = maps[0];
+		map->restart();
+		player->setTileMap(map);
 		gameOver = true;
 		timeGameOver = 0;
 		Game::instance().clearInput();
@@ -111,6 +115,9 @@ void Scene::change() {
 	sound.stopBGM();
 	if (Score::instance().gameOver() && !gameWin) {
 		sound.playSFX("sfx/game_over.wav");
+		map = maps[0];
+		map->restart();
+		player->setTileMap(map);
 		gameOver = true;
 		timeGameOver = 0;
 		Game::instance().clearInput();
@@ -124,7 +131,7 @@ void Scene::update(int deltaTime) {
 	bool inMenu = startMenu.showingMenu();
 	if (inMenu) return;
 
-	if (Score::instance().getTime() == 0) gameOver = true;
+	// JOAN if (Score::instance().getTime() == 0) gameOver = true;
 
 	/* --- Game Over --- */
 	if (gameOver) {
@@ -210,6 +217,10 @@ void Scene::update(int deltaTime) {
 					Game::instance().clearInput();
 					restart();
 					Score::instance().restartLives();
+					startMenu.openMenu();
+					pause = false, keyPausePressed = false;
+					gameOver = false; playingMusic = false;
+					sound.stopBGM();
 				}
 			}
 		}
@@ -267,7 +278,12 @@ void Scene::render() {
 		Score::instance().render();
 		return;
 	}
-
+	if (timeUp && !startMenu.showingMenu()) {
+		glClearColor(0, 0, 0, 1.0f);
+		text.render("TIME UP", glm::vec2(SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / 2), 20, glm::vec4(1, 1, 1, 1));
+		Score::instance().render();
+		return;
+	}
 	glm::mat4 modelview;
 	texProgram.use();
 	camera.bindProjection(texProgram);
