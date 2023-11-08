@@ -37,7 +37,7 @@ public:
 	bool isStarMario() const;
 	bool isSuperMario() const;
 	void setInitialStateSuperMario(bool superMario);
-
+	void reachCastleAnimation(float dt);
 	glm::vec2 getPos() const;
 	glm::vec2 getSize() const;
 
@@ -80,6 +80,8 @@ private:
 	int renderImmunity;
 
 	int jumpDuration;
+
+	bool auxFirstTime;
 };
 
 

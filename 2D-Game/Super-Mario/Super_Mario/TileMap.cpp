@@ -205,7 +205,7 @@ bool TileMap::loadLevel(const string &levelFile, const glm::vec2& minCoords, Sha
 	getline(fin, line);
 	sstream.str(line);
 	int ymin, ymax, xlim;
-	sstream >> ymin >> ymax >> xlim;
+	sstream >> ymin >> ymax >> xlim >> blockOfEntranceCaste;
 	sstream.clear();
 	flag = new Flag(ymin * blockSize, ymax * blockSize, xlim * blockSize, minCoords, &program);
 
@@ -389,7 +389,8 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 
 
 bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY, bool superMario){
-	if (!isInside(pos, size)) return false;
+	if (!superMario && !isInside(pos, size)) return false;
+	if (superMario && !isInside(glm::vec2(pos.x, pos.y - 32), size)) return false;
 	int x0, x1, y;
 
 	x0 = (pos.x + size.x*0.3f) / blockSize;
@@ -565,4 +566,8 @@ void TileMap::updateEnemies(int deltaTime, Player* player, float xmin, float xma
 			}
 		}
 	}
+}
+
+bool TileMap::reachEntranceCaste(const glm::vec2& pos) {
+	return pos.x / blockSize >= blockOfEntranceCaste;
 }

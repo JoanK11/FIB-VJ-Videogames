@@ -63,6 +63,7 @@ public:
 	bool reachFinishLine(const glm::ivec2& pos, const glm::ivec2& size, bool superMario );
 	bool animationOfFlag(float dt);
 	void updateEnemies(int deltaTime, Player* player, float xmin, float xmax);
+	bool reachEntranceCaste(const glm::vec2& pos);
 private:
 	bool loadLevel(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
 	Tile* getTile(string type, ShaderProgram& s, glm::vec2 tileC, glm::vec2 tileS,glm::vec2 tileMapDisplay, glm::vec2 textureC, glm::vec2 textureS, Texture* t, TileMap* map);
@@ -81,6 +82,7 @@ private:
 	std::vector<Object *> items;
 	Flag* flag;
 	std::vector<Enemy*> enemies;
+	int blockOfEntranceCaste;
 
 };
 

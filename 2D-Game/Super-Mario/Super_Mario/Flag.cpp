@@ -31,8 +31,9 @@ Flag::Flag(int ymin, int ymax, int xlim, const glm::vec2& tileMapDisplay, Shader
 }
 
 bool Flag::touchTheFlag(const glm::ivec2& pos, const glm::ivec2& size, bool superMario) {
-	if (currentState == END) false;
+	
 	bool condition = pos.x + size.x >= xlim + TUBE_DISPLAY;
+	if (!condition) return false;
 	if (currentState == IDLE && condition) {
 		currentState = ANIMATION;
 		double yPlayer = pos.y;
@@ -45,14 +46,13 @@ bool Flag::touchTheFlag(const glm::ivec2& pos, const glm::ivec2& size, bool supe
 
 		return true;
 	}
-	else if (currentState == ANIMATION && condition) return true;
-	return false;
+	return true;
 
 }
 bool Flag::update(float dt) {
 	if (showingText) timeText += dt;
-
-	if (currentState == IDLE || currentState == END) return false;
+	if (currentState == END) return true;
+	if (currentState == IDLE) return false;
 	if (currentState == ANIMATION) {
 		ymin += VELOCITY;
 		spr->setPosition(glm::vec2(xlim - HORIZONTAL_DISPLAY, ymin) + tileMapDisplay);

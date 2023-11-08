@@ -36,7 +36,7 @@ Player::~Player() {
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	bJumping = false, bFalling = false; jumpingEnemy = false;
-
+	auxFirstTime = true;
 	// Mario Types
 	superMario = false, superMarioKey = false;
 	starMario = false,  starMarioKey  = false;
@@ -787,3 +787,24 @@ void Player::animationOfReachingFinal() {
 void Player::setInitialStateSuperMario(bool superMario) {
 	this->superMario = superMario;
 }
+void Player::reachCastleAnimation(float dt) {
+	if (auxFirstTime) {
+		auxFirstTime = false;
+		sprite->changeAnimation(MOVE_RIGHT);
+		superSprite->changeAnimation(MOVE_RIGHT);
+		starSprite->changeAnimation(MOVE_RIGHT);
+		superStarSprite->changeAnimation(MOVE_RIGHT);
+
+	}
+	sprite->update(dt);
+	superSprite->update(dt);
+	starSprite->update(dt);
+	superStarSprite->update(dt);
+	posPlayer.y += FALL_STEP;
+	map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+	posPlayer.x += 2.;
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	superSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
+	starSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	superStarSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
+};

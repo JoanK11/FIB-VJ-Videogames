@@ -7,7 +7,7 @@
 #define SCREEN_X 0
 #define SCREEN_Y 32
 
-#define INIT_PLAYER_X_TILES 180
+#define INIT_PLAYER_X_TILES 2
 #define INIT_PLAYER_Y_TILES 11
 
 #define TIME_GAME_OVER 7000
@@ -39,7 +39,7 @@ void Scene::init() {
 	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1)));
 	currentTime = 0.0f;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
-	
+
 	/* Score */
 	Score::instance().init();
 
@@ -75,7 +75,7 @@ void Scene::restart() {
 	Score::instance().decreaseLive();
 	Score::instance().restart();
 
-	
+
 
 	/* --- Sound --- */
 	sound.stopBGM();
@@ -106,8 +106,8 @@ void Scene::change() {
 	map->restart();
 
 	/* --- Score --- */
-	
-	Score::instance().restart();
+
+	Score::instance().restartTime();
 
 
 
@@ -159,7 +159,7 @@ void Scene::update(int deltaTime) {
 	keyPausePressed = keyPause;
 	if (pause) return;
 
-	
+
 
 	/* --- Music --- */
 	if (!playingMusic) {
@@ -169,11 +169,31 @@ void Scene::update(int deltaTime) {
 
 	/*CHECKING IF REACHED THE FINISH LINE*/
 	if (map->reachFinishLine(player->getPos(), player->getSize(), player->isSuperMario())) {
-		map->animationOfFlag(deltaTime);
-		player->animationOfReachingFinal();
-		return;
-	}
+		if (!map->animationOfFlag(deltaTime)) {
+			player->animationOfReachingFinal();
+		}
+		else {
+			if (!map->reachEntranceCaste(player->getPos())) {
+				player->reachCastleAnimation(deltaTime);
+			}
+			else {
+				if (map == maps[0]) {
+					map = maps[1];
+					Score::instance().updateWorld(2, 1);
+					change();
+				}
+				else {
+					map = maps[0];
+					Score::instance().updateWorld(1, 1);
+					restart();
+					Score::instance().restartLives();
+					startMenu.openMenu();
+				}
+			}
+		}
 
+			return;
+	}
 	checkWorldKeys();
 
 
