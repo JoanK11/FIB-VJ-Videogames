@@ -120,3 +120,7 @@ void Brick::restart() {
 	bottomRight->setPosition(posBR);
 	bottomLeft->setPosition(posBL);
 }
+
+bool Brick::isMoving() {
+	return currentState == ANIMATION;
+}

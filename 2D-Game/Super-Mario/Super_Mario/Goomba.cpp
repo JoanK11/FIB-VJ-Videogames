@@ -70,7 +70,11 @@ void Goomba::update(int deltaTime, float xmin, float xmax) {
 		}
 		return;
 	}
-	
+
+	if (map->colisionDown(posEnemy, glm::ivec2(32, 32))) {
+		kill();
+		return;
+	} 
 
 	/* Collisions */
 	if (map->collisionMoveLeft(posEnemy, glm::ivec2(32, 32), &posEnemy.x, false) && dir < 0) {

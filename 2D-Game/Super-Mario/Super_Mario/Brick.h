@@ -28,6 +28,6 @@ class Brick :
         virtual Object* actionToTouch(bool isSuperMario);
         virtual void update(float dt);
         virtual void restart();
-
+        virtual bool isMoving();
 };
 

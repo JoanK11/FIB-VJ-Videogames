@@ -59,7 +59,11 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 		return;
 	}
 
-	glm::ivec2 dimKoopa = Koopa::getSize();
+	if (map->colisionDown(posEnemy, glm::ivec2(32, 32))) {
+		kill();
+		return;
+	}
+
 
 	if (map->collisionMoveLeft(posEnemy, glm::ivec2(32, 32), &posEnemy.x, true)) {
 		dir = 1;

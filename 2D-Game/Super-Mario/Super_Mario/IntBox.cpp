@@ -64,3 +64,7 @@ void IntBox::restart() {
 	spr->setPosition(pos);
 	spr->changeAnimation(0);
 }
+
+bool IntBox::isMoving() {
+	return false;
+}
