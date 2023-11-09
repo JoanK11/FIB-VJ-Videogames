@@ -84,5 +84,5 @@ void Flag::restart() {
 void Flag::showText(glm::vec2& posPlayer) {
 	showingText = true;
 	timeText = 0;
-	textPos = posPlayer;
+	textPos = glm::ivec2(posPlayer.x, max(posPlayer.y, ymin - 0.75f*(ymax - ymin)));
 }

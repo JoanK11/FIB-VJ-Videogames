@@ -28,7 +28,9 @@ void Mushroom::actionOfObject(Player* ply) {
 	else if (currentState == VALID) {
 		showText();
 		if (!ply->isSuperMario()) ply->setSuperMario();
+		else sound.playSFX("sfx/powerup-eats.wav");
 		currentState = USED;
+		Score::instance().increaseScore(1000);
 	}
 	else return;
 }
@@ -45,7 +47,6 @@ void Mushroom::update(float dt) {
 	}
 	else if (currentState == ANIMATION) {
 		if (currentTime == 0) {
-			Score::instance().increaseScore(1000);
 			sound.playSFX("sfx/powerup-appears.wav");
 		}
 		currentTime += dt;

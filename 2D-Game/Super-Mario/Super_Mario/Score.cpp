@@ -53,7 +53,7 @@ void Score::render() {
 
 	/* LIVES */
 	text.render("LIVES", glm::vec2(704, 32), 20, glm::vec4(1, 1, 1, 1));
-	text.render(to_string(lives), glm::vec2(736, 56), 20, glm::vec4(1, 1, 1, 1));
+	text.render(to_string(lives), glm::vec2(748, 56), 20, glm::vec4(1, 1, 1, 1));
 }
 
 void Score::increaseScore(int x) {
