@@ -15,7 +15,7 @@ public:
     glm::ivec2 getSize() const;
     bool canKillEnemies() const;
     void kill();
-    bool canCollide();
+    bool canCollide(float xmin, float xmax);
 
 private:
     enum KoopaStates {

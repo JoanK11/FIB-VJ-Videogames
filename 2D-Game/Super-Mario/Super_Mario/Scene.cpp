@@ -253,7 +253,7 @@ void Scene::update(int deltaTime) {
 
 	/* --- Restart --- */
 	glm::vec2 pos = player->getPos();
-	if (pos.y > 1200) {
+	if (pos.y > 1600) {
 		Score::instance().decreaseLive();
 		restart();
 	}

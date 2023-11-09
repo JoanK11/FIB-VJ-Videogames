@@ -532,9 +532,9 @@ void TileMap::updateEnemies(int deltaTime, Player* player, float xmin, float xma
 
 	/* Enemies (Collision with other Enemies) */
 	for (int i = 0; i < enemies.size(); ++i) {
-		if (!enemies[i]->canCollide()) continue;
+		if (!enemies[i]->canCollide(xmin, xmax)) continue;
 		for (int j = i + 1; j < enemies.size(); ++j) {
-			if (!enemies[j]->canCollide()) continue;
+			if (!enemies[j]->canCollide(xmin, xmax)) continue;
 			int col = enemies[i]->collision(enemies[j]->getPos(), enemies[j]->getSize());
 
 			if (col < 0) {

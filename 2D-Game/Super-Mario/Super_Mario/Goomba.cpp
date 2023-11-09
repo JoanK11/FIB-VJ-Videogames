@@ -126,8 +126,8 @@ int Goomba::collision(const glm::vec2& pos, const glm::vec2& size) {
 	return 0;
 }
 
-bool Goomba::canCollide() {
-	return !(died || dying || bDelete || !spawned);
+bool Goomba::canCollide(float xmin, float xmax) {
+	return !(died || dying || bDelete || !spawned) && (posEnemy.x <= 2 * xmax - xmin + 320);
 }
 
 void Goomba::kill() {

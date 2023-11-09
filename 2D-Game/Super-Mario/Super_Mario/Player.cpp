@@ -17,10 +17,6 @@
 #define TIME_POWER_UP_ANIMATION 1200
 #define TIME_STAR_MARIO 9000
 
-const float MAX_JUMP_DURATION = 0.5f;  // Adjust as needed
-const float JUMP_HEIGHT_INITIAL = 32.0f; // Initial jump height
-const float JUMP_HEIGHT_INCREMENT = 16.0f; // Height increase per second
-
 
 enum PlayerAnims {
 	STAND_RIGHT, STAND_LEFT, MOVE_RIGHT, MOVE_LEFT, JUMP_RIGHT, 
@@ -746,6 +742,7 @@ void Player::animationOfReachingFinal(int deltaTime) {
 
 void Player::setInitialStateSuperMario(bool superMario) {
 	this->superMario = superMario;
+	if (superMario) state = SUPER;
 }
 
 void Player::reachCastleAnimation(float dt) {

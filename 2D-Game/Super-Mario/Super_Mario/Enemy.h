@@ -41,7 +41,7 @@ public:
 
 	glm::ivec2 getPos() const;
 	virtual glm::ivec2 getSize() const;
-	virtual bool canCollide() = 0;
+	virtual bool canCollide(float xmin, float xmax) = 0;
 
 protected:
 	SoundManager sound;

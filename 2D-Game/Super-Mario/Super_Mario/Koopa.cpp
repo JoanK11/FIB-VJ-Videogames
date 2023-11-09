@@ -47,8 +47,7 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 
 	sprite->update(deltaTime);
 
-	if (posEnemy.x < xmin - 32 || posEnemy.y >= map->getMapSize().y * map->getBlockSize() ||
-		(state != NOT_SPAWNED && posEnemy.x > 2*xmax - xmin + 480)) {
+	if (posEnemy.x < xmin - 32 || posEnemy.y >= map->getMapSize().y * map->getBlockSize()) {
 		state = DIED;
 		bDelete = true;
 		return;
@@ -129,8 +128,8 @@ int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
 	return 0;
 }
 
-bool Koopa::canCollide() {
-	return !(state == NOT_SPAWNED || state == DYING || (state == DIED && bDelete));
+bool Koopa::canCollide(float xmin, float xmax) {
+	return !(state == NOT_SPAWNED || state == DYING || (state == DIED && bDelete)) && (posEnemy.x <= 2 * xmax - xmin + 320);
 }
 
 void Koopa::render(glm::vec2& cameraPos) {
