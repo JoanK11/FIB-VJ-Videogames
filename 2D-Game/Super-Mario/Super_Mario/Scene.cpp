@@ -33,6 +33,7 @@ void Scene::init() {
 	maps[0] = TileMap::createTileMap("levels/world1.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	maps[1] = TileMap::createTileMap("levels/world2.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map = maps[0];
+	if (player != nullptr) delete player;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, &sound);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getBlockSize(), INIT_PLAYER_Y_TILES * map->getBlockSize()));

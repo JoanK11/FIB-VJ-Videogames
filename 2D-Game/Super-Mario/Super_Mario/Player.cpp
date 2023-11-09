@@ -32,7 +32,6 @@ Player::~Player() {
 	if (sprite != NULL) delete sprite;
 	if (superSprite != NULL) delete superSprite;
 	if (starSprite != NULL) delete starSprite;
-	if (map != NULL) delete map;
 }
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, SoundManager *soundScene) {
