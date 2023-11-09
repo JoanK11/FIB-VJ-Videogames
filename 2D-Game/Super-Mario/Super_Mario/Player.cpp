@@ -29,9 +29,10 @@ enum PlayerAnims {
 };
 
 Player::~Player() {
-	delete sprite;
-	delete superSprite;
-	delete starSprite;
+	if (sprite != NULL) delete sprite;
+	if (superSprite != NULL) delete superSprite;
+	if (starSprite != NULL) delete starSprite;
+	if (map != NULL) delete map;
 }
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, SoundManager *soundScene) {
@@ -358,9 +359,8 @@ void Player::update(int deltaTime, float xmin, float& xmax) {
 	glm::ivec2 dimMario = glm::ivec2(32, 32);
 	if (superMario) dimMario = glm::ivec2(32, 64);
 
-
 	/* Check Fall Off Map */
-	if (state != DYING && posPlayer.y > map->getMapSize().y * map->getBlockSize()) {
+	if (state != DYING && posPlayer.y > map->getMapSize().y * map->getBlockSize() + 64) {
 		sprite->changeAnimation(DEAD);
 		state = DYING;
 		jumpAngle = 90;
@@ -565,70 +565,6 @@ void Player::update(int deltaTime, float xmin, float& xmax) {
 				activeSprite->changeAnimation(JUMP_RIGHT);
 		}
 	}
-
-	/*
-	if (bJumping) {
-		if (jumpingEnemy) jumpAngle += JUMP_ANGLE_STEP_ENEMY;
-		else              jumpAngle += JUMP_ANGLE_STEP;
-
-		if (jumpAngle == 180) {
-			bJumping = false; jumpingEnemy = false;
-			posPlayer.y = startY;
-		}
-		else {
-			if (jumpingEnemy) posPlayer.y = int(startY - JUMP_HEIGHT_ENEMY * sin(3.14159f * jumpAngle / 180.f));
-			else	          posPlayer.y = int(startY - JUMP_HEIGHT * sin(3.14159f * jumpAngle / 180.f));
-
-			if (jumpAngle > 90) { // is falling down
-				bFalling = true;
-				bJumping = false;
-			}
-
-			else bJumping = !map->collisionMoveUp(posPlayer, dimMario, &posPlayer.y, superMario);
-			if (!bJumping) jumpingEnemy = false;
-
-		}
-
-		if (activeSprite->animation() == MOVE_LEFT || activeSprite->animation() == STAND_LEFT ||
-			activeSprite->animation() == CHANGE_LEFT)
-			activeSprite->changeAnimation(JUMP_LEFT);
-		else if (activeSprite->animation() == MOVE_RIGHT || activeSprite->animation() == STAND_RIGHT ||
-			activeSprite->animation() == CHANGE_RIGHT)
-			activeSprite->changeAnimation(JUMP_RIGHT);
-	}
-	else {
-		posPlayer.y += FALL_STEP;
-
-		if (!bFalling && (activeSprite->animation() == JUMP_LEFT || activeSprite->animation() == JUMP_RIGHT)) {
-			if (Vx > 0) activeSprite->changeAnimation(STAND_RIGHT);
-			else if (Vx < 0) activeSprite->changeAnimation(STAND_LEFT);
-			else {
-				if (activeSprite->animation() == JUMP_LEFT)
-					activeSprite->changeAnimation(STAND_LEFT);
-				else
-					activeSprite->changeAnimation(STAND_RIGHT);
-			}
-		}
-
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
-			bFalling = false;
-			if (!keyJumpPressed && keyUp) {
-				if (superMario)	sound->playSFX("sfx/jump-super.wav");
-				else sound->playSFX("sfx/jump-small.wav");
-				bJumping = true;
-				jumpAngle = 0;
-				startY = posPlayer.y;
-			}
-		}
-		else {
-			bFalling = true;
-			if (activeSprite->animation() == MOVE_LEFT || activeSprite->animation() == STAND_LEFT)
-				activeSprite->changeAnimation(JUMP_LEFT);
-			else if (activeSprite->animation() == MOVE_RIGHT || activeSprite->animation() == STAND_RIGHT)
-				activeSprite->changeAnimation(JUMP_RIGHT);
-		}
-	}
-	*/
 
 	if (keyDown) {
 		if (superMario && !bJumping && !bFalling) {

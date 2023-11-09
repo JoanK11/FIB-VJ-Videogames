@@ -33,8 +33,7 @@ void TileMap::update(int dt) {
 
 	}
 }
-TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
-{	
+TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program) {	
 	items = vector<Object*>(0, nullptr);
 	ifstream fin;
 	string line;
@@ -60,17 +59,15 @@ TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProg
 	loadLevel(levelFile, minCoords,program);
 }
 
-TileMap::~TileMap()
-{
-	if(mapBlocks != NULL)
+TileMap::~TileMap() {
+	if (mapBlocks != NULL)
 		delete mapBlocks;
 	if (mapBackground != NULL)
 		delete mapBackground;
 }
 
 
-void TileMap::render(glm::vec2 pos, glm::vec2 size, ShaderProgram& texProgram) const
-{
+void TileMap::render(glm::vec2 pos, glm::vec2 size, ShaderProgram& texProgram) const {
 	
 
 	glm::vec2 posOriginal = (pos-position) / float(blockSize);

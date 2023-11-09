@@ -61,7 +61,6 @@ void Scene::restart() {
 	currentTime = 0.0f;
 
 	/* --- Player --- */
-	delete player;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, &sound);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getBlockSize(), INIT_PLAYER_Y_TILES * map->getBlockSize()));
@@ -89,7 +88,7 @@ void Scene::worldChange() {
 
 	/* --- Player --- */
 	bool isSuperMario = player->isSuperMario();
-	delete player;
+	//delete player;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, &sound);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getBlockSize(), INIT_PLAYER_Y_TILES * map->getBlockSize()));

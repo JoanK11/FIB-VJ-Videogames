@@ -13,12 +13,13 @@ void StartMenu::init() {
 
 	visible = true, state = 0;
 	pos = 0;
-	posYini = 212, espacio = 48;
+	posYini = 212;
+	espacio = 48;
 	posPlayer = glm::ivec2(240, posYini - 24);
 
 	/* Keys State */
 	keyUpPressed = false, keyDownPressed = false;
-	keyEnterPressed = false, keyEscPressed = false;
+	keyEnterPressed = false, keyEPressed = false;
 
 	/* MUSHROOM CHOOSER */
 	spritesheet.loadFromFile("images/menu.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -58,7 +59,7 @@ void StartMenu::openMenu() {
 	posPlayer = glm::ivec2(240, posYini - 24);
 
 	keyUpPressed = false, keyDownPressed = false;
-	keyEnterPressed = false, keyEscPressed = false;
+	keyEnterPressed = false, keyEPressed = false;
 }
 
 void StartMenu::update(int deltaTime) {
@@ -66,11 +67,12 @@ void StartMenu::update(int deltaTime) {
 
 	sprite->update(deltaTime);
 	sprite->changeAnimation(MUSHROOM);
+	updateValues();
 
 	bool keyUp    = Game::instance().getSpecialKey(GLUT_KEY_UP)     || Game::instance().getKey('w') || Game::instance().getKey('W');
 	bool keyDown  = Game::instance().getSpecialKey(GLUT_KEY_DOWN)   || Game::instance().getKey('s') || Game::instance().getKey('S');
 	bool keyEnter = Game::instance().getKey(13) || Game::instance().getKey(32);
-	bool keyEsc = Game::instance().getKey(27);
+	bool keyE     = Game::instance().getKey('e') || Game::instance().getKey('E');
 
 	if (!keyUpPressed && keyUp) {
 		keyUpPressed = true;
@@ -103,7 +105,7 @@ void StartMenu::update(int deltaTime) {
 		}
 	}
 
-	if (!keyEscPressed && keyEsc) {
+	if (!keyEPressed && keyE) {
 		state = 0;
 	}
 
@@ -111,22 +113,36 @@ void StartMenu::update(int deltaTime) {
 	if (!keyUp)    keyUpPressed    = false;
 	if (!keyDown)  keyDownPressed  = false;
 	if (!keyEnter) keyEnterPressed = false;
-	if (!keyEsc)   keyEscPressed   = false;
+	if (!keyE)   keyEPressed   = false;
 
-	posPlayer.y = posYini - 24 + espacio * pos;
+	posPlayer = glm::ivec2(posXini, posYini - 24 + espacio * pos);
 	sprite->setPosition(posPlayer);
 	Game::instance().clearInput();
 }
 
+void StartMenu::updateValues() {
+	int width = glutGet(GLUT_WINDOW_WIDTH);
+	int height = glutGet(GLUT_WINDOW_HEIGHT);
+
+	posXini = width / 2 - 144;
+	posYini = height / 2 - 64;
+	espacio = height / 10;
+}
+
 void StartMenu::render() {
 	if (!visible) return;
+	updateValues();
+
+	int width = glutGet(GLUT_WINDOW_WIDTH);
+	int height = glutGet(GLUT_WINDOW_HEIGHT);
 
 	if (state == 0) {
+		int posX = width / 2 - 96;
 		/* TEXT */
-		text.render("START GAME", glm::vec2(288, posYini), 18, glm::vec4(1, 1, 1, 1));
-		text.render("INSTRUCTIONS", glm::vec2(288, posYini + espacio), 18, glm::vec4(1, 1, 1, 1));
-		text.render("CREDITS", glm::vec2(288, posYini + 2 * espacio), 18, glm::vec4(1, 1, 1, 1));
-		text.render("EXIT", glm::vec2(288, posYini + 3 * espacio), 18, glm::vec4(1, 1, 1, 1));
+		text.render("START GAME", glm::vec2(posX, posYini), 18, glm::vec4(1, 1, 1, 1));
+		text.render("INSTRUCTIONS", glm::vec2(posX, posYini + espacio), 18, glm::vec4(1, 1, 1, 1));
+		text.render("CREDITS", glm::vec2(posX, posYini + 2 * espacio), 18, glm::vec4(1, 1, 1, 1));
+		text.render("EXIT", glm::vec2(posX, posYini + 3 * espacio), 18, glm::vec4(1, 1, 1, 1));
 
 		/* MUSHROOM CHOOSER */
 		restartShaders();
@@ -135,7 +151,7 @@ void StartMenu::render() {
 	else if (state == 1) {
 		restartShaders();
 		spriteWall->render();
-		text.render("INSTRUCTIONS", glm::vec2(SCREEN_WIDTH / 2 - 216, 112), 32, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+		text.render("INSTRUCTIONS", glm::vec2(width / 2 - 216, 112), 32, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
 
 		/* MOVEMENT */
 		text.render("Movement:",   glm::vec2(96, 176),  16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
@@ -143,8 +159,6 @@ void StartMenu::render() {
 		textKeyboard.render("ASD", glm::vec2(120, 254), 32, glm::vec4(1, 1, 1, 1));
 		textKeyboard.render("g",   glm::vec2(120, 302), 32, glm::vec4(1, 1, 1, 1));
 		text.render("Run",         glm::vec2(196, 292), 12, glm::vec4(1, 1, 1, 1));
-		textKeyboard.render("Z",   glm::vec2(120, 350), 32, glm::vec4(1, 1, 1, 1));
-		text.render("Mute",        glm::vec2(160, 340), 12, glm::vec4(1, 1, 1, 1));
 
 		/* CHEATS */
 		text.render("Cheats:",     glm::vec2(528, 176), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
@@ -156,8 +170,7 @@ void StartMenu::render() {
 		text.render("Level",       glm::vec2(620, 314), 12, glm::vec4(1, 1, 1, 1));
 		textKeyboard.render("a",   glm::vec2(544, 372), 32, glm::vec4(1, 1, 1, 1));
 		text.render("Pause",       glm::vec2(600, 362), 12, glm::vec4(1, 1, 1, 1));
-		text.render("Esc: Exit", glm::vec2(104, 400), 12, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-		// Esc = "m"
+		text.render("E: Exit", glm::vec2(104, 400), 12, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
 	}
 	else if (state == 2) {
 		restartShaders();
@@ -168,7 +181,7 @@ void StartMenu::render() {
 		text.render("* Jeremy Comino", glm::vec2(104, 232), 16, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
 
 		//textKeyboard.render('E', glm::vec2(104, 404), 32, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
-		text.render("Esc: Exit", glm::vec2(104, 400), 12, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
+		text.render("E: Exit", glm::vec2(104, 400), 12, glm::vec4(0.98823f, 0.76078f, 0.73725f, 1.f));
 	}
 }
 

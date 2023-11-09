@@ -72,7 +72,7 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 		dir = -1;
 	}
 
-	posEnemy.x += (state == MOVING ? VX : 6) * dir;
+	posEnemy.x += (state == MOVING ? VX : 5) * dir;
 
 	posEnemy.y += FALL_STEP;
 	if (!map->collisionMoveDown(posEnemy, glm::ivec2(32, 32), &posEnemy.y));
@@ -158,5 +158,7 @@ void Koopa::kill() {
 	sound.playSFX("sfx/kick.wav");
 	Score::instance().increaseScore(100);
 	sprite->changeAnimation(UPSIDE_DOWN);
-	showText();
+
+	if (posEnemy.y < map->getMapSize().y * map->getBlockSize())
+		showText();
 }

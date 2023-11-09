@@ -136,5 +136,7 @@ void Goomba::kill() {
 	sound.playSFX("sfx/kick.wav");
 	Score::instance().increaseScore(100);
 	sprite->changeAnimation(UPSIDE_DOWN);
-	showText();
+	
+	if (posEnemy.y < map->getMapSize().y * map->getBlockSize())
+		showText();
 }

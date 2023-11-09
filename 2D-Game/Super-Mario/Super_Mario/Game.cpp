@@ -22,6 +22,8 @@ void Game::render() {
 }
 
 void Game::keyPressed(int key) {
+	if (key == 27)
+		bPlay = false;
 	if (key >= int('A') && key <= int('Z')) key += 32;
 
 	keys[key] = true;

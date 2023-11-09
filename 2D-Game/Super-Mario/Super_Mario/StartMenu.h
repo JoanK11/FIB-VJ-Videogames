@@ -18,11 +18,12 @@ public:
 	void restartShaders();
 	void openMenu();
 	bool showingMenu() const;
+	void updateValues();
 
 private:
 	bool visible;
 	int pos;
-	int posYini, espacio;
+	int posXini, posYini, espacio;
 	Texture spritesheet;
 	Sprite *sprite, * spriteWall;
 	Text text, textKeyboard;
@@ -31,7 +32,7 @@ private:
 	SoundManager sound;
 
 	bool keyUpPressed, keyDownPressed;
-	bool keyEnterPressed, keyEscPressed;
+	bool keyEnterPressed, keyEPressed;
 	int state;
 };
 

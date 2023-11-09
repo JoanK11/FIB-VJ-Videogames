@@ -1,47 +1,48 @@
 Integrantes del grupo:
-Joan Caballero Castro
-Jeremy Comino Raigón
+- Joan Caballero Castro
+- Jeremy Comino Raigón
 
 Funcionalidades implementadas:
 
---Base--
--Estructura básica de 4 pantallas: menú principal, jugar, instrucciones y creditos.
--Dos pantallas del juego.
--Dos tipo de enemigos: Goomba y Koopa Troopas.
--Salto de Mario cuando le damos al espacio.
--Mario salta al mantener la tecla shift.
--Bricks se pueden romper cuando este en modo super Mario.
--Los bloques interrogantes contienen Monedas o Power-Ups.
--2 Power-Ups: estrella y el super champiñon con sus respectivos efectos.
--Scroll horizontal solo a la derecha.
--Caer por un agujero provoca la muerte del Mario.
--El jugador ha superar el nivel en un tiempo limite.
--Se da una puntuación acorde a la altura tocada de la bandera.
--Recuento del numero de monedas y la puntuación hasta el momento y su respectiva interficie gráfica.
--Sistema de cheats
+-- Parte Básica --
+- Estructura básica de 4 pantallas: menú principal, jugar, instrucciones y créditos.
+- Dos pantallas de juego: Mapas 1-1 y 2-1.
+- Dos tipo de enemigos: Goombas y Koopa Troopas.
+- Mario salta cuando clicamos el espacio.
+- Mario corre cuando mantenemos la tecla Shift.
+- Los ladrillos se pueden romper cuando se está en modo Super Mario.
+- Los bloques interrogantes contienen Monedas o Power-Ups.
+- 2 Power-Ups: Estrella y Super Champiñón con sus respectivos efectos.
+- Scroll horizontal solo a la derecha.
+- Caer por un agujero provoca la muerte del Mario.
+- El jugador ha de superar el nivel en un tiempo límite.
+- Se da una puntuación acorde a la altura tocada de la bandera.
+- Recuento de puntuación, número de monedas, mundo y tiempo actuales y vidas restantes con su respectiva interficie gráfica.
+- Sistema de cheats:
 	- G (Star Mario) y M (Super Mario).
 	- Teclas 1 y 2 para moverse entre el primer mundo y el segundo mundo.
 
+-- Parte Polish ---
+- Música de fondo y efectos especiales.
+- Pausa antes de empezar.
+- Animación de los bloques con interrogante.
+- Animaciones de Mario al moverse, saltar y morir.
+- Animaciones de los enemigos al moverse y al morir.
+- Sprites que aparecen encima del Mario indicando la puntuación conseguida.
+- Efecto de transformación de Mario entre sus cuatro estados.
+- Movimiento acelerado de Mario.
+- Animación en llegar a la bandera al acabar el nivel.
+- Bonus a la puntuación por tiempo restante al final del nivel.
 
---Extras--
--Pausa antes de comenzar (por hacer).
--Música de fondo y efectos especiales.
--Animación de los bloques interrogante.
--Animaciones del mario al moverse, saltar, morir.
--Animaciones de los enemigos al moverse y al morir.
--Sprites que aparezcan sobre Mario indicando la puntuación conseguida.
--Efecto por la transformación de Mario entre sus cuatro estados.
--Movimiento aceleardo del Mario.
--Animació en arribar a la bandera per finalitzar el nivell.
--Bonus a la puntuación por tiempo restante al final del nivel(por hacer).
+--- Instrucciones ---
 
+En el Juego:
+- Teclas W, A, S y D y Flechas direccionales: Para moverse en las direcciones arriba, izquierda, abajo y derecha respectivamente.
+- Espacio: Para saltar.
+- Enter: Pone y quita la Pausa durante el juego.
+- Esc: Para salir del juego en cualquier momento.
 
-
-Instrucciones del juego:
-
-Teclas W,A y D y Flechas direccionales: Para moverse en las direcciones arriba, izquierda y derecha respectivamente.
-Teclas W,A y D y Flechas direccionales: Sirven para moverse dentro del menu.
-Spacio: para saltar / moverse hacia arriba.
-Enter: Entrar en cada opción del menu.
-Enter: Poner y quitar Pausa durante el juego.
-Esc: Salir de ciertas pantallas (el propio juego indica cuando se puede utilizar).
+En el Menú:
+- Teclas W, A, S y D y Flechas direccionales: Sirven para moverse dentro del menú.
+- Enter: Para entrar en cada opción del menú.
+- E: Salir de ciertas pantallas.
