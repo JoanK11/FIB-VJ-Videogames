@@ -1,4 +1,4 @@
-35
+39
 B 0 1 N
 S 1 1 N	
 BR1 2 1 N	
@@ -34,3 +34,7 @@ DDC 31 0 N
 GR  9 0 N
 W -1 0 N
 BRC 16 0 N
+TR 32 0 N
+AP 33 0 N
+AAG 34 0 N
+DAG 35 0 N

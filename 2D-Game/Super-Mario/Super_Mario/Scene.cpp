@@ -7,8 +7,8 @@
 #define SCREEN_X 0
 #define SCREEN_Y 32
 
-#define INIT_PLAYER_X_TILES 187
-#define INIT_PLAYER_Y_TILES 2
+#define INIT_PLAYER_X_TILES 2
+#define INIT_PLAYER_Y_TILES 11
 
 #define TIME_GAME_OVER 7000
 #define TIME_GAME_WIN 5000
@@ -128,6 +128,7 @@ void Scene::update(int deltaTime) {
 			startMenu.openMenu();
 			glClearColor(0.3607843137f, 0.5803921569f, 0.9882352941f, 1.0f);
 			Score::instance().init();
+			setChangingScene();
 		}
 		return;
 	}
@@ -147,6 +148,7 @@ void Scene::update(int deltaTime) {
 			gameWin = false;
 			Game::instance().clearInput();
 			Score::instance().init();
+			setChangingScene();
 		}
 		return;
 	}
