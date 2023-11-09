@@ -47,7 +47,8 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 
 	sprite->update(deltaTime);
 
-	if (posEnemy.x < xmin - 32 || posEnemy.y >= map->getMapSize().y * map->getBlockSize()) {
+	if (posEnemy.x < xmin - 32 || posEnemy.y >= map->getMapSize().y * map->getBlockSize() ||
+		(state != NOT_SPAWNED && posEnemy.x > 2*xmax - xmin + 480)) {
 		state = DIED;
 		bDelete = true;
 		return;

@@ -19,6 +19,7 @@ public:
 	void pauseBGM();
 	void resumeBGM();
 	void playSFX(const char* filename);
+	void stopAllSounds();
 
 
 private:

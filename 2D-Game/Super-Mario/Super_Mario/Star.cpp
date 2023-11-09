@@ -58,6 +58,7 @@ void Star::update(float dt) {
 		if (currentTime >= WAITING_TIME) {
 			currentState = ANIMATION;
 			currentTime = 0;
+			sound.playSFX("sfx/powerup-appears.wav");
 		}
 	}
 	else if (currentState == ANIMATION) {

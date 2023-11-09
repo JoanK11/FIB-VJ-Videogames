@@ -34,7 +34,7 @@ Player::~Player() {
 	delete starSprite;
 }
 
-void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
+void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, SoundManager *soundScene) {
 	bJumping = false, bFalling = false; jumpingEnemy = false;
 	auxFirstTime = true;
 	// Mario Types
@@ -49,6 +49,9 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	// Velocity
 	Vx = 0, Vy = 0;
 	gravity = 0;
+
+	/* Sound */
+	sound = soundScene;
 
 	/* ----------------------- */
 	/* -------- MARIO -------- */
@@ -295,7 +298,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) {
 	superStarSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
 }
 
-void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundScene) {
+void Player::update(int deltaTime, float xmin, float& xmax) {
 	/* --- Mario Sprites --- */
 	Sprite* activeSprite = sprite;
 	if (superMario && !starMario)      activeSprite = superSprite;
@@ -333,16 +336,12 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 	if (starMario) starMarioTime += deltaTime;
 	if (!starMario && !starMarioKey && keyStarMario && !bPowerUpAnimation && !bImmunity && state != DYING) {
 		starMarioKey = true;
-		soundScene.stopBGM();
-		soundScene.playBGM("music/star_mario.mp3", true);
 		if (superMario) superStarSprite->changeAnimation(activeSprite->animation());
 		else starSprite->changeAnimation(activeSprite->animation());
 		setStarMario();
 	}
 	else if (starMario && state != DYING && (starMarioTime > TIME_STAR_MARIO || (!starMarioKey && keyStarMario && !bPowerUpAnimation))) {
 		starMario = false, starMarioKey = true;
-		soundScene.stopBGM();
-		soundScene.playBGM("music/title.mp3", true);
 		if (superMario) {
 			activeSprite->changeAnimation(superSprite->animation());
 			state = SUPER;
@@ -351,6 +350,8 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 			activeSprite->changeAnimation(sprite->animation());
 			state = NORMAL;
 		}
+		sound->stopBGM();
+		sound->playBGM("music/title.mp3", true);
 	}
 
 	/* PHYSICS */
@@ -364,7 +365,7 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 		state = DYING;
 		jumpAngle = 90;
 		startY = posPlayer.y;
-		sound.playSFX("sfx/mario_dies.wav");
+		sound->playSFX("sfx/mario_dies.wav");
 	}
 
 	/* ----- DYING ANIMATION ----- */
@@ -549,8 +550,8 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
 			bFalling = false;
 			if (!keyJumpPressed && keyUp) {
-				if (superMario)	sound.playSFX("sfx/jump-super.wav");
-				else sound.playSFX("sfx/jump-small.wav");
+				if (superMario)	sound->playSFX("sfx/jump-super.wav");
+				else sound->playSFX("sfx/jump-small.wav");
 				bJumping = true;
 				jumpAngle = 0;
 				startY = posPlayer.y;
@@ -612,8 +613,8 @@ void Player::update(int deltaTime, float xmin, float& xmax, SoundManager& soundS
 		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
 			bFalling = false;
 			if (!keyJumpPressed && keyUp) {
-				if (superMario)	sound.playSFX("sfx/jump-super.wav");
-				else sound.playSFX("sfx/jump-small.wav");
+				if (superMario)	sound->playSFX("sfx/jump-super.wav");
+				else sound->playSFX("sfx/jump-small.wav");
 				bJumping = true;
 				jumpAngle = 0;
 				startY = posPlayer.y;
@@ -710,17 +711,20 @@ void Player::setSuperMario() {
 	bPowerUpAnimation = true;
 	timePowerUpAnimation = 0;
 	renderPowerUpAnimation = 0;
-	sound.playSFX("sfx/powerup-eats.wav");
+	sound->playSFX("sfx/powerup-eats.wav");
 }
 
 void Player::setStarMario() {
+	sound->stopBGM();
+	sound->playSFX("sfx/powerup-eats.wav");
+	sound->playBGM("music/star_mario.mp3", true);
 	starMario = true, state = STAR;
 	starMarioTime = 0;
 }
 
 void Player::powerDown() {
 	state = NORMAL;
-	sound.playSFX("sfx/powerdown-pipe.wav");
+	sound->playSFX("sfx/powerdown-pipe.wav");
 	timeImmunity = 0;
 	bImmunity = true;
 	renderImmunity = 0;
@@ -740,7 +744,7 @@ void Player::setDying() {
 	state = DYING;
 	jumpAngle = 0;
 	startY = posPlayer.y;
-	sound.playSFX("sfx/mario_dies.wav");
+	sound->playSFX("sfx/mario_dies.wav");
 }
 
 void Player::collisionEnemy() {
@@ -749,7 +753,7 @@ void Player::collisionEnemy() {
 		state = DYING;
 		jumpAngle = 0;
 		startY = posPlayer.y;
-		sound.playSFX("sfx/mario_dies.wav");
+		sound->playSFX("sfx/mario_dies.wav");
 	}
 	else if (state == SUPER) {
 		powerDown();
@@ -812,7 +816,7 @@ void Player::setInitialStateSuperMario(bool superMario) {
 void Player::reachCastleAnimation(float dt) {
 	if (auxFirstTime) {
 		auxFirstTime = false;
-		sound.playSFX("sfx/stage_clear.wav");
+		sound->playSFX("sfx/stage_clear.wav");
 		sprite->changeAnimation(MOVE_RIGHT);
 		superSprite->changeAnimation(MOVE_RIGHT);
 		starSprite->changeAnimation(MOVE_RIGHT);

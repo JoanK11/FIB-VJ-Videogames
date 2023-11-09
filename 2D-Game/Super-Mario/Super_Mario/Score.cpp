@@ -36,7 +36,7 @@ void Score::render() {
 	/* SCORE */
 	text.render("SCORE", glm::vec2(32, 32), 20, glm::vec4(1, 1, 1, 1));
 	string str_score = to_string(score);
-	while (str_score.length() < 5) str_score = '0' + str_score;
+	while (str_score.length() < 6) str_score = '0' + str_score;
 	text.render(str_score, glm::vec2(32, 56), 20, glm::vec4(1, 1, 1, 1));
 
 	/* COINS */

@@ -15,8 +15,8 @@ class Player {
 
 public:
 	virtual ~Player();
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
-	void update(int deltaTime, float xmin, float& xmax, SoundManager& soundScene);
+	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, SoundManager *soundScene);
+	void update(int deltaTime, float xmin, float& xmax);
 	void render();
 	
 	void setTileMap(TileMap *tileMap);
@@ -45,7 +45,7 @@ public:
 	void animationOfReachingFinal(int deltaTime);
 
 private:
-	SoundManager sound;
+	SoundManager *sound;
 	Texture spritesheet, starSpritesheet, superStarSpritesheet;
 	Sprite *sprite, *superSprite, *starSprite, *superStarSprite;
 	TileMap *map;

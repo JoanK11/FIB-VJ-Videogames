@@ -34,3 +34,7 @@ void SoundManager::resumeBGM() {
 void SoundManager::playSFX(const char* filename) {
 	sfx = soundEngine->play2D(filename);
 }
+
+void SoundManager::stopAllSounds() {
+	soundEngine->stopAllSounds();
+}

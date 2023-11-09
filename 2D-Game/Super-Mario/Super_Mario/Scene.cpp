@@ -34,7 +34,7 @@ void Scene::init() {
 	maps[1] = TileMap::createTileMap("levels/world2.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map = maps[0];
 	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, &sound);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getBlockSize(), INIT_PLAYER_Y_TILES * map->getBlockSize()));
 	player->setTileMap(map);
 	camera = Projection(glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1)));
@@ -63,7 +63,7 @@ void Scene::restart() {
 	/* --- Player --- */
 	delete player;
 	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, &sound);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getBlockSize(), INIT_PLAYER_Y_TILES * map->getBlockSize()));
 	player->setTileMap(map);
 
@@ -91,7 +91,7 @@ void Scene::worldChange() {
 	bool isSuperMario = player->isSuperMario();
 	delete player;
 	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, &sound);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getBlockSize(), INIT_PLAYER_Y_TILES * map->getBlockSize()));
 	player->setTileMap(map);
 	player->setInitialStateSuperMario(isSuperMario);
@@ -132,8 +132,6 @@ void Scene::update(int deltaTime) {
 		}
 		return;
 	}
-
-	if (Game::instance().getKey('b')) gameWin = true;
 
 	/* Game Win */
 	if (gameWin) {
@@ -231,7 +229,7 @@ void Scene::update(int deltaTime) {
 	float actualMid = camera.getXmid();
 
 	/* --- Player --- */
-	player->update(deltaTime, camera.getXmin(), actualMid, sound);
+	player->update(deltaTime, camera.getXmin(), actualMid);
 
 	/* --- Enemies --- */
 	map->updateEnemies(deltaTime, player, camera.getXmin(), actualMid);
