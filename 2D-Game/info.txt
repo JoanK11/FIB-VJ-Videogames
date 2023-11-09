@@ -46,3 +46,4 @@ En el Menú:
 - Teclas W, A, S y D y Flechas direccionales: Sirven para moverse dentro del menú.
 - Enter: Para entrar en cada opción del menú.
 - E: Salir de ciertas pantallas.
+- Esc: Para salir del juego en cualquier momento.
