@@ -93,7 +93,7 @@ void Goomba::update(int deltaTime, float xmin, float xmax) {
 	if (posEnemy.y >= map->getMapSize().y * map->getBlockSize()) bDelete = true;
 }
 
-int Goomba::collision(const glm::vec2& pos, const glm::vec2& size) {
+int Goomba::collision(const glm::vec2& pos, const glm::vec2& size, bool isPlayer) {
 	if (died || dying || bDelete || !spawned) return 0;
 
 	// Margin for collision from above

@@ -9,7 +9,7 @@ public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime, float xmin, float xmax);
 
-	int collision(const glm::vec2& pos, const glm::vec2& size);
+	int collision(const glm::vec2& pos, const glm::vec2& size, bool isPlayer);
 	void restart();
 	void kill();
 	bool canCollide(float xmin, float xmax);

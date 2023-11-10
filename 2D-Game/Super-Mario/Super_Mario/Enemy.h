@@ -25,7 +25,7 @@ public:
 	virtual void render(glm::vec2& cameraPos);
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2& pos);
-	virtual int collision(const glm::vec2& pos, const glm::vec2& size);
+	virtual int collision(const glm::vec2& pos, const glm::vec2& size, bool isPlayer);
 	void setOriginalPosition(const glm::vec2& pos);
 	virtual void restart();
 	void changeDirection();

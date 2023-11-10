@@ -43,7 +43,7 @@ void Enemy::setPosition(const glm::vec2& pos) {
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
-int Enemy::collision(const glm::vec2& pos, const glm::vec2& size) {
+int Enemy::collision(const glm::vec2& pos, const glm::vec2& size, bool isPlayer) {
 	cout << "ENEMY COLLISION" << endl;
 	return 0;
 }

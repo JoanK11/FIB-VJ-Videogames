@@ -80,7 +80,7 @@ void Koopa::update(int deltaTime, float xmin, float xmax) {
 	if (posEnemy.y >= map->getMapSize().y *map->getBlockSize()) bDelete = true;
 }
 
-int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
+int Koopa::collision(const glm::vec2& pos, const glm::vec2& size, bool isPlayer) {
 	if (state == NOT_SPAWNED || state == DYING || (state == DIED && bDelete)) return 0;
 
 	// Margin for collision from above
@@ -94,7 +94,7 @@ int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
 
 	// Check for collision from above (Koopa turns shell or dies)
 	if (posB + margin >= goombaT && posB - margin <= goombaT &&
-		posT <= goombaB && posR >= goombaL && posL <= goombaR) {
+		posT <= goombaB && posR >= goombaL && posL <= goombaR && isPlayer) {
 		//cout << "Mario has collided from above" << endl;
 		if (state == MOVING || state == SHELL_MOVING) {
 			state = SHELL_IDLE, sprite->changeAnimation(SHELL);
@@ -116,10 +116,13 @@ int Koopa::collision(const glm::vec2& pos, const glm::vec2& size) {
 		//cout << "Mario has collided from left or right" << endl;
 
 		if (state == SHELL_IDLE) {
-			state = SHELL_MOVING;
 			if (pos.x < posEnemy.x + 16) dir = 1;
 			else dir = -1;
-			return 0;
+			if (isPlayer) {
+				state = SHELL_MOVING;
+				return 0;
+			}
+			else return -1;
 		}
 		return -1;
 	}

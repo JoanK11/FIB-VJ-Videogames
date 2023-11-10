@@ -513,7 +513,7 @@ void TileMap::updateEnemies(int deltaTime, Player* player, float xmin, float xma
 		enemy->update(deltaTime, xmin, xmax);
 
 		if (player->isDead()) continue;
-		int col = enemy->collision(player->getPos(), player->getSize());
+		int col = enemy->collision(player->getPos(), player->getSize(), true);
 
 		if (player->isStarMario() && col != 0) {
 			cout << "Star Mario Collision" << endl;
@@ -535,7 +535,7 @@ void TileMap::updateEnemies(int deltaTime, Player* player, float xmin, float xma
 		if (!enemies[i]->canCollide(xmin, xmax)) continue;
 		for (int j = i + 1; j < enemies.size(); ++j) {
 			if (!enemies[j]->canCollide(xmin, xmax)) continue;
-			int col = enemies[i]->collision(enemies[j]->getPos(), enemies[j]->getSize());
+			int col = enemies[i]->collision(enemies[j]->getPos(), enemies[j]->getSize(), false);
 
 			if (col < 0) {
 				bool e1 = enemies[i]->canKillEnemies();

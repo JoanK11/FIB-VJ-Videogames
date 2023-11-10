@@ -9,7 +9,7 @@ public:
     void update(int deltaTime, float xmin, float xmax);
     void render(glm::vec2& cameraPos);
 
-    int collision(const glm::vec2& pos, const glm::vec2& size);
+    int collision(const glm::vec2& pos, const glm::vec2& size, bool isPlayer);
     virtual void restart();
     
     glm::ivec2 getSize() const;
