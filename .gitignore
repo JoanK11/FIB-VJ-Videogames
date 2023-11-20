@@ -1,0 +1,41 @@
+2D-Game/Super-Mario/.vs/
+3D-Game/Orbital Bullet/Library/APIUpdater/
+3D-Game/Orbital Bullet/Library/Artifacts/
+3D-Game/Orbital Bullet/Library/Bee/
+3D-Game/Orbital Bullet/Library/PackageCache/
+3D-Game/Orbital Bullet/Library/PackageManager/
+3D-Game/Orbital Bullet/Library/PackageScriptAssemblies/
+3D-Game/Orbital Bullet/Library/Search/
+3D-Game/Orbital Bullet/Library/ShaderCache/
+3D-Game/Orbital Bullet/Library/TempArtifacts/
+3D-Game/Orbital Bullet/Library/ArtifactDB
+3D-Game/Orbital Bullet/Library/SourceAssetDB
+
+*.vsidx
+*.ipch
+*.pdb
+*.obj
+*.ilk
+*.tlog
+*.idb
+*.lastbuildstate
+*.suo
+*.db
+*.lock
+*.pdb
+*.idb
+*.obj
+*.tlog
+*.ilk
+*.enc
+*.db-wal
+*.db-shm
+*.opendb
+*.exe
+*.pdb
+*.exe
+*.pdb
+*.recipe
+*.log
+*.pdb
+2D-Game/Super-Mario/Debug/Super_Mario.pdb
