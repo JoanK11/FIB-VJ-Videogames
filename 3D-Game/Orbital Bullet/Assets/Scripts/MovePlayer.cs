@@ -5,10 +5,10 @@ using UnityEngine;
 public class MovePlayer : MonoBehaviour
 {
     public float rotationSpeed, jumpSpeed, gravity;
-
+    public GameObject prefab;
     Vector3 startDirection;
     float speedY;
-
+    bool isfirst;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +16,7 @@ public class MovePlayer : MonoBehaviour
         startDirection = transform.position - transform.parent.position;
         startDirection.y = 0.0f;
         startDirection.Normalize();
-
+        isfirst= true;
         speedY = 0;
     }
 
@@ -26,15 +26,17 @@ public class MovePlayer : MonoBehaviour
         CharacterController charControl = GetComponent<CharacterController>();
         Vector3 position;
 
+        float angle;
+        Vector3 direction, target;
+
+        position = transform.position;
+        angle = rotationSpeed * Time.deltaTime;
+        direction = position - transform.parent.position;
+
         // Left-right movement
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
         {
-            float angle;
-            Vector3 direction, target;
-
-            position = transform.position;
-            angle = rotationSpeed * Time.deltaTime;
-            direction = position - transform.parent.position;
+            
             if (Input.GetKey(KeyCode.A))
             {
                 target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
@@ -54,7 +56,12 @@ public class MovePlayer : MonoBehaviour
                 }
             }
         }
-
+        //making dynamically bullets
+        if (Input.GetKey(KeyCode.K) && isfirst) { 
+            isfirst = false;
+            Vector3 bulletPos = transform.parent.position + Quaternion.AngleAxis(-angle-10.0f, Vector3.up) * direction;
+            Instantiate(prefab, bulletPos, Quaternion.identity, transform.parent);
+        }
         // Correct orientation of player
         // Compute current direction
         Vector3 currentDirection = transform.position - transform.parent.position;

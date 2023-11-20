@@ -62,6 +62,7 @@
     <Compile Include="Assets\Scripts\Inventory.cs" />
     <Compile Include="Assets\Scripts\MovePlayer.cs" />
     <Compile Include="Assets\Scripts\Pickup.cs" />
+    <Compile Include="Assets\Scripts\MoveBala.cs" />
     <Compile Include="Assets\Scripts\FollowPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
