@@ -5,7 +5,6 @@ using UnityEngine;
 public class FollowPlayer : MonoBehaviour
 {
     public GameObject player;
-
     Vector3 startDirection;
 
     // Start is called before the first frame update

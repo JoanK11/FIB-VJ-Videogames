@@ -94,6 +94,15 @@ public class MovePlayer : MonoBehaviour
         else
             speedY -= gravity * Time.deltaTime;
     }
+
+    public bool JumpNextLevel() {
+        CharacterController charControl = GetComponent<CharacterController>();
+
+        if (charControl.isGrounded) {
+            speedY = 3 * jumpSpeed;
+        }
+        return false;
+    }
 }
 
 
