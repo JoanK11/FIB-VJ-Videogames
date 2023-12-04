@@ -10,7 +10,7 @@ public class MoveBala : MonoBehaviour
 
     Vector3 startDirection;
     float speedY;
-
+    Quaternion rotacionInicial;
 
     void Start()
     {
@@ -18,14 +18,15 @@ public class MoveBala : MonoBehaviour
         startDirection = transform.position - transform.parent.position;
         startDirection.y = 0.0f;
         startDirection.Normalize();
-
+        rotacionInicial = transform.rotation;
         speedY = 0;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        CharacterController charControl = GetComponent<CharacterController>();
+     //   Debug.Log("entro en el update");
+        
         Vector3 position;
         float angle;
         Vector3 direction, target;
@@ -35,14 +36,14 @@ public class MoveBala : MonoBehaviour
         direction = position - transform.parent.position;
 
         target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
-        if (charControl.Move(target - position) != CollisionFlags.None)
-        {
-            transform.position = position;
-            Physics.SyncTransforms();
-        }
+        
+        transform.position = target;
+        Physics.SyncTransforms();
+      
 
         // Correct orientation of player
         // Compute current direction
+        
         Vector3 currentDirection = transform.position - transform.parent.position;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
@@ -54,7 +55,15 @@ public class MoveBala : MonoBehaviour
             orientation = Quaternion.AngleAxis(180.0f, Vector3.up);
         else
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
-        transform.rotation = orientation;
+        transform.rotation = orientation * rotacionInicial;
+        
 
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log(other.gameObject.name + " ha entrado en el colider de " + gameObject.name);
+        MeshRenderer mesh = GetComponent<MeshRenderer>();
+        mesh.enabled = false;
+        Destroy(this);
     }
 }

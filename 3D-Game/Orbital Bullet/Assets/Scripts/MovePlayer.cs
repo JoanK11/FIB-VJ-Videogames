@@ -5,10 +5,13 @@ using UnityEngine;
 public class MovePlayer : MonoBehaviour
 {
     public float rotationSpeed, jumpSpeed, gravity;
+    public float timeToRestartShoot;
+    float restartTime;
     public GameObject prefab;
     Vector3 startDirection;
     float speedY;
-    bool isfirst;
+    bool reloading;
+    int num;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,10 +19,11 @@ public class MovePlayer : MonoBehaviour
         startDirection = transform.position - transform.parent.position;
         startDirection.y = 0.0f;
         startDirection.Normalize();
-        isfirst= true;
+        reloading= false;
         speedY = 0;
+        num = 0;
     }
-
+   
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -57,11 +61,7 @@ public class MovePlayer : MonoBehaviour
             }
         }
         //making dynamically bullets
-        if (Input.GetKey(KeyCode.K) && isfirst) { 
-            isfirst = false;
-            Vector3 bulletPos = transform.parent.position + Quaternion.AngleAxis(-angle-10.0f, Vector3.up) * direction;
-            Instantiate(prefab, bulletPos, Quaternion.identity, transform.parent);
-        }
+       
         // Correct orientation of player
         // Compute current direction
         Vector3 currentDirection = transform.position - transform.parent.position;
@@ -76,6 +76,25 @@ public class MovePlayer : MonoBehaviour
         else
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
         transform.rotation = orientation;
+
+        if (Input.GetKey(KeyCode.K) && !reloading)
+        {
+            reloading = true;
+            restartTime = 0.0f;
+            Vector3 bulletPos = transform.parent.position + Quaternion.AngleAxis(-angle - 15.0f, Vector3.up) * direction;
+            bulletPos.y = transform.position.y;
+            Debug.Log(bulletPos);
+            GameObject newObject = Instantiate(prefab, bulletPos, transform.rotation, transform.parent);
+            newObject.name = "bala" + (++num);
+        }
+        if (reloading)
+        {
+            restartTime += Time.deltaTime;
+            if (restartTime >= timeToRestartShoot)
+            {
+                reloading = false;
+            }
+        }
 
         // Apply up-down movement
         position = transform.position;
