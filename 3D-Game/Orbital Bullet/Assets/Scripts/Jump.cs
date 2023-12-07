@@ -11,18 +11,17 @@ public class Jump : MonoBehaviour {
         isPlayerOnTrigger = false;
         objectTriggered = false;
 
-        /*
+        // GameObjects initialization
         player = GameObject.Find("Player");
         if (player == null) {
             Debug.LogError("Player object not found. Make sure your player is named 'Player'");
         }
-        */
     }
 
     void Update() {
         if (isPlayerOnTrigger && !objectTriggered && Input.GetKeyUp(KeyCode.B)) {
-            objectTriggered = player.GetComponent<MovePlayer>().JumpNextLevel();
-            Debug.Log("HE SALTADO");
+            player.GetComponent<MovePlayer>().JumpNextLevel();
+            Debug.Log("Player tried to jump to the next level.");
         }
     }   
 
