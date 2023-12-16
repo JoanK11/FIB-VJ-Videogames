@@ -9,7 +9,7 @@ public class MoveBala : MonoBehaviour
     public float rotationSpeed, jumpSpeed, gravity;
 
     Vector3 startDirection;
-    float speedY;
+    
     Quaternion rotacionInicial;
 
     void Start()
@@ -19,7 +19,7 @@ public class MoveBala : MonoBehaviour
         startDirection.y = 0.0f;
         startDirection.Normalize();
         rotacionInicial = transform.rotation;
-        speedY = 0;
+       
     }
 
     // Update is called once per frame
@@ -64,6 +64,12 @@ public class MoveBala : MonoBehaviour
         Debug.Log(other.gameObject.name + " ha entrado en el colider de " + gameObject.name);
         MeshRenderer mesh = GetComponent<MeshRenderer>();
         mesh.enabled = false;
+
+        if (other.gameObject.tag == "Enemy") {
+            MoveEnemy1 enemy = other.gameObject.GetComponent<MoveEnemy1>();
+            enemy.takeDamage(10);
+        }
+        gameObject.SetActive(false);
         Destroy(this);
     }
 }
