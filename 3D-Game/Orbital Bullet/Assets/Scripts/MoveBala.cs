@@ -8,6 +8,8 @@ public class MoveBala : MonoBehaviour
 
     public float rotationSpeed, jumpSpeed, gravity;
 
+    public float damage;
+
     Vector3 startDirection;
     
     Quaternion rotacionInicial;
@@ -67,9 +69,9 @@ public class MoveBala : MonoBehaviour
 
         if (other.gameObject.tag == "Enemy") {
             MoveEnemy1 enemy = other.gameObject.GetComponent<MoveEnemy1>();
-            enemy.takeDamage(10);
+            enemy.takeDamage(damage);
         }
-        gameObject.SetActive(false);
-        Destroy(this);
+        
+        Destroy(gameObject);
     }
 }

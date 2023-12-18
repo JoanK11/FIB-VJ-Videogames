@@ -127,8 +127,8 @@ public class MoveEnemy1 : MonoBehaviour
             healthBar.updateHealthBar(health, maxHealth);
             if (health <= 0)
             {   
-                gameObject.SetActive(false);
-                Destroy(this);
+            
+                Destroy(gameObject);
 
             }
         }
