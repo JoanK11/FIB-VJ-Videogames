@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-public class EnemyBase : MonoBehaviour
-{
+public class EnemyBase : MonoBehaviour {
     public float maxHealth;
     float health;
 
@@ -18,13 +17,10 @@ public class EnemyBase : MonoBehaviour
         shield = maxShield;
         health = maxHealth;
     }
-    public void takeDamage(float damageAmount)
-    {
-        if (shield > 0)
-        {
+    public void takeDamage(float damageAmount) {
+        if (shield > 0) {
             shield -= damageAmount;
-            if (shield <= 0)
-            {
+            if (shield <= 0) {
                 float rest = Math.Abs(shield);
                 health -= rest;
                 healthBar.updateHealthBar(health, maxHealth);
@@ -32,12 +28,10 @@ public class EnemyBase : MonoBehaviour
             }
             else shieldBar.updateHealthBar(shield, maxShield);
         }
-        else
-        {
+        else {
             health -= damageAmount;
             healthBar.updateHealthBar(health, maxHealth);
-            if (health <= 0)
-            {
+            if (health <= 0) {
 
                 Destroy(gameObject);
 

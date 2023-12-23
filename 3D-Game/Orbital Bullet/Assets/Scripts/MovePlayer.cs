@@ -7,17 +7,23 @@ using UnityEngine;
 public class MovePlayer : MonoBehaviour {
     // Public fields should use PascalCase
     private float rotationSpeed, jumpSpeed, gravity;
-    public GameObject prefab;
 
     // Private fields should use camelCase
     private Vector3 startDirection;
     private float speedY;
     private bool isFirst;
     private float changingLevelTime;
-    bool ringChanging;
 
     public enum PlayerState { Normal, ChangingLevel, ChangingRing, Invincible };
     PlayerState State;
+
+    /* -- Shooting -- */
+    public float timeToRestartShoot;
+    float restartTime;
+    public GameObject prefab;
+    bool reloading;
+    int num;
+
 
     // Start is called before the first frame update
     void Start() {
@@ -28,13 +34,16 @@ public class MovePlayer : MonoBehaviour {
         isFirst = true;
         speedY = 0;
         changingLevelTime = 0;
-        ringChanging = false;
 
         State = PlayerState.Normal;
 
         rotationSpeed = 80;
         jumpSpeed = 8.25f;
         gravity = 25;
+
+        /* -- Shooting -- */
+        reloading = false;
+        num = 0;
     }
 
     // Update is called once per frame
@@ -50,8 +59,7 @@ public class MovePlayer : MonoBehaviour {
             }
             else canMove = false;
         }
-
-        if (ringChanging) {
+        else if (State == PlayerState.ChangingRing) {
             canMove = false;
         }
 
@@ -83,14 +91,7 @@ public class MovePlayer : MonoBehaviour {
             }
         }
 
-        //making dynamically bullets
-        if (Input.GetKey(KeyCode.K) && isFirst) {
-            isFirst = false;
-            Vector3 bulletPos = transform.parent.position + Quaternion.AngleAxis(-angle - 10.0f, Vector3.up) * direction;
-            Instantiate(prefab, bulletPos, Quaternion.identity, transform.parent);
-        }
-        // Correct orientation of player
-        // Compute current direction
+        /* -- Shooting -- */
         Vector3 currentDirection = transform.position - transform.parent.position;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
@@ -104,9 +105,25 @@ public class MovePlayer : MonoBehaviour {
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
         transform.rotation = orientation;
 
-        // Apply up-down movement
+        if (Input.GetKey(KeyCode.K) && !reloading) {
+            reloading = true;
+            restartTime = 0.0f;
+            Vector3 bulletPos = transform.parent.position + Quaternion.AngleAxis(-angle - 15.0f, Vector3.up) * direction;
+            bulletPos.y = transform.position.y;
+            Debug.Log(bulletPos);
+            GameObject newObject = Instantiate(prefab, bulletPos, transform.rotation, transform.parent);
+            newObject.name = "bala" + (++num);
+        }
+        if (reloading) {
+            restartTime += Time.deltaTime;
+            if (restartTime >= timeToRestartShoot) {
+                reloading = false;
+            }
+        }
+
+        /* - Vertical Movement -- */
         position = transform.position;
-        if (!ringChanging && charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.None) {
+        if (State != PlayerState.ChangingRing && charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.None) {
             transform.position = position;
             Physics.SyncTransforms();
         }
@@ -154,11 +171,11 @@ public class MovePlayer : MonoBehaviour {
 
         // Ensure the player is exactly at the final position after the jump
         //transform.position = finalPosition;
-        ringChanging = false;
+        State = PlayerState.Normal;
     }
 
     public void ChangeRing(Vector3 targetPosition) {
-        ringChanging = true;
+        State = PlayerState.ChangingRing;
         StartCoroutine(MovePlayerToPosition(transform.position, targetPosition));
     }
     

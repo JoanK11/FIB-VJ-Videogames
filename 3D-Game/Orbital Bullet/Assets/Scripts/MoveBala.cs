@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveBala : MonoBehaviour
-{
+public class MoveBala : MonoBehaviour {
     // Start is called before the first frame update
 
     public float rotationSpeed, jumpSpeed, gravity;
@@ -11,24 +10,22 @@ public class MoveBala : MonoBehaviour
     public float damage;
 
     Vector3 startDirection;
-    
+
     Quaternion rotacionInicial;
 
-    void Start()
-    {
+    void Start() {
         // Store starting direction of the player with respect to the axis of the level
         startDirection = transform.position - transform.parent.position;
         startDirection.y = 0.0f;
         startDirection.Normalize();
         rotacionInicial = transform.rotation;
-       
+
     }
 
     // Update is called once per frame
-    void FixedUpdate()
-    {
-     //   Debug.Log("entro en el update");
-        
+    void FixedUpdate() {
+        //   Debug.Log("entro en el update");
+
         Vector3 position;
         float angle;
         Vector3 direction, target;
@@ -38,14 +35,14 @@ public class MoveBala : MonoBehaviour
         direction = position - transform.parent.position;
 
         target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
-        
+
         transform.position = target;
         Physics.SyncTransforms();
-      
+
 
         // Correct orientation of player
         // Compute current direction
-        
+
         Vector3 currentDirection = transform.position - transform.parent.position;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
@@ -58,11 +55,10 @@ public class MoveBala : MonoBehaviour
         else
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
         transform.rotation = orientation * rotacionInicial;
-        
+
 
     }
-    private void OnTriggerEnter(Collider other)
-    {
+    private void OnTriggerEnter(Collider other) {
         Debug.Log(other.gameObject.name + " ha entrado en el colider de " + gameObject.name);
         MeshRenderer mesh = GetComponent<MeshRenderer>();
         mesh.enabled = false;
@@ -71,7 +67,7 @@ public class MoveBala : MonoBehaviour
             EnemyBase enemy = other.gameObject.GetComponent<EnemyBase>();
             enemy.takeDamage(damage);
         }
-        
+
         Destroy(gameObject);
     }
     public void setOrientation(float newDirection) {
