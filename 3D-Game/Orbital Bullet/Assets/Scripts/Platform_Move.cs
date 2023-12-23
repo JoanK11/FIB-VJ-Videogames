@@ -18,12 +18,12 @@ public class Platform_Move : MonoBehaviour {
     void Update() {
         if (moved) return;
 
-        if (!moving && platform.GetComponent<Platform_Script>().exitedTrigger) {
+        if (!moving && platform.GetComponent<Platform_Script>().enteredTrigger) {
             moving = true;
         }
 
         if (moving) {
-            transform.rotation *= Quaternion.Euler(0, 0.6f, 0);
+            transform.rotation *= Quaternion.Euler(0, 1.5f, 0);
 
             // Calculate the difference in rotation, taking wrapping into account
             float yRotationDifference = Mathf.DeltaAngle(transform.eulerAngles.y, finalYRotation);

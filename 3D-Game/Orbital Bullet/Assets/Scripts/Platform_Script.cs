@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Platform_Script : MonoBehaviour {
     private Collider objectCollider;
+    public bool enteredTrigger;
     public bool exitedTrigger;
 
     void Start() {
@@ -15,7 +16,15 @@ public class Platform_Script : MonoBehaviour {
             Debug.LogError(name + ": Collider component not found on the object.");
         }
 
+        enteredTrigger = false;
         exitedTrigger = false;
+    }
+
+    void OnTriggerEnter(Collider other) {
+        if (other.gameObject.CompareTag("Player")) {
+            Debug.Log(name + ": Player entered platform.");
+            enteredTrigger = true;
+        }
     }
 
     void OnTriggerExit(Collider other) {
