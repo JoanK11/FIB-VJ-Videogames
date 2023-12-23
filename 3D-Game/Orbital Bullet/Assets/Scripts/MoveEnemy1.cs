@@ -2,34 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveBala : MonoBehaviour
+public class MoveEnemy1 : EnemyBase
 {
     // Start is called before the first frame update
-
     public float rotationSpeed, jumpSpeed, gravity;
 
-    public float damage;
 
     Vector3 startDirection;
-    
-    Quaternion rotacionInicial;
+    float speedY;
 
+
+    Quaternion originalrotation;
+    bool isRight;
+
+  
+    CharacterController charControl;
+  
     void Start()
     {
         // Store starting direction of the player with respect to the axis of the level
         startDirection = transform.position - transform.parent.position;
         startDirection.y = 0.0f;
         startDirection.Normalize();
-        rotacionInicial = transform.rotation;
-       
-    }
+        speedY = 0;
 
+        originalrotation = transform.rotation;
+        isRight = true;
+
+
+        charControl = GetComponent<CharacterController>();
+        charControl.detectCollisions = true;
+
+        base.init();
+    }
     // Update is called once per frame
-    void FixedUpdate()
-    {
-     //   Debug.Log("entro en el update");
-        
+    void Update() {
         Vector3 position;
+
         float angle;
         Vector3 direction, target;
 
@@ -37,15 +46,20 @@ public class MoveBala : MonoBehaviour
         angle = rotationSpeed * Time.deltaTime;
         direction = position - transform.parent.position;
 
+        // Left-right movement
+
         target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
-        
-        transform.position = target;
-        Physics.SyncTransforms();
-      
+        if (charControl.Move(target - position) != CollisionFlags.None)
+        {
+            transform.position = position;
+            rotationSpeed *= -1;
+            isRight = !isRight;
+            
+        }
+    
 
         // Correct orientation of player
         // Compute current direction
-        
         Vector3 currentDirection = transform.position - transform.parent.position;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
@@ -57,24 +71,32 @@ public class MoveBala : MonoBehaviour
             orientation = Quaternion.AngleAxis(180.0f, Vector3.up);
         else
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
-        transform.rotation = orientation * rotacionInicial;
-        
+        transform.rotation = orientation* originalrotation;
+        if (!isRight) transform.rotation *= Quaternion.Euler(0, 180, 0);
 
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(other.gameObject.name + " ha entrado en el colider de " + gameObject.name);
-        MeshRenderer mesh = GetComponent<MeshRenderer>();
-        mesh.enabled = false;
 
-        if (other.gameObject.tag == "Enemy") {
-            EnemyBase enemy = other.gameObject.GetComponent<EnemyBase>();
-            enemy.takeDamage(damage);
+        // Apply up-down movement
+        position = transform.position;
+        if (charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.None)
+        {
+            transform.position = position;
+            Physics.SyncTransforms();
         }
+        if (charControl.isGrounded)
+        {
+            if (speedY < 0.0f)
+                speedY = 0.0f;
+           
+        }
+        else
+            speedY -= gravity * Time.deltaTime;
         
-        Destroy(gameObject);
+        
     }
-    public void setOrientation(float newDirection) {
-        rotationSpeed = newDirection * rotationSpeed;
+    
+    void OnControllerColliderHit(ControllerColliderHit hit) {
+        if(hit.gameObject.tag != "Floor")
+        Debug.Log("he hiteado a " + hit.gameObject.name);
     }
+
 }
