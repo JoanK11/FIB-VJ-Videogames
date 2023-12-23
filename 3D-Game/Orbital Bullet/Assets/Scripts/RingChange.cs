@@ -2,23 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Jump : MonoBehaviour {
-    public GameObject player;
+public class RingChange : MonoBehaviour {
+    private GameObject player;
+    public GameObject target;
     private bool isPlayerOnTrigger;
 
     void Start() {
-        isPlayerOnTrigger = false;
+        // Initialize GameObjects
+        InitializeGameObjects();
 
-        player = GameObject.Find("Player");
-        if (player == null) {
-            Debug.LogError(name + ": Player object not found. Make sure your player is named 'Player'.");
-        }
+        isPlayerOnTrigger = false;
     }
 
     void Update() {
-        if (isPlayerOnTrigger && Input.GetKeyUp(KeyCode.B)) {
-            player.GetComponent<MovePlayer>().JumpNextLevel();
-            Debug.Log(name + ": Player tried to jump to the next level.");
+        if (isPlayerOnTrigger && Input.GetKeyUp(KeyCode.E)) {
+            Vector3 targetPosition = target.transform.position + new Vector3(0, 1.0f, 0);
+            player.GetComponent<MovePlayer>().ChangeRing(targetPosition);
+        }
+    }
+
+    private void InitializeGameObjects() {
+        player = GameObject.Find("Player");
+
+        if (player == null) {
+            Debug.LogError(name + ": Player object not found. Make sure your player is named 'Player'.");
+        }
+
+        if (target == null) {
+            Debug.LogError(name + ": Ring Change has no target.");
         }
     }
 

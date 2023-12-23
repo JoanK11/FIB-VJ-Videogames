@@ -68,7 +68,6 @@
     <Compile Include="Assets\InfinityPBR\Equipment System\Editor\EquipmentObjectEditor.cs" />
     <Compile Include="Assets\InfinityPBR\Editor\InfinityEditor.cs" />
     <Compile Include="Assets\InfinityPBR\Equipment System\Editor\EquipObjectMenu.cs" />
-    <Compile Include="Assets\InfinityPBR\---Game Modules\Audio Clip Combiner\Editor\AudioClipCombiner.cs" />
     <Compile Include="Assets\InfinityPBR\Editor\SFB_BlendShapesManagerEditor.cs" />
     <Compile Include="Assets\InfinityPBR\Equipment System\Editor\BlendShapesPresetManagerEditor.cs" />
     <Compile Include="Assets\InfinityPBR\Editor\SFB_AudioSnapshotExporterEditor.cs" />
@@ -77,7 +76,6 @@
     <Compile Include="Assets\InfinityPBR\Editor\ObjExporterScript.cs" />
     <Compile Include="Assets\InfinityPBR\Editor\InfinityEditorScriptableObject.cs" />
     <Compile Include="Assets\InfinityPBR\Editor\SFB_DisplayPolycount.cs" />
-    <Compile Include="Assets\InfinityPBR\---Game Modules\Audio Clip Combiner\Editor\AudioClipCombinerEditor.cs" />
     <Compile Include="Assets\InfinityPBR\Editor\CustomEditor.cs" />
     <Compile Include="Assets\InfinityPBR\Equipment System\Editor\WardrobePrefabManagerEditor.cs" />
     <Compile Include="Assets\InfinityPBR\Editor\CustomEditorScriptableObject.cs" />
