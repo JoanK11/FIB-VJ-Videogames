@@ -59,23 +59,72 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.13f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\TakeScreenshot.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\SFB_AudioManager.cs" />
+    <Compile Include="Assets\InfinityPBR\Scripts Static\InfinityStatic.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\ExtendedFlycam.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\SFB_BlendShapesManager.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\IPBR_EnvironmentWarning.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\SFB_DemoControl_v2.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\SFB_CameraRotate_v2.cs" />
+    <Compile Include="Assets\Scripts\World.cs" />
+    <Compile Include="Assets\InfinityPBR\Scripts Static\EnumerableExtensions.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\SFB_StayWithTarget.cs" />
+    <Compile Include="Assets\Scripts\Platform_Script.cs" />
+    <Compile Include="Assets\Scripts\RingChange.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\SFB_AnubisDemo.cs" />
     <Compile Include="Assets\Scripts\Inventory.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\GotHitDirection.cs" />
+    <Compile Include="Assets\InfinityPBR\Equipment System\Scripts\BlendShapesManager.cs" />
     <Compile Include="Assets\Scripts\MovePlayer.cs" />
-    <Compile Include="Assets\Scripts\EnemyHealthBar.cs" />
+    <Compile Include="Assets\InfinityPBR\_InfinityPBR - Minotaur\Scripts\SFB_MinotaurDemo.cs" />
+    <Compile Include="Assets\InfinityPBR\Equipment System\Scripts\BlendShapesPresetManager.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\InfinityDemoCharacter.cs" />
     <Compile Include="Assets\Scripts\Pickup.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\FollowTarget.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\SFB_HumanDemoControl.cs" />
     <Compile Include="Assets\Scripts\HealthBar.cs" />
     <Compile Include="Assets\Scripts\MoveBala.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\IPBR_SupportAndReview.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\DemoControl.cs" />
+    <Compile Include="Assets\InfinityPBR\Equipment System\Scripts\EquipmentGroup.cs" />
+    <Compile Include="Assets\Scripts\Jump.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\photoController.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\DemoKeyCommands.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\SFB_TurnOffIfOn.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\SFB_CameraFocus.cs" />
     <Compile Include="Assets\Scripts\HealthBarText.cs" />
+    <Compile Include="Assets\InfinityPBR\Equipment System\Scripts\EquipmentObject.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\SFB_HumanDemoModel.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\SFB_ShotFollowTarget.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\SFB_ToggleOpposite.cs" />
+    <Compile Include="Assets\InfinityPBR\Equipment System\Scripts\EquipObject.cs" />
+    <Compile Include="Assets\InfinityPBR\Equipment System\Scripts\WardrobePrefabManager.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\InfinityDemoAnimationButton.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\InfinityDemoFloatSlider.cs" />
+    <Compile Include="Assets\InfinityPBR\Audio Snapshot Exporter\SFB_AudioSnapshotExporter.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\InfinityDemoAutomateStyles.cs" />
     <Compile Include="Assets\Scripts\FollowPlayer.cs" />
-    <Compile Include="Assets\Scripts\MoveEnemy1.cs" />
+    <Compile Include="Assets\InfinityPBR\_InfinityPBR - Minotaur\Scripts\MinotaurDemo.cs" />
+    <Compile Include="Assets\InfinityPBR\Demo Scripts\DemoWardrobe.cs" />
+    <Compile Include="Assets\InfinityPBR\Equipment System\Scripts\PrefabAndObjectManager.cs" />
+    <Compile Include="Assets\Scripts\Platform_Move.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\InfinityPBR\Shaders\AV\Hair\AV HDRP 2020.3.4.f1 Hair.shader" />
+    <None Include="Assets\InfinityPBR\Audio Snapshot Exporter\Instructions.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\InfinityPBR\_InfinityPBR - Minotaur\Blendshape Presets\Minotaur Demo Range 0.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+    <None Include="Assets\InfinityPBR\Shaders\AV\Hair\AV Standard Hair.shader" />
+    <None Include="Assets\InfinityPBR\Shaders\AV\Hair\AV URP Hair.shader" />
+    <None Include="Assets\InfinityPBR\_InfinityPBR - Minotaur\_Fluffy Support\_FLUFFY SUPPORT READ ME.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+    <None Include="Assets\InfinityPBR\Shaders\AV\Hair\AV HDRP Hair.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\InfinityPBR\Shaders\AV\Hair\AV HDRP Hair 2020.3.4.f1.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
@@ -85,6 +134,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\InfinityPBR\Shaders\AV\Hair\AV Hair readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
@@ -921,6 +971,62 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.13f1\Editor\Data\NetStandard\compat\2.1.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.EditorCoroutines.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.EditorCoroutines.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.PlasticSCM.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ProBuilder">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Timeline.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Shared.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualStudio.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Core">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Core.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Core.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.AddOns.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.AddOns.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Rider.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Flow">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Flow.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Timeline">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
       <Private>False</Private>
@@ -929,12 +1035,8 @@
       <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.EditorCoroutines.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.EditorCoroutines.Editor.dll</HintPath>
+    <Reference Include="Unity.ProBuilder.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
@@ -953,48 +1055,20 @@
       <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.PlasticSCM.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.VisualScripting.State.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Timeline.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Shared.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualStudio.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Core">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Core.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEditor.UI">
-      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Core.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Core.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Rider.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
+    <Reference Include="Unity.ProBuilder.AssetIdRemapUtility">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
@@ -1003,14 +1077,6 @@
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Flow">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Flow.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

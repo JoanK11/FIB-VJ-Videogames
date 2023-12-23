@@ -8,11 +8,9 @@ public class MoveBala : MonoBehaviour
 
     public float rotationSpeed, jumpSpeed, gravity;
 
-    public float damage;
-
     Vector3 startDirection;
-    
-    Quaternion rotacionInicial;
+    float speedY;
+
 
     void Start()
     {
@@ -20,15 +18,14 @@ public class MoveBala : MonoBehaviour
         startDirection = transform.position - transform.parent.position;
         startDirection.y = 0.0f;
         startDirection.Normalize();
-        rotacionInicial = transform.rotation;
-       
+
+        speedY = 0;
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-     //   Debug.Log("entro en el update");
-        
+        CharacterController charControl = GetComponent<CharacterController>();
         Vector3 position;
         float angle;
         Vector3 direction, target;
@@ -38,14 +35,14 @@ public class MoveBala : MonoBehaviour
         direction = position - transform.parent.position;
 
         target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
-        
-        transform.position = target;
-        Physics.SyncTransforms();
-      
+        if (charControl.Move(target - position) != CollisionFlags.None)
+        {
+            transform.position = position;
+            Physics.SyncTransforms();
+        }
 
         // Correct orientation of player
         // Compute current direction
-        
         Vector3 currentDirection = transform.position - transform.parent.position;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
@@ -57,21 +54,7 @@ public class MoveBala : MonoBehaviour
             orientation = Quaternion.AngleAxis(180.0f, Vector3.up);
         else
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
-        transform.rotation = orientation * rotacionInicial;
-        
+        transform.rotation = orientation;
 
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(other.gameObject.name + " ha entrado en el colider de " + gameObject.name);
-        MeshRenderer mesh = GetComponent<MeshRenderer>();
-        mesh.enabled = false;
-
-        if (other.gameObject.tag == "Enemy") {
-            MoveEnemy1 enemy = other.gameObject.GetComponent<MoveEnemy1>();
-            enemy.takeDamage(damage);
-        }
-        
-        Destroy(gameObject);
     }
 }
