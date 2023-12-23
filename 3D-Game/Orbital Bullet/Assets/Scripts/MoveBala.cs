@@ -68,10 +68,13 @@ public class MoveBala : MonoBehaviour
         mesh.enabled = false;
 
         if (other.gameObject.tag == "Enemy") {
-            MoveEnemy1 enemy = other.gameObject.GetComponent<MoveEnemy1>();
+            EnemyBase enemy = other.gameObject.GetComponent<EnemyBase>();
             enemy.takeDamage(damage);
         }
         
         Destroy(gameObject);
+    }
+    public void setOrientation(float newDirection) {
+        rotationSpeed = newDirection * rotationSpeed;
     }
 }

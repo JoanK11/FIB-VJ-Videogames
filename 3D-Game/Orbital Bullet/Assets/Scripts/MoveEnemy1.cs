@@ -1,18 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-public class MoveEnemy1 : MonoBehaviour
+public class MoveEnemy1 : EnemyBase
 {
     // Start is called before the first frame update
     public float rotationSpeed, jumpSpeed, gravity;
 
-    public float maxHealth;
-    float health;
 
-    public float maxShield;
-    float shield;
     Vector3 startDirection;
     float speedY;
 
@@ -22,8 +17,7 @@ public class MoveEnemy1 : MonoBehaviour
 
   
     CharacterController charControl;
-    EnemyHealthBar healthBar;
-    EnemyHealthBar shieldBar;
+  
     void Start()
     {
         // Store starting direction of the player with respect to the axis of the level
@@ -38,12 +32,8 @@ public class MoveEnemy1 : MonoBehaviour
 
         charControl = GetComponent<CharacterController>();
         charControl.detectCollisions = true;
-        EnemyHealthBar[] bars = GetComponentsInChildren<EnemyHealthBar>();
-        Debug.Log(bars.Length);
-        healthBar =bars[0];
-        shieldBar = bars[1];
-        shield = maxShield;
-        health = maxHealth;
+
+        base.init();
     }
     // Update is called once per frame
     void Update() {
@@ -109,28 +99,4 @@ public class MoveEnemy1 : MonoBehaviour
         Debug.Log("he hiteado a " + hit.gameObject.name);
     }
 
-    public void takeDamage(float damageAmount) {
-        if (shield > 0)
-        {
-            shield -= damageAmount;
-            if (shield <= 0)
-            {
-                float rest = Math.Abs(shield);
-                health -= rest;
-                healthBar.updateHealthBar(health, maxHealth);
-                shieldBar.gameObject.SetActive(false);
-            }
-            else shieldBar.updateHealthBar(shield, maxShield);
-        }
-        else {
-            health -= damageAmount;
-            healthBar.updateHealthBar(health, maxHealth);
-            if (health <= 0)
-            {   
-            
-                Destroy(gameObject);
-
-            }
-        }
-    }
 }
