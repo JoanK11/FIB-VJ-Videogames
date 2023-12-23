@@ -5,10 +5,9 @@ using UnityEngine;
 
 
 public class MovePlayer : MonoBehaviour {
-    // Public fields should use PascalCase
+    /* -- Player Movement -- */
     private float rotationSpeed, jumpSpeed, gravity;
 
-    // Private fields should use camelCase
     private Vector3 startDirection;
     private float speedY;
     private bool isFirst;
@@ -18,7 +17,7 @@ public class MovePlayer : MonoBehaviour {
     PlayerState State;
 
     /* -- Shooting -- */
-    public float timeToRestartShoot;
+    private float timeToRestartShoot;
     float restartTime;
     public GameObject prefab;
     bool reloading;
@@ -37,11 +36,14 @@ public class MovePlayer : MonoBehaviour {
 
         State = PlayerState.Normal;
 
+        /* -- Player Movement -- */
         rotationSpeed = 80;
         jumpSpeed = 8.25f;
         gravity = 25;
 
         /* -- Shooting -- */
+        timeToRestartShoot = 0.25f;
+        restartTime = 0;
         reloading = false;
         num = 0;
     }
