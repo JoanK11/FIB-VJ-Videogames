@@ -162,10 +162,10 @@ public class MovePlayer : MonoBehaviour {
 
         RaycastHit hit;
         if (Physics.Raycast(rayStart, Vector3.down, out hit, checkDistance)) {
-            Debug.Log(name + ": Is Grounded " + checkDistance);
+           // Debug.Log(name + ": Is Grounded " + checkDistance);
             return true;
         }
-        Debug.Log(name + ": Is not Grounded " + checkDistance);
+       // Debug.Log(name + ": Is not Grounded " + checkDistance);
         return false;
     }
 
