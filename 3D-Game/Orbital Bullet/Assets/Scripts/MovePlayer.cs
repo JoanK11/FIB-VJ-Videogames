@@ -6,18 +6,22 @@ using UnityEngine;
 
 public class MovePlayer : MonoBehaviour {
     /* -- Player Movement -- */
-    private float rotationSpeed, jumpSpeed, gravity;
+    float rotationSpeed, jumpSpeed, gravity;
 
-    private Vector3 startDirection;
-    private float speedY;
-    private bool isFirst;
-    private float changingLevelTime;
+    /* -- Double Jump -- */
+    int jumpCount;
+    const int maxJumpCount = 2;
+
+    Vector3 startDirection;
+    float speedY;
+    bool isFirst;
+    float changingLevelTime;
 
     public enum PlayerState { Normal, ChangingLevel, ChangingRing, Invincible };
     PlayerState State;
 
     /* -- Shooting -- */
-    private float timeToRestartShoot;
+    float timeToRestartShoot;
     float restartTime;
     public GameObject prefab;
     bool reloading;
@@ -37,9 +41,12 @@ public class MovePlayer : MonoBehaviour {
         State = PlayerState.Normal;
 
         /* -- Player Movement -- */
-        rotationSpeed = 80;
+        rotationSpeed = 70;
         jumpSpeed = 8.25f;
         gravity = 25;
+
+        /* -- Double Jump -- */
+        jumpCount = 0;
 
         /* -- Shooting -- */
         timeToRestartShoot = 0.25f;
@@ -55,7 +62,7 @@ public class MovePlayer : MonoBehaviour {
         bool canMove = true;
         if (State == PlayerState.ChangingLevel) {
             changingLevelTime += Time.deltaTime;
-            if (charControl.isGrounded && changingLevelTime > 0.5f) {
+            if (IsGrounded() && changingLevelTime > 0.5f) {
                 State = PlayerState.Normal;
                 changingLevelTime = 0;
             }
@@ -123,29 +130,52 @@ public class MovePlayer : MonoBehaviour {
             }
         }
 
-        /* - Vertical Movement -- */
-        position = transform.position;
-        if (State != PlayerState.ChangingRing && charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.None) {
-            transform.position = position;
-            Physics.SyncTransforms();
+        /* -- Vertical Movement && Double Jump -- */
+        if (IsGrounded()) {
+            jumpCount = 0;
         }
-        if (charControl.isGrounded) {
-            if (Input.GetKey(KeyCode.W))
+        if (State != PlayerState.ChangingRing) {
+            if (Input.GetKeyDown(KeyCode.W) && jumpCount < maxJumpCount) {
                 speedY = jumpSpeed;
+                jumpCount++;
+            }
+            else if (!IsGrounded()) {
+                speedY -= gravity * Time.deltaTime;
+            }
+
+            position = transform.position;
+            Vector3 moveVector = new Vector3(0, speedY, 0) * Time.deltaTime;
+            CollisionFlags flags = charControl.Move(moveVector);
+            if ((flags & CollisionFlags.Below) != 0) {
+                speedY = 0;
+            }
         }
-        else
-            speedY -= gravity * Time.deltaTime;
+    }
+
+    private bool IsGrounded() {
+        CharacterController charControl = GetComponent<CharacterController>();
+
+        // Calculate the bottom position of the character controller
+        Vector3 rayStart = transform.position - new Vector3(0, charControl.height / 4, 0);
+        float checkDistance = charControl.skinWidth + 0.1f; // Small distance plus skinWidth
+        Debug.DrawRay(rayStart, Vector3.down * checkDistance, Color.red, 1.0f);
+
+        RaycastHit hit;
+        if (Physics.Raycast(rayStart, Vector3.down, out hit, checkDistance)) {
+            Debug.Log(name + ": Is Grounded " + checkDistance);
+            return true;
+        }
+        Debug.Log(name + ": Is not Grounded " + checkDistance);
+        return false;
     }
 
     public void JumpNextLevel() {
-        CharacterController charControl = GetComponent<CharacterController>();
-
-        if (charControl.isGrounded) {
+        if (IsGrounded()) {
             speedY = 20.0f;
             GameObject world = GameObject.Find("World");
             world.GetComponent<World>().NextLevel();
             State = PlayerState.ChangingLevel;
-            Debug.Log(name + ": Player jumped to the next level.");
+            //Debug.Log(name + ": Jumped to the next level.");
         }
     }
 
