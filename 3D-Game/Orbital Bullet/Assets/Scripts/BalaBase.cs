@@ -1,29 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class MoveBala : MonoBehaviour {
-    // Start is called before the first frame update
+public class BalaBase : MonoBehaviour
+{
+    
+    protected float rotationSpeed;
 
-    public float rotationSpeed, jumpSpeed, gravity;
+    protected float damage;
 
-    public float damage;
+    protected Vector3 startDirection;
 
-    Vector3 startDirection;
+    protected Quaternion rotacionInicial;
 
-    Quaternion rotacionInicial;
-
-    void Start() {
-        // Store starting direction of the player with respect to the axis of the level
+    protected void initBala() {
         startDirection = transform.position - transform.parent.position;
         startDirection.y = 0.0f;
         startDirection.Normalize();
         rotacionInicial = transform.rotation;
-
     }
-
-    // Update is called once per frame
-    void FixedUpdate() {
+    protected void Move() {
         //   Debug.Log("entro en el update");
 
         Vector3 position;
@@ -55,22 +52,12 @@ public class MoveBala : MonoBehaviour {
         else
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
         transform.rotation = orientation * rotacionInicial;
-
-
     }
-    private void OnTriggerEnter(Collider other) {
-        Debug.Log(other.gameObject.name + " ha entrado en el colider de " + gameObject.name);
-        MeshRenderer mesh = GetComponent<MeshRenderer>();
-        mesh.enabled = false;
-
-        if (other.gameObject.tag == "Enemy") {
-            EnemyBase enemy = other.gameObject.GetComponent<EnemyBase>();
-            enemy.takeDamage(damage);
-        }
-
-        Destroy(gameObject);
+    public float GetDamage() { 
+        return damage;
     }
-    public void setOrientation(float newDirection) {
-        rotationSpeed = newDirection * rotationSpeed;
+    public void setOrientation(float newDirection)
+    {
+        rotationSpeed = newDirection * Math.Abs(rotationSpeed);
     }
 }

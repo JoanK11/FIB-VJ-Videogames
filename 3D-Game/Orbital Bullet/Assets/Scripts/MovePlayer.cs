@@ -16,7 +16,7 @@ public class MovePlayer : MonoBehaviour {
     float speedY;
     bool isFirst;
     float changingLevelTime;
-
+    float oneOrientation;
     public enum PlayerState { Normal, ChangingLevel, ChangingRing, Invincible };
     PlayerState State;
     enum DashState {NoDash, NoKeyLeft, NoKeyRight,PreDashLeft, PreDashRight, DashLeft, DashRight };
@@ -61,6 +61,9 @@ public class MovePlayer : MonoBehaviour {
 
         /* -- Dashing Time -- */
         TimeDashing = 0.0f;
+
+
+        oneOrientation = -1.0f;
     }
 
     // Update is called once per frame
@@ -82,7 +85,7 @@ public class MovePlayer : MonoBehaviour {
 
         /* -- CheckingDash -- */
         CheckDashing(charControl);
-        Debug.Log(Dash);
+      
 
         /* -- Left-Right Movement -- */
 
@@ -103,7 +106,9 @@ public class MovePlayer : MonoBehaviour {
                     {
                         transform.position = position;
                         Physics.SyncTransforms();
+                        
                     }
+                    oneOrientation = 1.0f;
                 }
                 if (Input.GetKey(KeyCode.D))
                 {
@@ -111,8 +116,10 @@ public class MovePlayer : MonoBehaviour {
                     if (charControl.Move(target - position) != CollisionFlags.None)
                     {
                         transform.position = position;
-                        Physics.SyncTransforms();
+                        Physics.SyncTransforms(); 
+                        
                     }
+                    oneOrientation = -1.0f;
                 }
             }
         }
@@ -135,12 +142,17 @@ public class MovePlayer : MonoBehaviour {
 
         /* -- Shooting -- */
         if (Input.GetKey(KeyCode.K) && !reloading) {
+           currentDirection = transform.position - transform.parent.position;
             reloading = true;
             restartTime = 0.0f;
-            Vector3 bulletPos = transform.parent.position + Quaternion.AngleAxis(-angle - 15.0f, Vector3.up) * direction;
+            Vector3 bulletPos = transform.parent.position + Quaternion.AngleAxis(oneOrientation* 5.0f, Vector3.up) * currentDirection;
             bulletPos.y = transform.position.y;
             Debug.Log(bulletPos);
             GameObject newObject = Instantiate(prefab, bulletPos, transform.rotation, transform.parent);
+            BalaPlayer bEnemy = newObject.AddComponent<BalaPlayer>();
+            Debug.Log("orientation: " + oneOrientation);
+            bEnemy.init();
+            bEnemy.setOrientation(oneOrientation);
             newObject.name = "bala" + (++num);
         }
         if (reloading) {

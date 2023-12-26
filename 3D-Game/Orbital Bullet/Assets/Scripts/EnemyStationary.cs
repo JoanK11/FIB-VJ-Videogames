@@ -71,7 +71,8 @@ public class EnemyStationary : EnemyBase {
         bulletPos.y = transform.position.y;
 
         GameObject newObject = Instantiate(bala, bulletPos, transform.rotation, reference);
-
-        newObject.GetComponent<MoveBala>().setOrientation(-direction);
+        BalaEnemy bEnemy = newObject.AddComponent<BalaEnemy>();
+        bEnemy.init();
+        bEnemy.setOrientation(-direction);
     }
 }
