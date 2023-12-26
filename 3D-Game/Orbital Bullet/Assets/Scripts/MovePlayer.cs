@@ -14,7 +14,6 @@ public class MovePlayer : MonoBehaviour {
 
     Vector3 startDirection;
     float speedY;
-    bool isFirst;
     float changingLevelTime;
     float oneOrientation;
     public enum PlayerState { Normal, ChangingLevel, ChangingRing, Invincible };
@@ -32,13 +31,16 @@ public class MovePlayer : MonoBehaviour {
     int num;
 
 
+    CharacterController charControl;
+    Animator anim;
+
+
     // Start is called before the first frame update
     void Start() {
         // Store starting direction of the player with respect to the axis of the level
         startDirection = transform.position - transform.parent.position;
         startDirection.y = 0.0f;
         startDirection.Normalize();
-        isFirst = true;
         speedY = 0;
         changingLevelTime = 0;
 
@@ -63,11 +65,13 @@ public class MovePlayer : MonoBehaviour {
         isDashing = false;
 
         oneOrientation = -1.0f;
+        charControl = GetComponent<CharacterController>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void FixedUpdate() {
-        CharacterController charControl = GetComponent<CharacterController>();
+        
 
         bool canMove = true;
         if (State == PlayerState.ChangingLevel) {
@@ -105,7 +109,11 @@ public class MovePlayer : MonoBehaviour {
                         Physics.SyncTransforms();
                         
                     }
+                    
+                    anim.SetBool("Moving", true);
+                    
                     oneOrientation = 1.0f;
+
                 }
                 if (Input.GetKey(KeyCode.D))
                 {
@@ -116,9 +124,13 @@ public class MovePlayer : MonoBehaviour {
                         Physics.SyncTransforms(); 
                         
                     }
+                    
+                        anim.SetBool("Moving", true);
+                    
                     oneOrientation = -1.0f;
                 }
             }
+            else anim.SetBool("Moving", false);
         }
 
         /* -- Correction of Player Movement -- */
@@ -151,11 +163,13 @@ public class MovePlayer : MonoBehaviour {
             bulletPos.y = transform.position.y;
             Debug.Log(bulletPos);
             GameObject newObject = Instantiate(prefab, bulletPos, transform.rotation, transform.parent);
+
             BalaPlayer bEnemy = newObject.AddComponent<BalaPlayer>();
             Debug.Log("orientation: " + oneOrientation);
             bEnemy.init();
             bEnemy.setOrientation(oneOrientation);
             newObject.name = "bala" + (++num);
+            anim.SetTrigger("Shoot");
         }
         if (reloading) {
             restartTime += Time.deltaTime;
