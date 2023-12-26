@@ -19,12 +19,11 @@ public class MovePlayer : MonoBehaviour {
     float oneOrientation;
     public enum PlayerState { Normal, ChangingLevel, ChangingRing, Invincible };
     PlayerState State;
-    enum DashState {NoDash, NoKeyLeft, NoKeyRight,PreDashLeft, PreDashRight, DashLeft, DashRight };
-    DashState Dash;
-    const float TimeForDashing = 5.0f;
-    float TimeDashing;
     const float TimeDashOcurr = 1.5f;
-    const float VelocityOfDashing = 100.0f / TimeDashOcurr;
+    const float VelocityOfDashing = 50.0f / TimeDashOcurr;
+    const float RotationHimself = 360.0f / TimeDashOcurr;
+    bool isDashing;
+    float TimeDashing;
     /* -- Shooting -- */
     float timeToRestartShoot;
     float restartTime;
@@ -44,7 +43,7 @@ public class MovePlayer : MonoBehaviour {
         changingLevelTime = 0;
 
         State = PlayerState.Normal;
-        Dash= DashState.NoDash;
+      
         /* -- Player Movement -- */
         rotationSpeed = 70;
         jumpSpeed = 8.25f;
@@ -61,7 +60,7 @@ public class MovePlayer : MonoBehaviour {
 
         /* -- Dashing Time -- */
         TimeDashing = 0.0f;
-
+        isDashing = false;
 
         oneOrientation = -1.0f;
     }
@@ -83,9 +82,7 @@ public class MovePlayer : MonoBehaviour {
             canMove = false;
         }
 
-        /* -- CheckingDash -- */
-        CheckDashing(charControl);
-      
+        
 
         /* -- Left-Right Movement -- */
 
@@ -93,10 +90,10 @@ public class MovePlayer : MonoBehaviour {
         float angle = rotationSpeed * Time.deltaTime;
         Vector3 direction = position - transform.parent.position;
 
-        if (Dash != DashState.DashLeft && Dash != DashState.DashRight) {
+        if (! isDashing ) {
             
 
-            if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && canMove && Dash != DashState.DashLeft)
+            if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && canMove )
             {
 
                 if (Input.GetKey(KeyCode.A))
@@ -138,6 +135,11 @@ public class MovePlayer : MonoBehaviour {
         else
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
         transform.rotation = orientation;
+        if(oneOrientation == 1.0f) transform.rotation *= Quaternion.Euler(0f, 180f,0f);
+
+
+        /* -- CheckingDash -- */
+        CheckDashing(charControl);
 
 
         /* -- Shooting -- */
@@ -167,9 +169,11 @@ public class MovePlayer : MonoBehaviour {
             jumpCount = 0;
         }
         if (State != PlayerState.ChangingRing) {
+       
             if (Input.GetKeyDown(KeyCode.W) && jumpCount < maxJumpCount) {
                 speedY = jumpSpeed;
                 jumpCount++;
+            
             }
             else if (!IsGrounded()) {
                 speedY -= gravity * Time.deltaTime;
@@ -178,8 +182,9 @@ public class MovePlayer : MonoBehaviour {
             position = transform.position;
             Vector3 moveVector = new Vector3(0, speedY, 0) * Time.deltaTime;
             CollisionFlags flags = charControl.Move(moveVector);
-            if ((flags & CollisionFlags.Below) != 0) {
+            if (flags != CollisionFlags.Below) {
                 speedY = 0;
+            
             }
         }
     }
@@ -244,116 +249,31 @@ public class MovePlayer : MonoBehaviour {
     }
 
     private void CheckDashing(CharacterController charControl) {
-        if (Dash == DashState.NoDash) {
-            if (Input.GetKey(KeyCode.A)) {
-                Dash = DashState.NoKeyLeft;
-                TimeDashing = 0.0f;
-            }
-            if (Input.GetKey(KeyCode.D)) {
-                Dash = DashState.NoKeyRight;
-                TimeDashing = 0.0f;
-            }
-            return;
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            isDashing = true;
+            TimeDashing = 0.0f;
         }
-        if(Dash == DashState.NoKeyLeft) {
-            TimeDashing += Time.deltaTime;
-            if (!Input.GetKey(KeyCode.A))
-            {
-                Dash = DashState.PreDashLeft;
-                TimeDashing = 0.0f;
-                return;
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                Dash = DashState.NoKeyRight;
-                TimeDashing = 0.0f;
-            }
-            if (TimeDashing > TimeForDashing) Dash = DashState.NoDash;
-            return;
-        }
-
-        if (Dash == DashState.NoKeyRight)
-        {
-            TimeDashing += Time.deltaTime;
-            if (!Input.GetKey(KeyCode.D))
-            {
-                Dash = DashState.PreDashRight;
-                TimeDashing = 0.0f;
-                return;
-            }
-            if (Input.GetKey(KeyCode.A))
-            {
-                Dash = DashState.NoKeyLeft;
-                TimeDashing = 0.0f;
-            }
-            
-            if (TimeDashing > TimeForDashing) Dash = DashState.NoDash;
-            return;
-        }
-
-        if (Dash == DashState.PreDashLeft) {
-            TimeDashing += Time.deltaTime;
-            if (Input.GetKey(KeyCode.A))
-            {
-                Dash = DashState.DashLeft;
-                TimeDashing = 0.0f;
-                return;
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                Dash = DashState.NoKeyRight;
-                TimeDashing = 0.0f;
-            }
-            if (TimeDashing > TimeForDashing) Dash = DashState.NoDash;
-            return;
-        }
-        if (Dash == DashState.PreDashRight)
-        {
-            TimeDashing += Time.deltaTime;
-            if (Input.GetKey(KeyCode.D))
-            {
-                Dash = DashState.DashRight;
-                TimeDashing = 0.0f;
-                return;
-            }
-            if (Input.GetKey(KeyCode.A))
-            {
-                Dash = DashState.NoKeyLeft;
-                TimeDashing = 0.0f;
-            }
-            if (TimeDashing > TimeForDashing) Dash = DashState.NoDash;
-            return;
-        }
-        if (Dash == DashState.DashLeft) { 
+        if (isDashing) {
             float time = Time.deltaTime;
             TimeDashing += time;
-            float angle = VelocityOfDashing * time;
-            Vector3 position = transform.position; ;
+            Vector3 position = transform.position;
+            float angle = oneOrientation *VelocityOfDashing * time ;
             Vector3 direction = position - transform.parent.position;
             Vector3 target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
             if (charControl.Move(target - position) != CollisionFlags.None)
             {
                 transform.position = position;
                 Physics.SyncTransforms();
+
             }
-            if(TimeDashing > TimeDashOcurr) Dash = DashState.NoDash;
-            return;
-        }
-        if (Dash == DashState.DashRight)
-        {
-            float time = Time.deltaTime;
-            TimeDashing += time;
-            float angle = VelocityOfDashing * time;
-            Vector3 position = transform.position; ;
-            Vector3 direction = position - transform.parent.position;
-            Vector3 target = transform.parent.position + Quaternion.AngleAxis(-angle, Vector3.up) * direction;
-            if (charControl.Move(target - position) != CollisionFlags.None)
-            {
-                transform.position = position;
-                Physics.SyncTransforms();
+            float bodyRotation = - RotationHimself * TimeDashing;
+
+            Quaternion rotation = Quaternion.Euler(0f, 0f, bodyRotation);
+            transform.rotation *= rotation;
+        
+            if (TimeDashing > TimeDashOcurr) {
+                isDashing = false;
             }
-            if (TimeDashing > TimeDashOcurr) Dash = DashState.NoDash;
-            return;
         }
     }
 }
