@@ -19,7 +19,12 @@ public class MovePlayer : MonoBehaviour {
 
     public enum PlayerState { Normal, ChangingLevel, ChangingRing, Invincible };
     PlayerState State;
-
+    enum DashState {NoDash, NoKeyLeft, NoKeyRight,PreDashLeft, PreDashRight, DashLeft, DashRight };
+    DashState Dash;
+    const float TimeForDashing = 5.0f;
+    float TimeDashing;
+    const float TimeDashOcurr = 1.5f;
+    const float VelocityOfDashing = 100.0f / TimeDashOcurr;
     /* -- Shooting -- */
     float timeToRestartShoot;
     float restartTime;
@@ -39,7 +44,7 @@ public class MovePlayer : MonoBehaviour {
         changingLevelTime = 0;
 
         State = PlayerState.Normal;
-
+        Dash= DashState.NoDash;
         /* -- Player Movement -- */
         rotationSpeed = 70;
         jumpSpeed = 8.25f;
@@ -53,6 +58,9 @@ public class MovePlayer : MonoBehaviour {
         restartTime = 0;
         reloading = false;
         num = 0;
+
+        /* -- Dashing Time -- */
+        TimeDashing = 0.0f;
     }
 
     // Update is called once per frame
@@ -72,38 +80,48 @@ public class MovePlayer : MonoBehaviour {
             canMove = false;
         }
 
-        Vector3 position;
+        /* -- CheckingDash -- */
+        CheckDashing(charControl);
+        Debug.Log(Dash);
 
-        float angle;
-        Vector3 direction, target;
+        /* -- Left-Right Movement -- */
 
-        position = transform.position;
-        angle = rotationSpeed * Time.deltaTime;
-        direction = position - transform.parent.position;
+        Vector3 position = transform.position;
+        float angle = rotationSpeed * Time.deltaTime;
+        Vector3 direction = position - transform.parent.position;
 
-        // Left-right movement
-        if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && canMove) {
+        if (Dash != DashState.DashLeft && Dash != DashState.DashRight) {
+            
 
-            if (Input.GetKey(KeyCode.A)) {
-                target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
-                if (charControl.Move(target - position) != CollisionFlags.None) {
-                    transform.position = position;
-                    Physics.SyncTransforms();
+            if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && canMove && Dash != DashState.DashLeft)
+            {
+
+                if (Input.GetKey(KeyCode.A))
+                {
+                    Vector3 target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
+                    if (charControl.Move(target - position) != CollisionFlags.None)
+                    {
+                        transform.position = position;
+                        Physics.SyncTransforms();
+                    }
                 }
-            }
-            if (Input.GetKey(KeyCode.D)) {
-                target = transform.parent.position + Quaternion.AngleAxis(-angle, Vector3.up) * direction;
-                if (charControl.Move(target - position) != CollisionFlags.None) {
-                    transform.position = position;
-                    Physics.SyncTransforms();
+                if (Input.GetKey(KeyCode.D))
+                {
+                    Vector3 target = transform.parent.position + Quaternion.AngleAxis(-angle, Vector3.up) * direction;
+                    if (charControl.Move(target - position) != CollisionFlags.None)
+                    {
+                        transform.position = position;
+                        Physics.SyncTransforms();
+                    }
                 }
             }
         }
 
-        /* -- Shooting -- */
+        /* -- Correction of Player Movement -- */
         Vector3 currentDirection = transform.position - transform.parent.position;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
+
         // Change orientation of player accordingly
         Quaternion orientation;
         if ((startDirection - currentDirection).magnitude < 1e-3)
@@ -114,6 +132,8 @@ public class MovePlayer : MonoBehaviour {
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
         transform.rotation = orientation;
 
+
+        /* -- Shooting -- */
         if (Input.GetKey(KeyCode.K) && !reloading) {
             reloading = true;
             restartTime = 0.0f;
@@ -210,5 +230,118 @@ public class MovePlayer : MonoBehaviour {
         State = PlayerState.ChangingRing;
         StartCoroutine(MovePlayerToPosition(transform.position, targetPosition));
     }
-    
+
+    private void CheckDashing(CharacterController charControl) {
+        if (Dash == DashState.NoDash) {
+            if (Input.GetKey(KeyCode.A)) {
+                Dash = DashState.NoKeyLeft;
+                TimeDashing = 0.0f;
+            }
+            if (Input.GetKey(KeyCode.D)) {
+                Dash = DashState.NoKeyRight;
+                TimeDashing = 0.0f;
+            }
+            return;
+        }
+        if(Dash == DashState.NoKeyLeft) {
+            TimeDashing += Time.deltaTime;
+            if (!Input.GetKey(KeyCode.A))
+            {
+                Dash = DashState.PreDashLeft;
+                TimeDashing = 0.0f;
+                return;
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                Dash = DashState.NoKeyRight;
+                TimeDashing = 0.0f;
+            }
+            if (TimeDashing > TimeForDashing) Dash = DashState.NoDash;
+            return;
+        }
+
+        if (Dash == DashState.NoKeyRight)
+        {
+            TimeDashing += Time.deltaTime;
+            if (!Input.GetKey(KeyCode.D))
+            {
+                Dash = DashState.PreDashRight;
+                TimeDashing = 0.0f;
+                return;
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                Dash = DashState.NoKeyLeft;
+                TimeDashing = 0.0f;
+            }
+            
+            if (TimeDashing > TimeForDashing) Dash = DashState.NoDash;
+            return;
+        }
+
+        if (Dash == DashState.PreDashLeft) {
+            TimeDashing += Time.deltaTime;
+            if (Input.GetKey(KeyCode.A))
+            {
+                Dash = DashState.DashLeft;
+                TimeDashing = 0.0f;
+                return;
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                Dash = DashState.NoKeyRight;
+                TimeDashing = 0.0f;
+            }
+            if (TimeDashing > TimeForDashing) Dash = DashState.NoDash;
+            return;
+        }
+        if (Dash == DashState.PreDashRight)
+        {
+            TimeDashing += Time.deltaTime;
+            if (Input.GetKey(KeyCode.D))
+            {
+                Dash = DashState.DashRight;
+                TimeDashing = 0.0f;
+                return;
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                Dash = DashState.NoKeyLeft;
+                TimeDashing = 0.0f;
+            }
+            if (TimeDashing > TimeForDashing) Dash = DashState.NoDash;
+            return;
+        }
+        if (Dash == DashState.DashLeft) { 
+            float time = Time.deltaTime;
+            TimeDashing += time;
+            float angle = VelocityOfDashing * time;
+            Vector3 position = transform.position; ;
+            Vector3 direction = position - transform.parent.position;
+            Vector3 target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
+            if (charControl.Move(target - position) != CollisionFlags.None)
+            {
+                transform.position = position;
+                Physics.SyncTransforms();
+            }
+            if(TimeDashing > TimeDashOcurr) Dash = DashState.NoDash;
+            return;
+        }
+        if (Dash == DashState.DashRight)
+        {
+            float time = Time.deltaTime;
+            TimeDashing += time;
+            float angle = VelocityOfDashing * time;
+            Vector3 position = transform.position; ;
+            Vector3 direction = position - transform.parent.position;
+            Vector3 target = transform.parent.position + Quaternion.AngleAxis(-angle, Vector3.up) * direction;
+            if (charControl.Move(target - position) != CollisionFlags.None)
+            {
+                transform.position = position;
+                Physics.SyncTransforms();
+            }
+            if (TimeDashing > TimeDashOcurr) Dash = DashState.NoDash;
+            return;
+        }
+    }
 }
