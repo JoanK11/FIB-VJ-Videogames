@@ -34,7 +34,7 @@ public class MovePlayer : MonoBehaviour {
     CharacterController charControl;
     Animator anim;
 
-
+    WeaponBase weapon;
     // Start is called before the first frame update
     void Start() {
         // Store starting direction of the player with respect to the axis of the level
@@ -67,6 +67,11 @@ public class MovePlayer : MonoBehaviour {
         oneOrientation = -1.0f;
         charControl = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+
+        weapon = GetComponentInChildren<WeaponBase>();
+        if (weapon == null) {
+            Debug.Log("LA HEMOS CAGADO");
+        }
     }
 
     // Update is called once per frame
@@ -161,14 +166,9 @@ public class MovePlayer : MonoBehaviour {
             restartTime = 0.0f;
             Vector3 bulletPos = transform.parent.position + Quaternion.AngleAxis(oneOrientation* 5.0f, Vector3.up) * currentDirection;
             bulletPos.y = transform.position.y;
-            Debug.Log(bulletPos);
-            GameObject newObject = Instantiate(prefab, bulletPos, transform.rotation, transform.parent);
-
-            BalaPlayer bEnemy = newObject.AddComponent<BalaPlayer>();
-            Debug.Log("orientation: " + oneOrientation);
-            bEnemy.init();
-            bEnemy.setOrientation(oneOrientation);
-            newObject.name = "bala" + (++num);
+        
+            weapon.Shoot(bulletPos, transform.rotation * prefab.transform.rotation, transform.parent,oneOrientation);
+            
             anim.SetTrigger("Shoot");
         }
         if (reloading) {

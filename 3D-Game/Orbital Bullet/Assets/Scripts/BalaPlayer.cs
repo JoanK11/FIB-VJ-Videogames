@@ -8,7 +8,8 @@ public class BalaPlayer : BalaBase {
     public void init() {
         rotationSpeed = -10.0f;
         damage = 10.0f;
-        initBala();
+        base.initBala();
+        Debug.Log(rotacionInicial);
     }
 
     // Update is called once per frame

@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\Platform_Script.cs" />
     <Compile Include="Assets\Scripts\RingChange.cs" />
     <Compile Include="Assets\Scripts\Inventory.cs" />
+    <Compile Include="Assets\Scripts\WeaponBase.cs" />
     <Compile Include="Assets\Scripts\MovePlayer.cs" />
     <Compile Include="Assets\Scripts\EnemyHealthBar.cs" />
     <Compile Include="Assets\Scripts\Pickup.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Assets\Scripts\EnemyStationary.cs" />
     <Compile Include="Assets\Scripts\BalaBase.cs" />
     <Compile Include="Assets\Scripts\Jump.cs" />
+    <Compile Include="Assets\Scripts\WeaponNormal.cs" />
     <Compile Include="Assets\Scripts\HealthBarText.cs" />
     <Compile Include="Assets\Scripts\EnemyBase.cs" />
     <Compile Include="Assets\Scripts\BalaEnemy.cs" />
