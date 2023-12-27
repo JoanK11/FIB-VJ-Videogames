@@ -28,13 +28,35 @@ public class MovePlayer : MonoBehaviour {
     float restartTime;
     public GameObject prefab;
     bool reloading;
-    int num;
+ 
 
 
     CharacterController charControl;
     Animator anim;
 
-    WeaponBase weapon;
+    WeaponBase[] weapons;
+    int index;
+    WeaponBase currentWeapon;
+    void SetupWeapons() { 
+        weapons = GetComponentsInChildren<WeaponBase>(true);
+        foreach (WeaponBase weapon in weapons) { 
+            weapon.gameObject.SetActive(false);
+        }
+        weapons[0].gameObject.SetActive(true);
+        index = 0;
+        currentWeapon = weapons[index];
+    }
+    void CheckSelectionWeapon() {
+        if (Input.GetKeyDown(KeyCode.L)) {
+            weapons[index].gameObject.SetActive(false);
+            index = (index + 1)% weapons.Length;
+            Debug.Log(index);
+
+            weapons[index].gameObject.SetActive(true);
+            currentWeapon = weapons[index];
+        }
+    }
+    
     // Start is called before the first frame update
     void Start() {
         // Store starting direction of the player with respect to the axis of the level
@@ -58,7 +80,7 @@ public class MovePlayer : MonoBehaviour {
         timeToRestartShoot = 0.25f;
         restartTime = 0;
         reloading = false;
-        num = 0;
+      
 
         /* -- Dashing Time -- */
         TimeDashing = 0.0f;
@@ -68,12 +90,13 @@ public class MovePlayer : MonoBehaviour {
         charControl = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
 
-        weapon = GetComponentInChildren<WeaponBase>();
-        if (weapon == null) {
-            Debug.Log("LA HEMOS CAGADO");
-        }
+        SetupWeapons();
     }
-
+    void Update()
+    {
+        /* -- CheckingSelectionOfWeapon -- */
+        CheckSelectionWeapon();
+    }
     // Update is called once per frame
     void FixedUpdate() {
         
@@ -158,7 +181,7 @@ public class MovePlayer : MonoBehaviour {
         /* -- CheckingDash -- */
         CheckDashing(charControl);
 
-
+        
         /* -- Shooting -- */
         if (Input.GetKey(KeyCode.K) && !reloading) {
            currentDirection = transform.position - transform.parent.position;
@@ -167,7 +190,7 @@ public class MovePlayer : MonoBehaviour {
             Vector3 bulletPos = transform.parent.position + Quaternion.AngleAxis(oneOrientation* 5.0f, Vector3.up) * currentDirection;
             bulletPos.y = transform.position.y;
         
-            weapon.Shoot(bulletPos, transform.rotation * prefab.transform.rotation, transform.parent,oneOrientation);
+            currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent,oneOrientation);
             
             anim.SetTrigger("Shoot");
         }

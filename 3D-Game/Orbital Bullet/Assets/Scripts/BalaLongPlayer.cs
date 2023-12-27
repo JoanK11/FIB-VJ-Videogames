@@ -1,32 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class BalaPlayer : BalaBase {
+public class BalaLongPlayer : BalaBase
+{
     // Start is called before the first frame update
-
+    private float Distance;
     public void init() {
-        rotationSpeed = -10.0f;
-        damage = 10.0f;
+        rotationSpeed = -100.0f;
+        damage = 30.0f;
         base.initBala();
-        Debug.Log(rotacionInicial);
+        Distance = 0.0f;
     }
 
     // Update is called once per frame
-    void FixedUpdate() {
-
-        Move();
+    void Update()
+    {
+        base.Move();
+        Distance += Math.Abs(rotationSpeed * Time.deltaTime);
+        if (Distance >= 360.0) Destroy(gameObject);
     }
-    protected void OnTriggerEnter(Collider other) {
+    protected void OnTriggerEnter(Collider other)
+    {
         Debug.Log(other.gameObject.name + " ha entrado en el colider de " + gameObject.name);
-        
+       
 
-        if (other.gameObject.tag == "Enemy") {
+        if (other.gameObject.tag == "Enemy")
+        {
             EnemyBase enemy = other.gameObject.GetComponent<EnemyBase>();
             enemy.takeDamage(GetDamage());
         }
 
         Destroy(gameObject);
     }
-    
 }

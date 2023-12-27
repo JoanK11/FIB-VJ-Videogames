@@ -19,7 +19,6 @@ public class BalaBase : MonoBehaviour
         startDirection.y = 0.0f;
         startDirection.Normalize();
         rotacionInicial = transform.rotation;
-        Debug.Log(rotacionInicial);
     }
     protected void Move() {
         //   Debug.Log("entro en el update");
