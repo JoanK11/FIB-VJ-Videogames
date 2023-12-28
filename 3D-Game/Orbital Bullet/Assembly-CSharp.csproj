@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\BalaBase.cs" />
     <Compile Include="Assets\Scripts\Jump.cs" />
     <Compile Include="Assets\Scripts\WeaponNormal.cs" />
+    <Compile Include="Assets\Scripts\ShowCurrentWeapon.cs" />
     <Compile Include="Assets\Scripts\HealthBarText.cs" />
     <Compile Include="Assets\Scripts\EnemyBase.cs" />
     <Compile Include="Assets\Scripts\BalaEnemy.cs" />

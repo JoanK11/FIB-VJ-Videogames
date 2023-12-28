@@ -50,7 +50,7 @@ public class MovePlayer : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.L)) {
             weapons[index].gameObject.SetActive(false);
             index = (index + 1)% weapons.Length;
-            Debug.Log(index);
+            //Debug.Log(index);
 
             weapons[index].gameObject.SetActive(true);
             currentWeapon = weapons[index];
