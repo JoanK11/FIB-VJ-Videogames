@@ -21,12 +21,45 @@ public class MovePlayer : MonoBehaviour {
     public enum PlayerStates { Normal, ChangingLevel, ChangingRing, Invincible };
     PlayerStates State;
 
+    /* -- Dash -- */
+    float oneOrientation;
+    const float TimeDashOcurr = 1.5f;
+    const float VelocityOfDashing = 50.0f / TimeDashOcurr;
+    const float RotationHimself = 360.0f / TimeDashOcurr;
+    bool isDashing;
+    float TimeDashing;
+
     /* -- Shooting -- */
     float timeToRestartShoot;
     float restartTime;
     public GameObject prefab;
     bool reloading;
-    int num;
+
+    CharacterController charControl;
+    Animator anim;
+
+    WeaponBase[] weapons;
+    int index;
+    WeaponBase currentWeapon;
+    void SetupWeapons() {
+        weapons = GetComponentsInChildren<WeaponBase>(true);
+        foreach (WeaponBase weapon in weapons) {
+            weapon.gameObject.SetActive(false);
+        }
+        weapons[0].gameObject.SetActive(true);
+        index = 0;
+        currentWeapon = weapons[index];
+    }
+    void CheckSelectionWeapon() {
+        if (Input.GetKeyDown(KeyCode.L)) {
+            weapons[index].gameObject.SetActive(false);
+            index = (index + 1)% weapons.Length;
+            //Debug.Log(index);
+
+            weapons[index].gameObject.SetActive(true);
+            currentWeapon = weapons[index];
+        }
+    }
 
     void Start() {
         // Store starting direction of the player with respect to the axis of the level
@@ -51,51 +84,72 @@ public class MovePlayer : MonoBehaviour {
         timeToRestartShoot = 0.25f;
         restartTime = 0;
         reloading = false;
-        num = 0;
-    }
 
+
+        /* -- Dashing Time -- */
+        TimeDashing = 0.0f;
+        isDashing = false;
+
+        oneOrientation = -1.0f;
+        charControl = GetComponent<CharacterController>();
+        anim = GetComponent<Animator>();
+
+        SetupWeapons();
+    }
+    void Update()
+    {
+        /* -- CheckingSelectionOfWeapon -- */
+        CheckSelectionWeapon();
+    }
+    // Update is called once per frame
     void FixedUpdate() {
-        CharacterController charControl = GetComponent<CharacterController>();
-        
+
+
         bool canMove = true;
         if (State == PlayerStates.ChangingRing ||
             State == PlayerStates.ChangingLevel) {
             canMove = false;
         }
 
-        Vector3 position;
 
-        float angle;
-        Vector3 direction, target;
+
+        /* -- Left-Right Movement -- */
 
         position = transform.position;
         angle = rotationSpeed * Time.deltaTime;
         direction = position - Center;
 
-        /* -- Horizontal Movement -- */
-        if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && canMove) {
+        if (!isDashing) {
+          /* -- Horizontal Movement -- */
+          if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && canMove) {
 
-            if (Input.GetKey(KeyCode.A)) {
-                target = Center + Quaternion.AngleAxis(angle, Vector3.up) * direction;
-                if (charControl.Move(target - position) != CollisionFlags.None) {
-                    transform.position = position;
-                    Physics.SyncTransforms();
-                }
-            }
-            if (Input.GetKey(KeyCode.D)) {
-                target = Center + Quaternion.AngleAxis(-angle, Vector3.up) * direction;
-                if (charControl.Move(target - position) != CollisionFlags.None) {
-                    transform.position = position;
-                    Physics.SyncTransforms();
-                }
-            }
-            // Increment Character Speed
-            rotationSpeed += 2.0f;
-            if (rotationSpeed > maxRotationSpeed) rotationSpeed = maxRotationSpeed;
-        }
-        else {
-            rotationSpeed -= 5.0f;
-            if (rotationSpeed < 0) rotationSpeed = 0;
+              if (Input.GetKey(KeyCode.A)) {
+                  target = Center + Quaternion.AngleAxis(angle, Vector3.up) * direction;
+                  if (charControl.Move(target - position) != CollisionFlags.None) {
+                      transform.position = position;
+                      Physics.SyncTransforms();
+                  }
+                  anim.SetBool("Moving", true);
+                  oneOrientation = 1.0f;
+              }
+              if (Input.GetKey(KeyCode.D)) {
+                  target = Center + Quaternion.AngleAxis(-angle, Vector3.up) * direction;
+                  if (charControl.Move(target - position) != CollisionFlags.None) {
+                      transform.position = position;
+                      Physics.SyncTransforms();
+                  }
+                  anim.SetBool("Moving", true);
+                  oneOrientation = -1.0f;
+              }
+              // Increment Character Speed
+              rotationSpeed += 2.0f;
+              if (rotationSpeed > maxRotationSpeed) rotationSpeed = maxRotationSpeed;
+          }
+          else {
+              rotationSpeed -= 5.0f;
+              if (rotationSpeed < 0) rotationSpeed = 0;
+              anim.SetBool("Moving", false);
+          }
         }
 
         /* -- Shooting -- */
@@ -112,15 +166,24 @@ public class MovePlayer : MonoBehaviour {
         else
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
         transform.rotation = orientation;
+        if(oneOrientation == 1.0f) transform.rotation *= Quaternion.Euler(0f, 180f,0f);
 
+
+        /* -- CheckingDash -- */
+        CheckDashing(charControl);
+
+
+        /* -- Shooting -- */
         if (Input.GetKey(KeyCode.K) && !reloading) {
+           currentDirection = transform.position - transform.parent.position;
             reloading = true;
             restartTime = 0.0f;
-            Vector3 bulletPos = Center + Quaternion.AngleAxis(-angle - 15.0f, Vector3.up) * direction;
+            Vector3 bulletPos = Center + Quaternion.AngleAxis(oneOrientation* 5.0f, Vector3.up) * currentDirection;
             bulletPos.y = transform.position.y;
-            Debug.Log(bulletPos);
-            GameObject newObject = Instantiate(prefab, bulletPos, transform.rotation, transform.parent);
-            newObject.name = "bala" + (++num);
+
+            currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent,oneOrientation);
+
+            anim.SetTrigger("Shoot");
         }
 
         if (reloading) {
@@ -138,6 +201,7 @@ public class MovePlayer : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.W) && jumpCount < maxJumpCount) {
                 speedY = jumpSpeed;
                 jumpCount++;
+
             }
             else if (!IsGrounded()) {
                 speedY -= gravity * Time.deltaTime;
@@ -146,8 +210,9 @@ public class MovePlayer : MonoBehaviour {
             position = transform.position;
             Vector3 moveVector = new Vector3(0, speedY, 0) * Time.deltaTime;
             CollisionFlags flags = charControl.Move(moveVector);
-            if ((flags & CollisionFlags.Below) != 0) {
+            if (flags != CollisionFlags.Below) {
                 speedY = 0;
+
             }
         }*/
         // Apply up-down movement
@@ -176,10 +241,10 @@ public class MovePlayer : MonoBehaviour {
 
         RaycastHit hit;
         if (Physics.Raycast(rayStart, Vector3.down, out hit, checkDistance)) {
-            Debug.Log(name + ": Is Grounded " + checkDistance);
+           // Debug.Log(name + ": Is Grounded " + checkDistance);
             return true;
         }
-        Debug.Log(name + ": Is not Grounded " + checkDistance);
+       // Debug.Log(name + ": Is not Grounded " + checkDistance);
         return false;
     }
 
@@ -230,5 +295,34 @@ public class MovePlayer : MonoBehaviour {
         Center = new Vector3(50, 0, 0);
         FollowPlayer cameraScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
         StartCoroutine(cameraScript.ChangeCylinder(3.5f, 50.0f));
+    }
+
+    private void CheckDashing(CharacterController charControl) {
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            isDashing = true;
+            TimeDashing = 0.0f;
+        }
+        if (isDashing) {
+            float time = Time.deltaTime;
+            TimeDashing += time;
+            Vector3 position = transform.position;
+            float angle = oneOrientation *VelocityOfDashing * time ;
+            Vector3 direction = position - transform.parent.position;
+            Vector3 target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
+            if (charControl.Move(target - position) != CollisionFlags.None)
+            {
+                transform.position = position;
+                Physics.SyncTransforms();
+
+            }
+            float bodyRotation = - RotationHimself * TimeDashing;
+
+            Quaternion rotation = Quaternion.Euler(0f, 0f, bodyRotation);
+            transform.rotation *= rotation;
+
+            if (TimeDashing > TimeDashOcurr) {
+                isDashing = false;
+            }
+        }
     }
 }

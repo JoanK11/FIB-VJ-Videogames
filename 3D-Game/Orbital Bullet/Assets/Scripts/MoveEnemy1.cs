@@ -17,11 +17,12 @@ public class MoveEnemy1 : EnemyBase
 
   
     CharacterController charControl;
-  
+    Transform reference;
     void Start()
     {
+        reference = GameObject.Find("World").transform;
         // Store starting direction of the player with respect to the axis of the level
-        startDirection = transform.position - transform.parent.position;
+        startDirection = transform.position - reference.position;
         startDirection.y = 0.0f;
         startDirection.Normalize();
         speedY = 0;
@@ -44,11 +45,11 @@ public class MoveEnemy1 : EnemyBase
 
         position = transform.position;
         angle = rotationSpeed * Time.deltaTime;
-        direction = position - transform.parent.position;
+        direction = position - reference.position;
 
         // Left-right movement
 
-        target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
+        target = reference.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
         if (charControl.Move(target - position) != CollisionFlags.None)
         {
             transform.position = position;
@@ -60,7 +61,7 @@ public class MoveEnemy1 : EnemyBase
 
         // Correct orientation of player
         // Compute current direction
-        Vector3 currentDirection = transform.position - transform.parent.position;
+        Vector3 currentDirection = transform.position - reference.position;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
         // Change orientation of player accordingly

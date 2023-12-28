@@ -59,23 +59,30 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.13f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\WeaponLong.cs" />
     <Compile Include="Assets\Scripts\World.cs" />
+    <Compile Include="Assets\Scripts\BalaLongPlayer.cs" />
     <Compile Include="Assets\Scripts\Platform_Script.cs" />
     <Compile Include="Assets\Scripts\RingChange.cs" />
     <Compile Include="Assets\Scripts\Inventory.cs" />
+    <Compile Include="Assets\Scripts\WeaponBase.cs" />
     <Compile Include="Assets\Scripts\MovePlayer.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\EnemyHealthBar.cs" />
     <Compile Include="Assets\Scripts\Pickup.cs" />
+    <Compile Include="Assets\Scripts\BalaPlayer.cs" />
     <Compile Include="Assets\Scripts\HealthBar.cs" />
     <Compile Include="Assets\Scripts\EnemyStationary.cs" />
-    <Compile Include="Assets\Scripts\MoveBala.cs" />
+    <Compile Include="Assets\Scripts\BalaBase.cs" />
     <Compile Include="Assets\Scripts\Jump.cs" />
     <Compile Include="Assets\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\MenuToogle.cs" />
+    <Compile Include="Assets\Scripts\CylinderChange.cs" />
+    <Compile Include="Assets\Scripts\WeaponNormal.cs" />
+    <Compile Include="Assets\Scripts\ShowCurrentWeapon.cs" />
     <Compile Include="Assets\Scripts\HealthBarText.cs" />
     <Compile Include="Assets\Scripts\EnemyBase.cs" />
-    <Compile Include="Assets\Scripts\CylinderChange.cs" />
+    <Compile Include="Assets\Scripts\BalaEnemy.cs" />
     <Compile Include="Assets\Scripts\FollowPlayer.cs" />
     <Compile Include="Assets\Scripts\Platform_Move.cs" />
     <Compile Include="Assets\Scripts\MoveEnemy1.cs" />

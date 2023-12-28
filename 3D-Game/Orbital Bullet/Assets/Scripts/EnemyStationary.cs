@@ -18,14 +18,17 @@ public class EnemyStationary : EnemyBase {
         ATTACKING
     }
     EnemyState currentState;
+
+    Transform reference;
     void Start() {
         base.init();
         original = transform.rotation;
         currentState = EnemyState.IDLE;
         currentTime = 0.0f;
         currentNumberOfBullets = 0;
+        reference = GameObject.Find("World").transform ;
     }
-
+    
     // Update is called once per frame
     void FixedUpdate() {
         if (currentState == EnemyState.IDLE) {
@@ -62,13 +65,14 @@ public class EnemyStationary : EnemyBase {
     }
 
     private void makeBala() {
-        Vector3 orientation = transform.position - transform.parent.position;
+        Vector3 orientation = transform.position - reference.position;
         orientation.y = 0.0f;
-        Vector3 bulletPos = transform.parent.position + Quaternion.AngleAxis(direction * 15.0f, Vector3.up) * orientation;
+        Vector3 bulletPos = reference.position + Quaternion.AngleAxis(direction * 15.0f, Vector3.up) * orientation;
         bulletPos.y = transform.position.y;
 
-        GameObject newObject = Instantiate(bala, bulletPos, transform.rotation, transform.parent);
-
-        newObject.GetComponent<MoveBala>().setOrientation(-direction);
+        GameObject newObject = Instantiate(bala, bulletPos, transform.rotation, reference);
+        BalaEnemy bEnemy = newObject.AddComponent<BalaEnemy>();
+        bEnemy.init();
+        bEnemy.setOrientation(-direction);
     }
 }

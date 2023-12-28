@@ -5,8 +5,11 @@ using UnityEngine.UI;
 
 public class EnemyHealthBar : MonoBehaviour {
     public Slider slider;
-    public Camera camera;
+    Camera camera;
     public Transform target;
+    void Start(){
+        camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+    }
 
     public void updateHealthBar(float currentHealth, float maxHealth) {
         slider.value = currentHealth / maxHealth;
