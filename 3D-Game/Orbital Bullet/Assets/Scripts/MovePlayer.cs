@@ -7,18 +7,19 @@ using UnityEngine;
 public class MovePlayer : MonoBehaviour {
     /* -- Player Movement -- */
     float rotationSpeed, jumpSpeed, gravity;
+    Vector3 Center;
+    const float maxRotationSpeed = 70.0f;
 
     /* -- Double Jump -- */
     int jumpCount;
     const int maxJumpCount = 2;
-
     Vector3 startDirection;
     float speedY;
-    bool isFirst;
     float changingLevelTime;
 
-    public enum PlayerState { Normal, ChangingLevel, ChangingRing, Invincible };
-    PlayerState State;
+    /* -- Player States -- */
+    public enum PlayerStates { Normal, ChangingLevel, ChangingRing, Invincible };
+    PlayerStates State;
 
     /* -- Shooting -- */
     float timeToRestartShoot;
@@ -27,23 +28,21 @@ public class MovePlayer : MonoBehaviour {
     bool reloading;
     int num;
 
-
-    // Start is called before the first frame update
     void Start() {
         // Store starting direction of the player with respect to the axis of the level
         startDirection = transform.position - transform.parent.position;
         startDirection.y = 0.0f;
         startDirection.Normalize();
-        isFirst = true;
         speedY = 0;
         changingLevelTime = 0;
 
-        State = PlayerState.Normal;
+        State = PlayerStates.Normal;
 
         /* -- Player Movement -- */
-        rotationSpeed = 70;
+        rotationSpeed = 0;
         jumpSpeed = 8.25f;
         gravity = 25;
+        Center = new Vector3(0, 0, 0);
 
         /* -- Double Jump -- */
         jumpCount = 0;
@@ -55,20 +54,12 @@ public class MovePlayer : MonoBehaviour {
         num = 0;
     }
 
-    // Update is called once per frame
     void FixedUpdate() {
         CharacterController charControl = GetComponent<CharacterController>();
-
+        
         bool canMove = true;
-        if (State == PlayerState.ChangingLevel) {
-            changingLevelTime += Time.deltaTime;
-            if (IsGrounded() && changingLevelTime > 0.5f) {
-                State = PlayerState.Normal;
-                changingLevelTime = 0;
-            }
-            else canMove = false;
-        }
-        else if (State == PlayerState.ChangingRing) {
+        if (State == PlayerStates.ChangingRing ||
+            State == PlayerStates.ChangingLevel) {
             canMove = false;
         }
 
@@ -79,31 +70,39 @@ public class MovePlayer : MonoBehaviour {
 
         position = transform.position;
         angle = rotationSpeed * Time.deltaTime;
-        direction = position - transform.parent.position;
+        direction = position - Center;
 
-        // Left-right movement
+        /* -- Horizontal Movement -- */
         if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && canMove) {
 
             if (Input.GetKey(KeyCode.A)) {
-                target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
+                target = Center + Quaternion.AngleAxis(angle, Vector3.up) * direction;
                 if (charControl.Move(target - position) != CollisionFlags.None) {
                     transform.position = position;
                     Physics.SyncTransforms();
                 }
             }
             if (Input.GetKey(KeyCode.D)) {
-                target = transform.parent.position + Quaternion.AngleAxis(-angle, Vector3.up) * direction;
+                target = Center + Quaternion.AngleAxis(-angle, Vector3.up) * direction;
                 if (charControl.Move(target - position) != CollisionFlags.None) {
                     transform.position = position;
                     Physics.SyncTransforms();
                 }
             }
+            // Increment Character Speed
+            rotationSpeed += 2.0f;
+            if (rotationSpeed > maxRotationSpeed) rotationSpeed = maxRotationSpeed;
+        }
+        else {
+            rotationSpeed -= 5.0f;
+            if (rotationSpeed < 0) rotationSpeed = 0;
         }
 
         /* -- Shooting -- */
-        Vector3 currentDirection = transform.position - transform.parent.position;
+        Vector3 currentDirection = transform.position - Center;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
+
         // Change orientation of player accordingly
         Quaternion orientation;
         if ((startDirection - currentDirection).magnitude < 1e-3)
@@ -117,12 +116,13 @@ public class MovePlayer : MonoBehaviour {
         if (Input.GetKey(KeyCode.K) && !reloading) {
             reloading = true;
             restartTime = 0.0f;
-            Vector3 bulletPos = transform.parent.position + Quaternion.AngleAxis(-angle - 15.0f, Vector3.up) * direction;
+            Vector3 bulletPos = Center + Quaternion.AngleAxis(-angle - 15.0f, Vector3.up) * direction;
             bulletPos.y = transform.position.y;
             Debug.Log(bulletPos);
             GameObject newObject = Instantiate(prefab, bulletPos, transform.rotation, transform.parent);
             newObject.name = "bala" + (++num);
         }
+
         if (reloading) {
             restartTime += Time.deltaTime;
             if (restartTime >= timeToRestartShoot) {
@@ -130,11 +130,11 @@ public class MovePlayer : MonoBehaviour {
             }
         }
 
-        /* -- Vertical Movement && Double Jump -- */
-        if (IsGrounded()) {
+        /* -- Vertical Movement && Double Jump --
+        if (IsGrounded() && jumpCount > 0) {
             jumpCount = 0;
         }
-        if (State != PlayerState.ChangingRing) {
+        if (State != PlayerStates.ChangingRing) {
             if (Input.GetKeyDown(KeyCode.W) && jumpCount < maxJumpCount) {
                 speedY = jumpSpeed;
                 jumpCount++;
@@ -149,6 +149,20 @@ public class MovePlayer : MonoBehaviour {
             if ((flags & CollisionFlags.Below) != 0) {
                 speedY = 0;
             }
+        }*/
+        // Apply up-down movement
+        if (State != PlayerStates.ChangingRing) {
+            position = transform.position;
+            if (charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.None) {
+                transform.position = position;
+                Physics.SyncTransforms();
+            }
+            if (charControl.isGrounded) {
+                if (Input.GetKey(KeyCode.W))
+                    speedY = jumpSpeed;
+            }
+            else
+                speedY -= gravity * Time.deltaTime;
         }
     }
 
@@ -170,19 +184,18 @@ public class MovePlayer : MonoBehaviour {
     }
 
     public void JumpNextLevel() {
-        if (IsGrounded()) {
-            speedY = 20.0f;
-            GameObject world = GameObject.Find("World");
-            world.GetComponent<World>().NextLevel();
-            State = PlayerState.ChangingLevel;
-            //Debug.Log(name + ": Jumped to the next level.");
-        }
+        speedY = 20.5f;
+        State = PlayerStates.ChangingLevel;
+        Debug.Log(name + " jumped to the next level.");
     }
 
-    private IEnumerator MovePlayerToPosition(Vector3 startPosition, Vector3 finalPosition) {
-        float duration = 0.6f; // Duration of the jump
+    public void ArrivedNextLevel() {
+        State = PlayerStates.Normal;
+    }
+
+    private IEnumerator MovePlayerToPosition(Vector3 startPosition, Vector3 finalPosition, float duration) {
         float elapsed = 0.0f;
-        float peakHeight = 1.5f; // Adjust for desired peak height
+        float peakHeight = 1f; // Adjust for desired peak height
 
         while (elapsed < duration) {
             elapsed += Time.deltaTime;
@@ -203,12 +216,19 @@ public class MovePlayer : MonoBehaviour {
 
         // Ensure the player is exactly at the final position after the jump
         //transform.position = finalPosition;
-        State = PlayerState.Normal;
+        State = PlayerStates.Normal;
     }
 
     public void ChangeRing(Vector3 targetPosition) {
-        State = PlayerState.ChangingRing;
-        StartCoroutine(MovePlayerToPosition(transform.position, targetPosition));
+        State = PlayerStates.ChangingRing;
+        StartCoroutine(MovePlayerToPosition(transform.position, targetPosition, 0.6f));
     }
-    
+
+    public void ChangeCylinder(Vector3 targetPosition) {
+        State = PlayerStates.ChangingRing;
+        StartCoroutine(MovePlayerToPosition(transform.position, targetPosition, 3.0f));
+        Center = new Vector3(50, 0, 0);
+        FollowPlayer cameraScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
+        StartCoroutine(cameraScript.ChangeCylinder(3.5f, 50.0f));
+    }
 }

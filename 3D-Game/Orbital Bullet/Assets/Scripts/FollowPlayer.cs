@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FollowPlayer : MonoBehaviour {
-    private GameObject player;
-    private Vector3 startDirection;
-    private float yOffset;
+    GameObject player;
+    Vector3 startDirection;
+    float yOffset;
+    bool changingCylinder;
+    Vector3 Center;
+
 
     void Start() {
         // Initialize GameObjects
@@ -18,9 +21,13 @@ public class FollowPlayer : MonoBehaviour {
 
         // Calculate initial Y offset between camera and player
         yOffset = transform.position.y - player.transform.position.y;
+
+        changingCylinder = false;
+        Center = new Vector3(0, 0, 0);
     }
 
     void Update() {
+        if (changingCylinder) return;
         // Update direction and orientation
         UpdateDirectionAndOrientation();
 
@@ -38,20 +45,24 @@ public class FollowPlayer : MonoBehaviour {
 
     private void UpdateDirectionAndOrientation() {
         // Compute current direction
-        Vector3 currentDirection = player.transform.position - player.transform.parent.position;
+        Vector3 currentDirection = player.transform.position - Center;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
+        Debug.Log("Current direction is " + currentDirection);
 
         // Change orientation of the camera pivot to match the player's
         Quaternion orientation;
         if ((startDirection - currentDirection).magnitude < 1e-3) {
             orientation = Quaternion.AngleAxis(0.0f, Vector3.up);
+            Debug.Log("First conditional");
         }
         else if ((startDirection + currentDirection).magnitude < 1e-3) {
             orientation = Quaternion.AngleAxis(180.0f, Vector3.up);
+            Debug.Log("Second conditional");
         }
         else {
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
+            Debug.Log("Third conditional");
         }
         transform.parent.rotation = orientation;
     }
@@ -60,5 +71,46 @@ public class FollowPlayer : MonoBehaviour {
         Vector3 cameraPosition = transform.position;
         cameraPosition.y = player.transform.position.y + yOffset;
         transform.position = cameraPosition;
+    }
+
+    public IEnumerator ChangeCylinder(float duration, float moveAmountX) {
+        float elapsed = 0.0f;
+        changingCylinder = true;
+
+        // Use the parent's rotation as the starting point
+        Quaternion startRotation = transform.parent.rotation;
+        Vector3 euler = startRotation.eulerAngles;
+        euler.y = -euler.y;
+        Quaternion endRotation = Quaternion.Euler(euler);
+
+        Vector3 startPosition = transform.parent.position;
+        Vector3 endPosition = startPosition + new Vector3(moveAmountX, 0, 0);
+        float durationRotation = duration / 3;
+
+        while (elapsed < duration) {
+            elapsed += Time.deltaTime;
+            float progress = elapsed / duration;
+            float progressRotation = elapsed / durationRotation;
+
+            // Rotate the parent of the camera
+            transform.parent.rotation = Quaternion.Lerp(startRotation, endRotation, progressRotation);
+
+            // Move the parent of the camera on the X axis
+            transform.parent.position = new Vector3(
+                Mathf.Lerp(startPosition.x, endPosition.x, progress),
+                transform.parent.position.y,
+                transform.parent.position.z
+            );
+
+            yield return null;
+        }
+
+        // Ensures the parent is exactly at the final rotation and position
+        transform.parent.rotation = endRotation;
+        transform.parent.position = endPosition;
+        
+        // Update the center and direction accordingly
+        Center = new Vector3(50, 0, 0);
+        changingCylinder = false;
     }
 }

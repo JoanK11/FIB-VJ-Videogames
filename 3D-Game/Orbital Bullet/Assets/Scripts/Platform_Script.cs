@@ -31,17 +31,8 @@ public class Platform_Script : MonoBehaviour {
         if (other.gameObject.CompareTag("Player")) {
             Debug.Log(name + ": Player exited platform.");
             exitedTrigger = true;
-        }
-    }
-
-    public void ActivateCollider() {
-        // Check if the collider exists
-        if (objectCollider != null) {
-            // Change the collider to act as a physical collider, not a trigger
+            other.GetComponent<MovePlayer>().ArrivedNextLevel();
             objectCollider.isTrigger = false;
-        }
-        else {
-            Debug.LogError("Collider component not found on the object.");
         }
     }
 }
