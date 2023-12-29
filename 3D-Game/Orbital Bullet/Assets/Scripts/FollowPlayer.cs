@@ -48,21 +48,17 @@ public class FollowPlayer : MonoBehaviour {
         Vector3 currentDirection = player.transform.position - Center;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
-        Debug.Log("Current direction is " + currentDirection);
 
         // Change orientation of the camera pivot to match the player's
         Quaternion orientation;
         if ((startDirection - currentDirection).magnitude < 1e-3) {
             orientation = Quaternion.AngleAxis(0.0f, Vector3.up);
-            Debug.Log("First conditional");
         }
         else if ((startDirection + currentDirection).magnitude < 1e-3) {
             orientation = Quaternion.AngleAxis(180.0f, Vector3.up);
-            Debug.Log("Second conditional");
         }
         else {
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
-            Debug.Log("Third conditional");
         }
         transform.parent.rotation = orientation;
     }

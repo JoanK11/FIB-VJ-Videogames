@@ -41,6 +41,7 @@ public class MovePlayer : MonoBehaviour {
     WeaponBase[] weapons;
     int index;
     WeaponBase currentWeapon;
+
     void SetupWeapons() {
         weapons = GetComponentsInChildren<WeaponBase>(true);
         foreach (WeaponBase weapon in weapons) {
@@ -50,11 +51,11 @@ public class MovePlayer : MonoBehaviour {
         index = 0;
         currentWeapon = weapons[index];
     }
+
     void CheckSelectionWeapon() {
         if (Input.GetKeyDown(KeyCode.L)) {
             weapons[index].gameObject.SetActive(false);
-            index = (index + 1)% weapons.Length;
-            //Debug.Log(index);
+            index = (index + 1) % weapons.Length;
 
             weapons[index].gameObject.SetActive(true);
             currentWeapon = weapons[index];
@@ -96,15 +97,14 @@ public class MovePlayer : MonoBehaviour {
 
         SetupWeapons();
     }
-    void Update()
-    {
+
+    void Update() {
         /* -- CheckingSelectionOfWeapon -- */
         CheckSelectionWeapon();
     }
+
     // Update is called once per frame
     void FixedUpdate() {
-
-
         bool canMove = true;
         if (State == PlayerStates.ChangingRing ||
             State == PlayerStates.ChangingLevel) {
@@ -112,12 +112,11 @@ public class MovePlayer : MonoBehaviour {
         }
 
 
-
         /* -- Left-Right Movement -- */
-
-        position = transform.position;
-        angle = rotationSpeed * Time.deltaTime;
-        direction = position - Center;
+        Vector3 position = transform.position;
+        float angle = rotationSpeed * Time.deltaTime;
+        Vector3 direction = position - Center;
+        Vector3 target;
 
         if (!isDashing) {
           /* -- Horizontal Movement -- */
@@ -152,7 +151,7 @@ public class MovePlayer : MonoBehaviour {
           }
         }
 
-        /* -- Shooting -- */
+        /* -- Correction of Player Movement -- */
         Vector3 currentDirection = transform.position - Center;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
@@ -166,7 +165,9 @@ public class MovePlayer : MonoBehaviour {
         else
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
         transform.rotation = orientation;
-        if(oneOrientation == 1.0f) transform.rotation *= Quaternion.Euler(0f, 180f,0f);
+        if (oneOrientation == 1.0f) {
+            transform.rotation *= Quaternion.Euler(0, 180.0f, 0);
+        }
 
 
         /* -- CheckingDash -- */
@@ -175,13 +176,13 @@ public class MovePlayer : MonoBehaviour {
 
         /* -- Shooting -- */
         if (Input.GetKey(KeyCode.K) && !reloading) {
-           currentDirection = transform.position - transform.parent.position;
+            currentDirection = transform.position - Center;
             reloading = true;
             restartTime = 0.0f;
             Vector3 bulletPos = Center + Quaternion.AngleAxis(oneOrientation* 5.0f, Vector3.up) * currentDirection;
             bulletPos.y = transform.position.y;
 
-            currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent,oneOrientation);
+            currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent, oneOrientation);
 
             anim.SetTrigger("Shoot");
         }
@@ -241,10 +242,8 @@ public class MovePlayer : MonoBehaviour {
 
         RaycastHit hit;
         if (Physics.Raycast(rayStart, Vector3.down, out hit, checkDistance)) {
-           // Debug.Log(name + ": Is Grounded " + checkDistance);
             return true;
         }
-       // Debug.Log(name + ": Is not Grounded " + checkDistance);
         return false;
     }
 
