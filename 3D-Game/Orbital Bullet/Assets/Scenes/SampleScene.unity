@@ -3105,7 +3105,7 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
-  fill: {fileID: 0}
+  fill: {fileID: 1305277604}
 --- !u!114 &826760578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3151,9 +3151,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 100
+  m_MaxValue: 1
   m_WholeNumbers: 1
-  m_Value: 100
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
