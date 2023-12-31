@@ -1,0 +1,13 @@
+-- Start Menu --
+1. Elden Ring - https://www.gameuidatabase.com/gameData.php?id=1371#&gid=1&pid=1
+
+-- Pause Menu --
+1. Hades - https://www.gameuidatabase.com/gameData.php?id=534#&gid=1&pid=13
+2. Hollow Knight - https://www.gameuidatabase.com/gameData.php?id=113#&gid=1&pid=14
+
+
+-- Others --
+1. Shadow of the Colossus
+2. God of War
+3. Nier Automata
+4. Overwatch - UI armas?

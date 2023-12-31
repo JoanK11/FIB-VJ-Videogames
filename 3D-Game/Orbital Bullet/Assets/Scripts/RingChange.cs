@@ -17,15 +17,14 @@ public class RingChange : MonoBehaviour {
 
 
     void Start() {
-        // Initialize GameObjects
         InitializeGameObjects();
-
         isPlayerOnTrigger = false;
     }
 
     void Update() {
         if (isPlayerOnTrigger && Input.GetKeyUp(KeyCode.E)) {
-            Vector3 targetPosition = target.transform.position + new Vector3(0, 1.0f, 0);
+            Vector3 targetPosition = target.transform.position + Vector3.up;
+            Debug.Log(name + ": Player needs to go to " + targetPosition);
             player.GetComponent<MovePlayer>().ChangeRing(targetPosition);
         }
     }

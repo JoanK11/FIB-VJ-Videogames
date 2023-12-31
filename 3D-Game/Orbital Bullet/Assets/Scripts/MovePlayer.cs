@@ -8,29 +8,33 @@ using TMPro;
 public class MovePlayer : MonoBehaviour {
     /* -- Player Movement -- */
     float rotationSpeed, jumpSpeed, gravity;
+    Vector3 Center;
+    const float maxRotationSpeed = 70.0f;
 
     /* -- Double Jump -- */
     int jumpCount;
     const int maxJumpCount = 2;
-
     Vector3 startDirection;
     float speedY;
     float changingLevelTime;
+
+    /* -- Player States -- */
+    public enum PlayerStates { Normal, ChangingLevel, ChangingRing, Invincible };
+    PlayerStates State;
+
+    /* -- Dash -- */
     float oneOrientation;
-    public enum PlayerState { Normal, ChangingLevel, ChangingRing, Invincible };
-    PlayerState State;
     const float TimeDashOcurr = 1.5f;
     const float VelocityOfDashing = 50.0f / TimeDashOcurr;
     const float RotationHimself = 360.0f / TimeDashOcurr;
     bool isDashing;
     float TimeDashing;
+
     /* -- Shooting -- */
     float timeToRestartShoot;
     float restartTime;
     public GameObject prefab;
     bool reloading;
- 
-
 
     CharacterController charControl;
     Animator anim;
@@ -46,25 +50,24 @@ public class MovePlayer : MonoBehaviour {
 
     void SetupWeapons() { 
         weapons = GetComponentsInChildren<WeaponBase>(true);
-        foreach (WeaponBase weapon in weapons) { 
+        foreach (WeaponBase weapon in weapons) {
             weapon.gameObject.SetActive(false);
         }
         weapons[0].gameObject.SetActive(true);
         index = 0;
         currentWeapon = weapons[index];
     }
+
     void CheckSelectionWeapon() {
         if (Input.GetKeyDown(KeyCode.L)) {
             weapons[index].gameObject.SetActive(false);
-            index = (index + 1)% weapons.Length;
-            //Debug.Log(index);
+            index = (index + 1) % weapons.Length;
 
             weapons[index].gameObject.SetActive(true);
             currentWeapon = weapons[index];
         }
     }
-    
-    // Start is called before the first frame update
+
     void Start() {
         // Store starting direction of the player with respect to the axis of the level
         startDirection = transform.position - transform.parent.position;
@@ -73,12 +76,13 @@ public class MovePlayer : MonoBehaviour {
         speedY = 0;
         changingLevelTime = 0;
 
-        State = PlayerState.Normal;
-      
+        State = PlayerStates.Normal;
+
         /* -- Player Movement -- */
-        rotationSpeed = 70;
+        rotationSpeed = 0;
         jumpSpeed = 8.25f;
         gravity = 25;
+        Center = new Vector3(0, 0, 0);
 
         /* -- Double Jump -- */
         jumpCount = 0;
@@ -87,7 +91,7 @@ public class MovePlayer : MonoBehaviour {
         timeToRestartShoot = 0.25f;
         restartTime = 0;
         reloading = false;
-      
+
 
         /* -- Dashing Time -- */
         TimeDashing = 0.0f;
@@ -111,78 +115,63 @@ public class MovePlayer : MonoBehaviour {
         healthBar.SetHealth(health);
         
     }
-    void Update()
-    {
+
+    void Update() {
         /* -- CheckingSelectionOfWeapon -- */
         CheckSelectionWeapon();
         if (Input.GetKeyDown(KeyCode.P)) takeDamage(10);
     }
+
     // Update is called once per frame
     void FixedUpdate() {
-        
-
         bool canMove = true;
-        if (State == PlayerState.ChangingLevel) {
-            changingLevelTime += Time.deltaTime;
-            if (IsGrounded() && changingLevelTime > 0.5f) {
-                State = PlayerState.Normal;
-                changingLevelTime = 0;
-            }
-            else canMove = false;
-        }
-        else if (State == PlayerState.ChangingRing) {
+        if (State == PlayerStates.ChangingRing ||
+            State == PlayerStates.ChangingLevel) {
             canMove = false;
         }
 
-        
 
         /* -- Left-Right Movement -- */
-
         Vector3 position = transform.position;
         float angle = rotationSpeed * Time.deltaTime;
-        Vector3 direction = position - transform.parent.position;
+        Vector3 direction = position - Center;
+        Vector3 target;
 
-        if (! isDashing ) {
-            
+        if (!isDashing) {
+          /* -- Horizontal Movement -- */
+          if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && canMove) {
 
-            if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && canMove )
-            {
-
-                if (Input.GetKey(KeyCode.A))
-                {
-                    Vector3 target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
-                    if (charControl.Move(target - position) != CollisionFlags.None)
-                    {
-                        transform.position = position;
-                        Physics.SyncTransforms();
-                        
-                    }
-                    
-                    anim.SetBool("Moving", true);
-                    
-                    oneOrientation = 1.0f;
-
-                }
-                if (Input.GetKey(KeyCode.D))
-                {
-                    Vector3 target = transform.parent.position + Quaternion.AngleAxis(-angle, Vector3.up) * direction;
-                    if (charControl.Move(target - position) != CollisionFlags.None)
-                    {
-                        transform.position = position;
-                        Physics.SyncTransforms(); 
-                        
-                    }
-                    
-                        anim.SetBool("Moving", true);
-                    
-                    oneOrientation = -1.0f;
-                }
-            }
-            else anim.SetBool("Moving", false);
+              if (Input.GetKey(KeyCode.A)) {
+                  target = Center + Quaternion.AngleAxis(angle, Vector3.up) * direction;
+                  if (charControl.Move(target - position) != CollisionFlags.None) {
+                      transform.position = position;
+                      Physics.SyncTransforms();
+                  }
+                  anim.SetBool("Moving", true);
+                  oneOrientation = 1.0f;
+              }
+              if (Input.GetKey(KeyCode.D)) {
+                  target = Center + Quaternion.AngleAxis(-angle, Vector3.up) * direction;
+                  if (charControl.Move(target - position) != CollisionFlags.None) {
+                      transform.position = position;
+                      Physics.SyncTransforms();
+                  }
+                  anim.SetBool("Moving", true);
+                  oneOrientation = -1.0f;
+              }
+              // Increment Character Speed
+              rotationSpeed += 2.0f;
+              if (rotationSpeed > maxRotationSpeed) rotationSpeed = maxRotationSpeed;
+          }
+          else {
+              rotationSpeed -= 5.0f;
+              if (rotationSpeed < 0) rotationSpeed = 0;
+              anim.SetBool("Moving", false);
+          }
         }
 
         /* -- Correction of Player Movement -- */
-        Vector3 currentDirection = transform.position - transform.parent.position;
+        Vector3 currentDirection = transform.position - Center;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
 
@@ -195,25 +184,28 @@ public class MovePlayer : MonoBehaviour {
         else
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
         transform.rotation = orientation;
-        if(oneOrientation == 1.0f) transform.rotation *= Quaternion.Euler(0f, 180f,0f);
+        if (oneOrientation == 1.0f) {
+            transform.rotation *= Quaternion.Euler(0, 180.0f, 0);
+        }
 
 
         /* -- CheckingDash -- */
         CheckDashing(charControl);
 
-        
+
         /* -- Shooting -- */
         if (Input.GetKey(KeyCode.K) && !reloading) {
-           currentDirection = transform.position - transform.parent.position;
+            currentDirection = transform.position - Center;
             reloading = true;
             restartTime = 0.0f;
-            Vector3 bulletPos = transform.parent.position + Quaternion.AngleAxis(oneOrientation* 5.0f, Vector3.up) * currentDirection;
+            Vector3 bulletPos = Center + Quaternion.AngleAxis(oneOrientation* 5.0f, Vector3.up) * currentDirection;
             bulletPos.y = transform.position.y;
-        
-            currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent,oneOrientation);
-            
+
+            currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent, oneOrientation);
+
             anim.SetTrigger("Shoot");
         }
+
         if (reloading) {
             restartTime += Time.deltaTime;
             if (restartTime >= timeToRestartShoot) {
@@ -221,16 +213,15 @@ public class MovePlayer : MonoBehaviour {
             }
         }
 
-        /* -- Vertical Movement && Double Jump -- */
-        if (IsGrounded()) {
+        /* -- Vertical Movement && Double Jump --
+        if (IsGrounded() && jumpCount > 0) {
             jumpCount = 0;
         }
-        if (State != PlayerState.ChangingRing) {
-       
+        if (State != PlayerStates.ChangingRing) {
             if (Input.GetKeyDown(KeyCode.W) && jumpCount < maxJumpCount) {
                 speedY = jumpSpeed;
                 jumpCount++;
-            
+
             }
             else if (!IsGrounded()) {
                 speedY -= gravity * Time.deltaTime;
@@ -241,8 +232,22 @@ public class MovePlayer : MonoBehaviour {
             CollisionFlags flags = charControl.Move(moveVector);
             if (flags != CollisionFlags.Below) {
                 speedY = 0;
-            
+
             }
+        }*/
+        // Apply up-down movement
+        if (State != PlayerStates.ChangingRing) {
+            position = transform.position;
+            if (charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.None) {
+                transform.position = position;
+                Physics.SyncTransforms();
+            }
+            if (charControl.isGrounded) {
+                if (Input.GetKey(KeyCode.W))
+                    speedY = jumpSpeed;
+            }
+            else
+                speedY -= gravity * Time.deltaTime;
         }
     }
 
@@ -256,27 +261,24 @@ public class MovePlayer : MonoBehaviour {
 
         RaycastHit hit;
         if (Physics.Raycast(rayStart, Vector3.down, out hit, checkDistance)) {
-           // Debug.Log(name + ": Is Grounded " + checkDistance);
             return true;
         }
-       // Debug.Log(name + ": Is not Grounded " + checkDistance);
         return false;
     }
 
     public void JumpNextLevel() {
-        if (IsGrounded()) {
-            speedY = 20.0f;
-            GameObject world = GameObject.Find("World");
-            world.GetComponent<World>().NextLevel();
-            State = PlayerState.ChangingLevel;
-            //Debug.Log(name + ": Jumped to the next level.");
-        }
+        speedY = 20.5f;
+        State = PlayerStates.ChangingLevel;
+        Debug.Log(name + " jumped to the next level.");
     }
 
-    private IEnumerator MovePlayerToPosition(Vector3 startPosition, Vector3 finalPosition) {
-        float duration = 0.6f; // Duration of the jump
+    public void ArrivedNextLevel() {
+        State = PlayerStates.Normal;
+    }
+
+    private IEnumerator MovePlayerToPosition(Vector3 startPosition, Vector3 finalPosition, float duration) {
         float elapsed = 0.0f;
-        float peakHeight = 1.5f; // Adjust for desired peak height
+        float peakHeight = 1f; // Adjust for desired peak height
 
         while (elapsed < duration) {
             elapsed += Time.deltaTime;
@@ -297,12 +299,20 @@ public class MovePlayer : MonoBehaviour {
 
         // Ensure the player is exactly at the final position after the jump
         //transform.position = finalPosition;
-        State = PlayerState.Normal;
+        State = PlayerStates.Normal;
     }
 
     public void ChangeRing(Vector3 targetPosition) {
-        State = PlayerState.ChangingRing;
-        StartCoroutine(MovePlayerToPosition(transform.position, targetPosition));
+        State = PlayerStates.ChangingRing;
+        StartCoroutine(MovePlayerToPosition(transform.position, targetPosition, 0.6f));
+    }
+
+    public void ChangeCylinder(Vector3 targetPosition) {
+        State = PlayerStates.ChangingRing;
+        StartCoroutine(MovePlayerToPosition(transform.position, targetPosition, 3.0f));
+        Center = new Vector3(50, 0, 0);
+        FollowPlayer cameraScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
+        StartCoroutine(cameraScript.ChangeCylinder(3.5f, 50.0f));
     }
 
     private void CheckDashing(CharacterController charControl) {
@@ -327,7 +337,7 @@ public class MovePlayer : MonoBehaviour {
 
             Quaternion rotation = Quaternion.Euler(0f, 0f, bodyRotation);
             transform.rotation *= rotation;
-        
+
             if (TimeDashing > TimeDashOcurr) {
                 isDashing = false;
             }
