@@ -67,7 +67,7 @@ public class EnemyStationary : EnemyBase {
     private void makeBala() {
         Vector3 orientation = transform.position - reference.position;
         orientation.y = 0.0f;
-        Vector3 bulletPos = reference.position + Quaternion.AngleAxis(direction * 15.0f, Vector3.up) * orientation;
+        Vector3 bulletPos = reference.position + Quaternion.AngleAxis(-direction * 5.0f, Vector3.up) * orientation;
         bulletPos.y = transform.position.y;
 
         GameObject newObject = Instantiate(bala, bulletPos, transform.rotation, reference);
