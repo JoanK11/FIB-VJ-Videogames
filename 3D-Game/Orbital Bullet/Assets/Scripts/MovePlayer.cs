@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
+using TMPro;
 
 
 public class MovePlayer : MonoBehaviour {
@@ -41,7 +42,12 @@ public class MovePlayer : MonoBehaviour {
     int index;
     WeaponBase currentWeapon;
 
-    void SetupWeapons() {
+    const float maxHealth = 120.0f;
+    float health;
+    HealthBar healthBar;
+   
+
+    void SetupWeapons() { 
         weapons = GetComponentsInChildren<WeaponBase>(true);
         foreach (WeaponBase weapon in weapons) {
             weapon.gameObject.SetActive(false);
@@ -94,11 +100,24 @@ public class MovePlayer : MonoBehaviour {
         anim = GetComponent<Animator>();
 
         SetupWeapons();
+
+        health = maxHealth;
+        GameObject tmp= GameObject.Find("Health Bar");
+        healthBar = tmp.GetComponentInChildren<HealthBar>();
+        
+        healthBar.SetMaxHealth(maxHealth);
+        
+    }
+    public void takeDamage(float damageAmount) { 
+        health -= damageAmount;
+        healthBar.SetHealth(health);
+        
     }
 
     void Update() {
         /* -- CheckingSelectionOfWeapon -- */
         CheckSelectionWeapon();
+        if (Input.GetKeyDown(KeyCode.P)) takeDamage(10);
     }
 
     // Update is called once per frame

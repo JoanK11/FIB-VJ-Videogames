@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\Pickup.cs" />
     <Compile Include="Assets\Scripts\BalaPlayer.cs" />
     <Compile Include="Assets\Scripts\HealthBar.cs" />
+    <Compile Include="Assets\Scripts\CurrentAmmo.cs" />
     <Compile Include="Assets\Scripts\EnemyStationary.cs" />
     <Compile Include="Assets\Scripts\BalaBase.cs" />
     <Compile Include="Assets\Scripts\Jump.cs" />
