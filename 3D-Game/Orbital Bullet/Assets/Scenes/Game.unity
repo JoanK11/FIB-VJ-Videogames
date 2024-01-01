@@ -11195,9 +11195,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1682270164}
   - component: {fileID: 1682270166}
-  - component: {fileID: 1682270165}
+  - component: {fileID: 1682270167}
   m_Layer: 0
-  m_Name: Bow1 (1)
+  m_Name: Bow2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11218,19 +11218,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2019485000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1682270165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1682270163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d325290ef391f28419fe46ce7263267f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefab: {fileID: 4750639879699153164, guid: c6e78ca40bf1eb642952bc4ed00928f9, type: 3}
 --- !u!137 &1682270166
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -11354,6 +11341,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.26085094, y: -0.1811938, z: -0.04736048}
     m_Extent: {x: 0.2205351, y: 0.26982406, z: 0.69461787}
   m_DirtyAABB: 0
+--- !u!114 &1682270167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1682270163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b313527a5bc9db40b484b69bf8a84d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 4750639879699153164, guid: c6e78ca40bf1eb642952bc4ed00928f9, type: 3}
 --- !u!1 &1687811100
 GameObject:
   m_ObjectHideFlags: 0
@@ -12017,7 +12017,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: e4f3aec80ce475145ad71d04954abe74, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 

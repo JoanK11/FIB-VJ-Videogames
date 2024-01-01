@@ -15,6 +15,7 @@ public class BalaLongPlayer : BalaBase
         base.initBala();
         Distance = 0.0f;
         prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/BigExplosion.prefab");
+        Center = GameObject.Find("Player").GetComponent<MovePlayer>().GetCenter();
     }
 
     // Update is called once per frame

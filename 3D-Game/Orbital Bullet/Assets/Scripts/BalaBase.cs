@@ -13,9 +13,10 @@ public class BalaBase : MonoBehaviour
     protected Vector3 startDirection;
 
     protected Quaternion rotacionInicial;
-
+    protected Vector3 Center;
     protected void initBala() {
-        startDirection = transform.position - transform.parent.position;
+  
+        startDirection = transform.position -Center;
         startDirection.y = 0.0f;
         startDirection.Normalize();
         rotacionInicial = transform.rotation;
@@ -29,9 +30,9 @@ public class BalaBase : MonoBehaviour
 
         position = transform.position;
         angle = rotationSpeed * Time.deltaTime;
-        direction = position - transform.parent.position;
+        direction = position - Center;
 
-        target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
+        target = Center + Quaternion.AngleAxis(angle, Vector3.up) * direction;
 
         transform.position = target;
         Physics.SyncTransforms();
@@ -40,18 +41,14 @@ public class BalaBase : MonoBehaviour
         // Correct orientation of player
         // Compute current direction
 
-        Vector3 currentDirection = transform.position - transform.parent.position;
+        Vector3 currentDirection = transform.position - Center;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
+        Debug.Log("Current direction: "+currentDirection);
         // Change orientation of player accordingly
-        Quaternion orientation;
-        if ((startDirection - currentDirection).magnitude < 1e-3)
-            orientation = Quaternion.AngleAxis(0.0f, Vector3.up);
-        else if ((startDirection + currentDirection).magnitude < 1e-3)
-            orientation = Quaternion.AngleAxis(180.0f, Vector3.up);
-        else
-            orientation = Quaternion.FromToRotation(startDirection, currentDirection);
-        transform.rotation = orientation * rotacionInicial;
+        Vector3 forward = Vector3.Cross(currentDirection, Vector3.up);
+        transform.rotation=Quaternion.LookRotation(forward);
+        
     }
     public float GetDamage() { 
         return damage;
