@@ -10,8 +10,12 @@ public class BalaPlayer : BalaBase {
         rotationSpeed = -10.0f;
         damage = 10.0f;
         base.initBala();
-        Debug.Log(rotacionInicial);
+        
         prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/SmallExplosion.prefab");
+        Center = GameObject.Find("Player").GetComponent<MovePlayer>().GetCenter();
+        Quaternion pre = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Bala.prefab").transform.rotation;
+        rotacionInicial = GameObject.Find("Player").transform.rotation * Quaternion.Euler(0, 90, 0) * pre;
+  
     }
 
     // Update is called once per frame

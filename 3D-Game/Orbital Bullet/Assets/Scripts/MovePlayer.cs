@@ -49,7 +49,13 @@ public class MovePlayer : MonoBehaviour {
 
     /* -- Audio -- */
     PlayerAudio playerAudio;
-
+    public Vector3 GetCenter() {
+        return Center;
+    }
+    public Vector3 GetStartDirection()
+    {
+        return startDirection;
+    }
     void SetupWeapons() { 
         weapons = GetComponentsInChildren<WeaponBase>(true);
         foreach (WeaponBase weapon in weapons) {

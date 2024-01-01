@@ -11,6 +11,7 @@ public class BalaEnemy : BalaBase
         damage = 10.0f;
         initBala();
         prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/SmallExplosion.prefab");
+        Center = transform.parent.position;
     }
 
     // Update is called once per frame

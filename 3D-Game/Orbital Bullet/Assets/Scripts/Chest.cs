@@ -26,7 +26,7 @@ public class Chest : MonoBehaviour {
     void Start () {
         isPlayerOnTrigger = false;
         isChestOpened = false;
-        //animator = chest.GetComponent<Animator>();
+        animator = chest.GetComponent<Animator>();
         InitializeGameObjects();
     }
 
@@ -47,10 +47,10 @@ public class Chest : MonoBehaviour {
         }
     }
 
-    void FixedUpdate() {
+    void Update() {
         if (isPlayerOnTrigger && Input.GetKeyUp(KeyCode.E) && !isChestOpened) {
             isChestOpened = true;
-            //animator.Play("chest");
+            animator.SetTrigger("move");
             playerAudio.PlayChestSound();
             Debug.Log(name + ": Player opened chest.");
         }
