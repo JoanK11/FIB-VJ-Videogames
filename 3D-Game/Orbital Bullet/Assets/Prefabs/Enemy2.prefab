@@ -398,7 +398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   maxShield: 100
-  bala: {fileID: 1958033528114205798, guid: b30b117c79ec8684b9dc92f12f38640f, type: 3}
+  bala: {fileID: 6196737890966260218, guid: d97ef1dbbc0e688409574d3484a0c245, type: 3}
   secondsInIdle: 5
   secondsBetweenBullets: 3
   numberOfBullets: 3

@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using UnityEditor;
 public class BalaLongPlayer : BalaBase
 {
     // Start is called before the first frame update
+    GameObject prefab;
+
     private float Distance;
     public void init() {
         rotationSpeed = -100.0f;
         damage = 30.0f;
         base.initBala();
         Distance = 0.0f;
+        prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/BigExplosion.prefab");
     }
 
     // Update is called once per frame
@@ -31,7 +34,8 @@ public class BalaLongPlayer : BalaBase
             EnemyBase enemy = other.gameObject.GetComponent<EnemyBase>();
             enemy.takeDamage(GetDamage());
         }
-
+        GameObject explosion = Instantiate(prefab, transform.position, Quaternion.identity);
+        Destroy(explosion, 1.0f);
         Destroy(gameObject);
     }
 }
