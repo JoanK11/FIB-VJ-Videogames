@@ -145,7 +145,7 @@ public class MovePlayer : MonoBehaviour {
               if (rotationSpeed > maxRotationSpeed) rotationSpeed = maxRotationSpeed;
           }
           else {
-              rotationSpeed -= 5.0f;
+              //rotationSpeed -= 5.0f;
               if (rotationSpeed < 0) rotationSpeed = 0;
               anim.SetBool("Moving", false);
           }
@@ -297,28 +297,27 @@ public class MovePlayer : MonoBehaviour {
     }
 
     private void CheckDashing(CharacterController charControl) {
-        if (Input.GetKey(KeyCode.LeftShift)) {
+        if (Input.GetKeyDown(KeyCode.LeftShift)) {
             isDashing = true;
             TimeDashing = 0.0f;
         }
+
         if (isDashing) {
             float time = Time.deltaTime;
             TimeDashing += time;
             Vector3 position = transform.position;
-            float angle = oneOrientation *VelocityOfDashing * time ;
-            Vector3 direction = position - transform.parent.position;
-            Vector3 target = transform.parent.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
-            if (charControl.Move(target - position) != CollisionFlags.None)
-            {
-                transform.position = position;
+            float angle = oneOrientation * VelocityOfDashing * time;
+            Vector3 direction = position - Center;
+            Vector3 target = Center + Quaternion.AngleAxis(angle, Vector3.up) * direction;
+            if (charControl.Move(target - position) != CollisionFlags.None) {
+                Debug.Log("He entrado");
+                //transform.position = position;
                 Physics.SyncTransforms();
-
             }
             float bodyRotation = - RotationHimself * TimeDashing;
 
             Quaternion rotation = Quaternion.Euler(0f, 0f, bodyRotation);
             transform.rotation *= rotation;
-
             if (TimeDashing > TimeDashOcurr) {
                 isDashing = false;
             }

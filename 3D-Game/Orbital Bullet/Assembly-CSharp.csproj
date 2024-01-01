@@ -60,10 +60,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\WeaponLong.cs" />
+    <Compile Include="Assets\Scripts\Chest.cs" />
     <Compile Include="Assets\Scripts\idle.cs" />
     <Compile Include="Assets\Scripts\World.cs" />
     <Compile Include="Assets\Scripts\BalaLongPlayer.cs" />
     <Compile Include="Assets\Scripts\Platform_Script.cs" />
+    <Compile Include="Assets\Scripts\Column.cs" />
     <Compile Include="Assets\Scripts\RingChange.cs" />
     <Compile Include="Assets\Scripts\Inventory.cs" />
     <Compile Include="Assets\Scripts\WeaponBase.cs" />
