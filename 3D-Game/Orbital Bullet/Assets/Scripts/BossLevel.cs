@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BossLevel : MonoBehaviour {
-    float rotationSpeed = 5.0f;
-    bool exitedTrigger;
-    public BoxCollider boxCollider;
+    float rotationSpeed = 25.0f;
+    public bool exitedTrigger;
 
     void Start() {
         exitedTrigger = false;
     }
 
-    void Update() {
+    void FixedUpdate() {
         if (exitedTrigger) {
             transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
         }
@@ -21,7 +20,7 @@ public class BossLevel : MonoBehaviour {
         if (other.gameObject.CompareTag("Player")) {
             exitedTrigger = true;
             other.GetComponent<MovePlayer>().ArrivedNextLevel();
-            boxCollider.isTrigger = false;
+            GetComponent<BoxCollider>().isTrigger = false;
         }
     }
 }
