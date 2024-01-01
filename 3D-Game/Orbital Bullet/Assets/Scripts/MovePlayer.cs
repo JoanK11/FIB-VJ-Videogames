@@ -11,11 +11,10 @@ public class MovePlayer : MonoBehaviour {
     const float maxRotationSpeed = 70.0f;
 
     /* -- Double Jump -- */
-    int jumpCount;
+    //int jumpCount;
     const int maxJumpCount = 2;
     Vector3 startDirection;
     float speedY;
-    float changingLevelTime;
 
     /* -- Player States -- */
     public enum PlayerStates { Normal, ChangingLevel, ChangingRing, Invincible };
@@ -68,7 +67,6 @@ public class MovePlayer : MonoBehaviour {
         startDirection.y = 0.0f;
         startDirection.Normalize();
         speedY = 0;
-        changingLevelTime = 0;
 
         State = PlayerStates.Normal;
 
@@ -79,7 +77,7 @@ public class MovePlayer : MonoBehaviour {
         Center = new Vector3(0, 0, 0);
 
         /* -- Double Jump -- */
-        jumpCount = 0;
+        //jumpCount = 0;
 
         /* -- Shooting -- */
         timeToRestartShoot = 0.25f;
