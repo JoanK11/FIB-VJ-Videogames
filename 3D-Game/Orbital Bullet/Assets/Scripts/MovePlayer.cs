@@ -42,10 +42,13 @@ public class MovePlayer : MonoBehaviour {
     int index;
     WeaponBase currentWeapon;
 
+    /* -- Health -- */
     const float maxHealth = 120.0f;
     float health;
     HealthBar healthBar;
-   
+
+    /* -- Audio -- */
+    PlayerAudio playerAudio;
 
     void SetupWeapons() { 
         weapons = GetComponentsInChildren<WeaponBase>(true);
@@ -102,22 +105,26 @@ public class MovePlayer : MonoBehaviour {
         SetupWeapons();
 
         health = maxHealth;
-        GameObject tmp= GameObject.Find("Health Bar");
+        GameObject tmp = GameObject.Find("Health Bar");
         healthBar = tmp.GetComponentInChildren<HealthBar>();
         
         healthBar.SetMaxHealth(maxHealth);
-        
+
+        /* -- Audio -- */
+        playerAudio = GetComponent<PlayerAudio>();
+
     }
-    public void takeDamage(float damageAmount) { 
+
+    public void TakeDamage(float damageAmount) { 
         health -= damageAmount;
+        playerAudio.PlayDamageSound();
         healthBar.SetHealth(health);
-        
     }
 
     void Update() {
         /* -- CheckingSelectionOfWeapon -- */
         CheckSelectionWeapon();
-        if (Input.GetKeyDown(KeyCode.P)) takeDamage(10);
+        if (Input.GetKeyDown(KeyCode.P)) TakeDamage(10);
     }
 
     // Update is called once per frame
@@ -200,7 +207,7 @@ public class MovePlayer : MonoBehaviour {
             bulletPos.y = transform.position.y;
 
             currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent, oneOrientation);
-
+            playerAudio.PlayAttackSound();
             anim.SetTrigger("Shoot");
         }
 
@@ -241,8 +248,10 @@ public class MovePlayer : MonoBehaviour {
                 Physics.SyncTransforms();
             }
             if (charControl.isGrounded) {
-                if (Input.GetKey(KeyCode.W))
+                if (Input.GetKey(KeyCode.W)) {
                     speedY = jumpSpeed;
+                    playerAudio.PlayJumpSound();
+                }
             }
             else
                 speedY -= gravity * Time.deltaTime;
@@ -267,6 +276,7 @@ public class MovePlayer : MonoBehaviour {
     public void JumpNextLevel() {
         speedY = 20.5f;
         State = PlayerStates.ChangingLevel;
+        playerAudio.PlayTeleportSound();
         Debug.Log(name + " jumped to the next level.");
     }
 
@@ -302,6 +312,7 @@ public class MovePlayer : MonoBehaviour {
 
     public void ChangeRing(Vector3 targetPosition) {
         State = PlayerStates.ChangingRing;
+        playerAudio.PlayRingChangeSound();
         StartCoroutine(MovePlayerToPosition(transform.position, targetPosition, 0.6f));
     }
 

@@ -20,6 +20,9 @@ public class Chest : MonoBehaviour {
     /* -- Animation -- */
     Animator animator;
 
+    /* -- Chest -- */
+    PlayerAudio playerAudio;
+
     void Start () {
         isPlayerOnTrigger = false;
         isChestOpened = false;
@@ -32,6 +35,7 @@ public class Chest : MonoBehaviour {
         if (player == null) {
             Debug.LogError(name + ": Player object not found. Make sure your player is named 'Player'.");
         }
+        playerAudio = player.GetComponent<PlayerAudio>();
 
         if (UIButton == null) {
             Debug.LogError(name + ": UIButton not found.");
@@ -47,6 +51,7 @@ public class Chest : MonoBehaviour {
         if (isPlayerOnTrigger && Input.GetKeyUp(KeyCode.E) && !isChestOpened) {
             isChestOpened = true;
             //animator.Play("chest");
+            playerAudio.PlayChestSound();
             Debug.Log(name + ": Player opened chest.");
         }
     }

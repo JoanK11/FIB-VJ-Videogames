@@ -59,17 +59,20 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.13f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\PlayerAudio.cs" />
     <Compile Include="Assets\Scripts\WeaponLong.cs" />
     <Compile Include="Assets\Scripts\Chest.cs" />
     <Compile Include="Assets\Scripts\idle.cs" />
     <Compile Include="Assets\Scripts\World.cs" />
     <Compile Include="Assets\Scripts\BalaLongPlayer.cs" />
+    <Compile Include="Assets\Scripts\BossLevel.cs" />
     <Compile Include="Assets\Scripts\Platform_Script.cs" />
     <Compile Include="Assets\Scripts\Column.cs" />
     <Compile Include="Assets\Scripts\RingChange.cs" />
     <Compile Include="Assets\Scripts\Inventory.cs" />
     <Compile Include="Assets\Scripts\WeaponBase.cs" />
     <Compile Include="Assets\Scripts\MovePlayer.cs" />
+    <Compile Include="Assets\Scripts\Trap.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\EnemyHealthBar.cs" />
     <Compile Include="Assets\Scripts\Pickup.cs" />
