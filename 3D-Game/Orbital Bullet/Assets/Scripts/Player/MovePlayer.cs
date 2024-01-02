@@ -351,7 +351,7 @@ public class MovePlayer : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.LeftShift)) {
             isDashing = true;
             TimeDashing = 0.0f;
-            charControl.radius = 0;
+            
             anim.SetTrigger("Roll");
         }
 
@@ -371,7 +371,7 @@ public class MovePlayer : MonoBehaviour {
            
             if (TimeDashing > TimeDashOcurr) {
                 isDashing = false;
-                charControl.radius = radius;
+                
             }
         }
     }
