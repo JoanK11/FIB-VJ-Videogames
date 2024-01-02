@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 
 public class MovePlayer : MonoBehaviour {
@@ -49,6 +50,10 @@ public class MovePlayer : MonoBehaviour {
 
     /* -- Audio -- */
     PlayerAudio playerAudio;
+    /* --  Ammo -- */
+    const int maxAmmo = 60;
+    int ammo;
+    CurrentAmmo text;
     public Vector3 GetCenter() {
         return Center;
     }
@@ -75,7 +80,10 @@ public class MovePlayer : MonoBehaviour {
             currentWeapon = weapons[index];
         }
     }
-
+    public void SetAmmo(int ammo) {
+        this.ammo = Math.Min(ammo, maxAmmo);
+        text.SetAmmo(this.ammo);
+    }
     void Start() {
         // Store starting direction of the player with respect to the axis of the level
         startDirection = transform.position - transform.parent.position;
@@ -118,6 +126,10 @@ public class MovePlayer : MonoBehaviour {
 
         /* -- Audio -- */
         playerAudio = GetComponent<PlayerAudio>();
+
+        /* -- Ammo -- */
+        text = GameObject.Find("CurrentAmmo").GetComponent<CurrentAmmo>();
+        SetAmmo(maxAmmo);
 
     }
 
@@ -205,7 +217,7 @@ public class MovePlayer : MonoBehaviour {
 
 
         /* -- Shooting -- */
-        if (Input.GetKey(KeyCode.K) && !reloading) {
+        if (Input.GetKey(KeyCode.K) && !reloading && ammo > 0) {
             currentDirection = transform.position - Center;
             reloading = true;
             restartTime = 0.0f;
@@ -215,6 +227,7 @@ public class MovePlayer : MonoBehaviour {
             currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent, oneOrientation);
             playerAudio.PlayAttackSound();
             anim.SetTrigger("Shoot");
+            SetAmmo(ammo - 1);
         }
 
         if (reloading) {

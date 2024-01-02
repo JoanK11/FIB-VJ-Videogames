@@ -44,7 +44,7 @@ public class BalaBase : MonoBehaviour
         Vector3 currentDirection = transform.position - Center;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
-        Debug.Log("Current direction: "+currentDirection);
+      
         // Change orientation of player accordingly
         Vector3 forward = Vector3.Cross(currentDirection, Vector3.up);
         transform.rotation=Quaternion.LookRotation(forward);
