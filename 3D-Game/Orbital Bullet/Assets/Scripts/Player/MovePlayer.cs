@@ -144,7 +144,16 @@ public class MovePlayer : MonoBehaviour {
         CheckSelectionWeapon();
         if (Input.GetKeyDown(KeyCode.P)) TakeDamage(10);
     }
-
+    void Shoot() {
+        Vector3 currentDirection = transform.position - Center;
+        reloading = false;
+        restartTime = 0.0f;
+        Vector3 bulletPos = Center + Quaternion.AngleAxis(oneOrientation * 5.0f, Vector3.up) * currentDirection;
+        bulletPos.y = transform.position.y;
+        currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent, oneOrientation);
+        SetAmmo(ammo - 1);
+        
+    }
     // Update is called once per frame
     void FixedUpdate() {
         bool canMove = true;
@@ -218,24 +227,13 @@ public class MovePlayer : MonoBehaviour {
 
         /* -- Shooting -- */
         if (Input.GetKey(KeyCode.K) && !reloading && ammo > 0) {
-            currentDirection = transform.position - Center;
             reloading = true;
-            restartTime = 0.0f;
-            Vector3 bulletPos = Center + Quaternion.AngleAxis(oneOrientation* 5.0f, Vector3.up) * currentDirection;
-            bulletPos.y = transform.position.y;
-
-            currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent, oneOrientation);
             playerAudio.PlayAttackSound();
             anim.SetTrigger("Shoot");
-            SetAmmo(ammo - 1);
+            Invoke("Shoot", 0.7f);
         }
 
-        if (reloading) {
-            restartTime += Time.deltaTime;
-            if (restartTime >= timeToRestartShoot) {
-                reloading = false;
-            }
-        }
+        
 
         /* -- Vertical Movement && Double Jump --
         if (IsGrounded() && jumpCount > 0) {
