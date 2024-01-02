@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 
 public class MovePlayer : MonoBehaviour {
@@ -49,6 +50,10 @@ public class MovePlayer : MonoBehaviour {
 
     /* -- Audio -- */
     PlayerAudio playerAudio;
+    /* --  Ammo -- */
+    const int maxAmmo = 60;
+    int ammo;
+    CurrentAmmo text;
     public Vector3 GetCenter() {
         return Center;
     }
@@ -75,7 +80,10 @@ public class MovePlayer : MonoBehaviour {
             currentWeapon = weapons[index];
         }
     }
-
+    public void SetAmmo(int ammo) {
+        this.ammo = Math.Min(ammo, maxAmmo);
+        text.SetAmmo(this.ammo);
+    }
     void Start() {
         // Store starting direction of the player with respect to the axis of the level
         startDirection = transform.position - transform.parent.position;
@@ -119,6 +127,10 @@ public class MovePlayer : MonoBehaviour {
         /* -- Audio -- */
         playerAudio = GetComponent<PlayerAudio>();
 
+        /* -- Ammo -- */
+        text = GameObject.Find("CurrentAmmo").GetComponent<CurrentAmmo>();
+        SetAmmo(maxAmmo);
+
     }
 
     public void TakeDamage(float damageAmount) { 
@@ -132,7 +144,16 @@ public class MovePlayer : MonoBehaviour {
         CheckSelectionWeapon();
         if (Input.GetKeyDown(KeyCode.P)) TakeDamage(10);
     }
-
+    void Shoot() {
+        Vector3 currentDirection = transform.position - Center;
+        reloading = false;
+        restartTime = 0.0f;
+        Vector3 bulletPos = Center + Quaternion.AngleAxis(oneOrientation * 5.0f, Vector3.up) * currentDirection;
+        bulletPos.y = transform.position.y;
+        currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent, oneOrientation);
+        SetAmmo(ammo - 1);
+        
+    }
     // Update is called once per frame
     void FixedUpdate() {
         bool canMove = true;
@@ -205,24 +226,14 @@ public class MovePlayer : MonoBehaviour {
 
 
         /* -- Shooting -- */
-        if (Input.GetKey(KeyCode.K) && !reloading) {
-            currentDirection = transform.position - Center;
+        if (Input.GetKey(KeyCode.K) && !reloading && ammo > 0) {
             reloading = true;
-            restartTime = 0.0f;
-            Vector3 bulletPos = Center + Quaternion.AngleAxis(oneOrientation* 5.0f, Vector3.up) * currentDirection;
-            bulletPos.y = transform.position.y;
-
-            currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent, oneOrientation);
             playerAudio.PlayAttackSound();
             anim.SetTrigger("Shoot");
+            Invoke("Shoot", 0.7f);
         }
 
-        if (reloading) {
-            restartTime += Time.deltaTime;
-            if (restartTime >= timeToRestartShoot) {
-                reloading = false;
-            }
-        }
+        
 
         /* -- Vertical Movement && Double Jump --
         if (IsGrounded() && jumpCount > 0) {

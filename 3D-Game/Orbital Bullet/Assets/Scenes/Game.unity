@@ -3644,7 +3644,6 @@ GameObject:
   - component: {fileID: 548575376}
   - component: {fileID: 548575378}
   - component: {fileID: 548575377}
-  - component: {fileID: 548575379}
   m_Layer: 5
   m_Name: Ammo
   m_TagString: Untagged
@@ -3768,20 +3767,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 548575375}
   m_CullTransparentMesh: 1
---- !u!114 &548575379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 548575375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfc0e8058afb27745b025f5f73c24e78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthText: {fileID: 548575377}
-  slider: {fileID: 826760578}
 --- !u!4 &557540950 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5048025441337412694, guid: 26bdc60651ed25c44836718351d52a00, type: 3}
@@ -4450,7 +4435,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -759, y: 255.2}
+  m_AnchoredPosition: {x: -664, y: 255.2}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &620787703
@@ -5976,7 +5961,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -916.9, y: 278}
+  m_AnchoredPosition: {x: -828, y: 278}
   m_SizeDelta: {x: 38, y: 33}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &737349737

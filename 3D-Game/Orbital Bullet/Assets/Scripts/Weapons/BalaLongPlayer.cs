@@ -10,7 +10,7 @@ public class BalaLongPlayer : BalaBase
 
     private float Distance;
     public void init() {
-        rotationSpeed = -100.0f;
+        rotationSpeed = -80.0f;
         damage = 30.0f;
         base.initBala();
         Distance = 0.0f;

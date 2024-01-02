@@ -7,7 +7,7 @@ public class BalaPlayer : BalaBase {
     // Start is called before the first frame update
     GameObject prefab;
     public void init() {
-        rotationSpeed = -10.0f;
+        rotationSpeed = -70.0f;
         damage = 10.0f;
         base.initBala();
         
