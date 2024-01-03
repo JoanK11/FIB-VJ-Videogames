@@ -250,7 +250,7 @@ MonoBehaviour:
   - {fileID: 16}
   - {fileID: 17}
   m_Selected: 0
-  m_LastSelected: 1
+  m_LastSelected: 2
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -270,8 +270,8 @@ MonoBehaviour:
     y: 0
     width: 338.40002
     height: 730.8
-  m_MinSize: {x: 276, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 275, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 18}
@@ -598,7 +598,7 @@ MonoBehaviour:
       sizeOverriden: 0
     m_OverlaysVisible: 1
   m_WindowGUID: cc27987af1a868c49b0894db9c0f5429
-  m_Gizmos: 0
+  m_Gizmos: 1
   m_OverrideSceneCullingMask: 6917529027641081856
   m_SceneIsLit: 1
   m_SceneLighting: 1
@@ -607,9 +607,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -16.83443, y: -1.8937607, z: 12.487242}
+    m_Target: {x: 62.217567, y: 9.220805, z: 9.333578}
     speed: 2
-    m_Value: {x: -16.83443, y: -1.8937607, z: 12.487242}
+    m_Value: {x: 62.217567, y: 9.220805, z: 9.333578}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -655,13 +655,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.16896226, y: -0.47083694, z: 0.09243835, w: 0.8609929}
+    m_Target: {x: 0.20300582, y: 0.41438437, z: -0.09536157, w: 0.8821035}
     speed: 2
-    m_Value: {x: 0.17009917, y: -0.46967143, z: 0.092795156, w: 0.8613154}
+    m_Value: {x: 0.20182051, y: 0.41553083, z: -0.09510041, w: 0.88179284}
   m_Size:
-    m_Target: 17.975004
+    m_Target: 13.240178
     speed: 2
-    m_Value: 17.975004
+    m_Value: 13.240176
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -722,10 +722,10 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 234.79999}
-      m_SelectedIDs: bc1d0000
-      m_LastClickedID: 0
-      m_ExpandedIDs: 14d0feffd0d2feff60fffeff9c00ffff6c0affff960effff5023ffff0c2cffff9c30ffff7057ffff3064ffff686fffff3098ffffbcbeffff76c4ffff98c7fffffccfffff5ad3ffff42e1ffff8ce4ffff02fbffff306000008662000042a700008ca70000c2a7000018aa0000e0ca000066cd000050d100009ad10000cad100001ed2000020d400004ed600006a2d0200b42d0200163f0200c2400200cc400200ea43020056440200585c0200865c0200a25c02002a5f020048620200fe730200867402003e750200507502007c760200867602009a760200d47602002677020038770200ae770200e0770200167902008c790200a4790200
+      scrollPos: {x: 0, y: 0}
+      m_SelectedIDs: eca00100
+      m_LastClickedID: 106732
+      m_ExpandedIDs: eea7ffff7ea8ffffe2b2ffffecfaffffda600000ec6000004e6100008e6100009462000046630000e063000040640000b0640000306500001e9f010016a1010000a30100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -892,7 +892,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Enemies
+    - Assets/Scenes
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -900,16 +900,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts/Enemies
+  - Assets/Scenes
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\joanc\Desktop\FIB-VJ-Videojocs\3D-Game\Orbital Bullet
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 557.4}
-    m_SelectedIDs: c06a0000
-    m_LastClickedID: 27328
-    m_ExpandedIDs: 00000000526a0000546a0000566a0000586a00005a6a00005c6a00005e6a0000606a0000626a0000646a0000666a0000686a0000d06a0000d26a0000d652010000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 429.40002}
+    m_SelectedIDs: 066b0000
+    m_LastClickedID: 27398
+    m_ExpandedIDs: 000000005e6a0000606a0000626a0000646a0000666a0000686a00006a6a00006c6a00006e6a0000706a0000726a0000746a000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -937,7 +937,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000526a0000546a0000566a0000586a00005a6a00005c6a00005e6a0000606a0000626a0000646a0000666a0000686a0000
+    m_ExpandedIDs: 000000005e6a0000606a0000626a0000646a0000666a0000686a00006a6a00006c6a00006e6a0000706a0000726a0000746a0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

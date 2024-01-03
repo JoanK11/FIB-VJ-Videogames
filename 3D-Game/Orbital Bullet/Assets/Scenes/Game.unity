@@ -2804,8 +2804,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 25, y: 0}
+  m_SizeDelta: {x: 50, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &249246623
 MonoBehaviour:
@@ -4224,7 +4224,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1.2, y: 0.74, z: 1.32}
-  m_Center: {x: -0.07, y: 0.14, z: 0.04}
+  m_Center: {x: -0.07, y: -0.17, z: 0.04}
 --- !u!23 &499102147
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7743,10 +7743,10 @@ RectTransform:
   - {fileID: 737349736}
   - {fileID: 1720476782}
   - {fileID: 620787702}
-  - {fileID: 1511768440}
+  - {fileID: 1503871531}
   - {fileID: 730610413}
   - {fileID: 1960129279}
-  - {fileID: 1503871531}
+  - {fileID: 1511768440}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -13724,8 +13724,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.26, y: 1, z: 1.24}
-  m_Center: {x: 1.3, y: -0.16, z: -0.27}
+  m_Size: {x: 1.26, y: 0.7, z: 1.24}
+  m_Center: {x: 1.3, y: 0, z: -0.27}
 --- !u!23 &1409841099
 MeshRenderer:
   m_ObjectHideFlags: 0
