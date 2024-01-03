@@ -50,7 +50,6 @@ public class Trap : MonoBehaviour {
                 elapsed += Time.deltaTime;
                 float alpha = Mathf.Lerp(0.5f, 0, elapsed / flashDuration);
                 screenFlash.color = new Color(screenFlash.color.r, screenFlash.color.g, screenFlash.color.b, alpha);
-                Debug.Log(screenFlash.color);
                 yield return null;
             }
 

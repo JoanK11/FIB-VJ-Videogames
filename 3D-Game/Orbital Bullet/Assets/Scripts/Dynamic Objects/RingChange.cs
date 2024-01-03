@@ -8,6 +8,7 @@ public class RingChange : MonoBehaviour {
     public GameObject target;
     GameObject player;
     bool isPlayerOnTrigger;
+    const float duration = 0.6f;
 
     /* -- UI -- */
     public GameObject UIButton;
@@ -15,36 +16,24 @@ public class RingChange : MonoBehaviour {
     Image UIimage;
     Sprite keySprite;
 
-
     void Start() {
         InitializeGameObjects();
         isPlayerOnTrigger = false;
     }
 
+    void InitializeGameObjects() {
+        player = GameObject.Find("Player");
+
+        UItext = UIButton.GetComponentInChildren<TextMeshProUGUI>();
+        UIimage = UIButton.GetComponentInChildren<Image>();
+        keySprite = Resources.Load<Sprite>("E-Key");
+    }
+
     void Update() {
         if (isPlayerOnTrigger && Input.GetKeyUp(KeyCode.E)) {
             Vector3 targetPosition = target.transform.position + Vector3.up;
-            Debug.Log(name + ": Player needs to go to " + targetPosition);
-            player.GetComponent<MovePlayer>().ChangeRing(targetPosition);
-        }
-    }
-
-    void InitializeGameObjects() {
-        player = GameObject.Find("Player");
-        if (player == null) {
-            Debug.LogError(name + ": Player object not found. Make sure your player is named 'Player'.");
-        }
-
-        if (target == null) {
-            Debug.LogError(name + ": Ring Change has no target.");
-        }
-
-        if (UIButton == null) {
-            Debug.LogError(name + ": UIButton not found.");
-        } else {
-            UItext = UIButton.GetComponentInChildren<TextMeshProUGUI>();
-            UIimage = UIButton.GetComponentInChildren<Image>();
-            keySprite = Resources.Load<Sprite>("E-Key");
+            Debug.Log(name + ": Teleporting Player to " + targetPosition);
+            player.GetComponent<MovePlayer>().ChangeRing(targetPosition, duration);
         }
     }
 

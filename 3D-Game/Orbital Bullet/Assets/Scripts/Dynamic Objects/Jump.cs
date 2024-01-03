@@ -7,6 +7,7 @@ using UnityEngine.UI; // Image namespace
 public class Jump : MonoBehaviour {
     public GameObject player;
     private bool isPlayerOnTrigger;
+    public EnemyManager enemyManager;
 
     /* -- UI -- */
     public GameObject UIButton;
@@ -32,9 +33,9 @@ public class Jump : MonoBehaviour {
     }
 
     void Update() {
-        if (isPlayerOnTrigger && Input.GetKeyUp(KeyCode.E)) {
+        if (isPlayerOnTrigger && Input.GetKeyUp(KeyCode.E) && enemyManager.enemyCount == 0) {
             player.GetComponent<MovePlayer>().JumpNextLevel();
-            Debug.Log(name + ": Player tried to jump to the next level.");
+            Debug.Log(name + ": Player jumped to the next level.");
         }
     }
 
@@ -56,11 +57,25 @@ public class Jump : MonoBehaviour {
 
     void ShowUI(bool show) {
         if (show) {
-            UItext.text = "Jump to the next sector";
-            UIimage.sprite = keySprite;
+            if (enemyManager.enemyCount > 0) {
+                UItext.text = "Defeat all enemies to access the next level!";
+                UItext.color = Color.red;
+                UIimage.gameObject.SetActive(false);
+            }
+            else {
+                UItext.text = "Jump to the next sector";
+                UItext.color = Color.white;
+                UIimage.sprite = keySprite;
+                UIimage.gameObject.SetActive(true);
+            }
             UIButton.SetActive(true);
         } else {
+            UIimage.gameObject.SetActive(true);
             UIButton.SetActive(false);
         }
+    }
+
+    public void UpdateUI() {
+        ShowUI(isPlayerOnTrigger);
     }
 }

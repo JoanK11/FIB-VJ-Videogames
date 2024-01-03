@@ -104,9 +104,15 @@ public class FollowPlayer : MonoBehaviour {
         // Ensures the parent is exactly at the final rotation and position
         transform.parent.rotation = endRotation;
         transform.parent.position = endPosition;
-        
+
         // Update the center and direction accordingly
         Center = new Vector3(50, 0, 0);
         changingCylinder = false;
+    }
+
+    public void SetCamera(Quaternion newRotation, Vector3 newPosition, Vector3 newCenter) {
+        transform.parent.rotation = newRotation;
+        transform.parent.position = newPosition;
+        Center = newCenter;
     }
 }

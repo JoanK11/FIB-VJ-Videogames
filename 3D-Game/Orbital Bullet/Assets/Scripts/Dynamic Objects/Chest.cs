@@ -13,6 +13,8 @@ public class Chest : MonoBehaviour {
 
     /* -- Loot -- */
     public GameObject loot;
+    public int dropsAmmo;
+    public int dropsHealth;
 
     /* -- UI -- */
     public GameObject UIButton;
@@ -37,19 +39,13 @@ public class Chest : MonoBehaviour {
     }
 
     void InitializeGameObjects() {
+        /* -- Player -- */
         player = GameObject.Find("Player");
-        if (player == null) {
-            Debug.LogError(name + ": Player object not found. Make sure your player is named 'Player'.");
-        }
 
-        if (UIButton == null) {
-            Debug.LogError(name + ": UIButton not found.");
-        }
-        else {
-            UItext = UIButton.GetComponentInChildren<TextMeshProUGUI>();
-            UIimage = UIButton.GetComponentInChildren<Image>();
-            keySprite = Resources.Load<Sprite>("E-Key");
-        }
+        /* -- UI Button -- */
+        UItext = UIButton.GetComponentInChildren<TextMeshProUGUI>();
+        UIimage = UIButton.GetComponentInChildren<Image>();
+        keySprite = Resources.Load<Sprite>("E-Key");
     }
 
     void Update() {
@@ -65,6 +61,13 @@ public class Chest : MonoBehaviour {
 
             animator.SetTrigger("move");
             Debug.Log(name + ": Player opened chest.");
+
+            if (dropsAmmo > 0) {
+                player.GetComponent<MovePlayer>().IncreaseAmmo(dropsAmmo);
+            }
+            if (dropsHealth > 0) {
+                player.GetComponent<MovePlayer>().IncreaseHealth(dropsHealth);
+            }
         }
     }
 

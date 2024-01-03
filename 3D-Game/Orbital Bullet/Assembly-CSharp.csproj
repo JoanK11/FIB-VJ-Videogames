@@ -65,6 +65,8 @@
     <Compile Include="Assets\Scripts\Enemies\EnemyHealthBar.cs" />
     <Compile Include="Assets\UnityTechnologies\EffectExamples\Shared\Scripts\DecalDestroyer.cs" />
     <Compile Include="Assets\Scripts\Objects\Platform_Script.cs" />
+    <Compile Include="Assets\Scripts\UI\GameWin.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Player\MovePlayer.cs" />
     <Compile Include="Assets\Scripts\Weapons\BalaBase.cs" />
     <Compile Include="Assets\Scripts\UI\HealthBarText.cs" />
@@ -79,10 +81,12 @@
     <Compile Include="Assets\Scripts\Weapons\BalaEnemy.cs" />
     <Compile Include="Assets\Scripts\Main Menu\MenuToogle.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyStationary.cs" />
+    <Compile Include="Assets\Scripts\Dynamic Objects\BossPortal.cs" />
     <Compile Include="Assets\UnityTechnologies\EffectExamples\Shared\Scripts\GunAim.cs" />
     <Compile Include="Assets\Scripts\Pickup.cs" />
     <Compile Include="Assets\Scripts\Enemies\MoveEnemy1.cs" />
     <Compile Include="Assets\Scripts\Weapons\WeaponBase.cs" />
+    <Compile Include="Assets\Scripts\UI\GameOver.cs" />
     <Compile Include="Assets\Scripts\Dynamic Objects\Chest.cs" />
     <Compile Include="Assets\UnityTechnologies\EffectExamples\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\Dynamic Objects\CylinderChange.cs" />
