@@ -56,6 +56,7 @@ public class RingChange : MonoBehaviour {
     void ShowUI(bool show) {
         if (show) {
             UItext.text = "Switch Ring";
+            UItext.color = Color.white;
             UIimage.sprite = keySprite;
             UIButton.SetActive(true);
         } else {

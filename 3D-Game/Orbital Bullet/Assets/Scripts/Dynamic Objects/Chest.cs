@@ -90,6 +90,7 @@ public class Chest : MonoBehaviour {
     void ShowUI(bool show) {
         if (show && !isChestOpened) {
             UItext.text = "Open Chest";
+            UItext.color = Color.white;
             UIimage.sprite = keySprite;
             UIButton.SetActive(true);
         }

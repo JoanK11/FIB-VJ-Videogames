@@ -56,6 +56,7 @@ public class BossPortal : MonoBehaviour {
     void ShowUI(bool show) {
         if (show) {
             UItext.text = "Enter Boss Level";
+            UItext.color = Color.white;
             UIimage.sprite = keySprite;
             UIButton.SetActive(true);
         }
