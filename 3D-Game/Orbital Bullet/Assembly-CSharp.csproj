@@ -102,6 +102,7 @@
     <Compile Include="Assets\Scripts\Dynamic Objects\RingChange.cs" />
     <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\Weapons\BalaLongPlayer.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Enemy3.cs" />
     <Compile Include="Assets\Scripts\Objects\BossLevel.cs" />
     <Compile Include="Assets\Scripts\Weapons\WeaponNormal.cs" />
     <Compile Include="Assets\Scripts\Player\idle.cs" />

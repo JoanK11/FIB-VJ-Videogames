@@ -109,7 +109,7 @@ public class MovePlayer : MonoBehaviour {
 
         /* -- Player Movement -- */
         rotationSpeed = 0;
-        jumpSpeed = 8.25f;
+        jumpSpeed = 8.5f;
         gravity = 25;
         Center = new Vector3(0, 0, 0);
 
