@@ -2,12 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class BossLevel : MonoBehaviour {
     float rotationSpeed = 25.0f;
     public bool exitedTrigger;
 
+    /* -- Music -- */
+    AudioSource audioSource;
+    public AudioClip bossMusic;
+
     void Start() {
         exitedTrigger = false;
+
+        /* -- Music -- */
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = bossMusic;
     }
 
     void FixedUpdate() {
@@ -18,9 +27,18 @@ public class BossLevel : MonoBehaviour {
 
     void OnTriggerExit(Collider other) {
         if (other.gameObject.CompareTag("Player")) {
-            exitedTrigger = true;
             other.GetComponent<MovePlayer>().ArrivedNextLevel();
-            GetComponent<BoxCollider>().isTrigger = false;
+            SetBossLevel();
         }
+    }
+
+    public void SetBossLevel() {
+        exitedTrigger = true;
+        GetComponent<BoxCollider>().isTrigger = false;
+        audioSource.Play();
+    }
+
+    public void WinGame() {
+        audioSource.Stop();
     }
 }

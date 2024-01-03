@@ -6,39 +6,35 @@ using UnityEngine.UI; // Image namespace
 
 public class Jump : MonoBehaviour {
     public GameObject player;
-    private bool isPlayerOnTrigger;
+    protected bool isPlayerOnTrigger;
+
+    /* -- Enemy Manager -- */
+    public EnemyManager enemyManager;
 
     /* -- UI -- */
     public GameObject UIButton;
-    TextMeshProUGUI UItext;
-    Image UIimage;
-    Sprite keySprite;
+    protected TextMeshProUGUI UItext;
+    protected Image UIimage;
+    protected Sprite keySprite;
 
-    void Start() {
+    protected void Start() {
         isPlayerOnTrigger = false;
 
         player = GameObject.Find("Player");
-        if (player == null) {
-            Debug.LogError(name + ": Player object not found. Make sure your player is named 'Player'.");
-        }
 
-        if (UIButton == null) {
-            Debug.LogError(name + ": UIButton not found.");
-        } else {
-            UItext = UIButton.GetComponentInChildren<TextMeshProUGUI>();
-            UIimage = UIButton.GetComponentInChildren<Image>();
-            keySprite = Resources.Load<Sprite>("E-Key");
-        }
+        UItext = UIButton.GetComponentInChildren<TextMeshProUGUI>();
+        UIimage = UIButton.GetComponentInChildren<Image>();
+        keySprite = Resources.Load<Sprite>("E-Key");
     }
 
-    void Update() {
-        if (isPlayerOnTrigger && Input.GetKeyUp(KeyCode.E)) {
+    protected virtual void Update() {
+        if (isPlayerOnTrigger && Input.GetKeyUp(KeyCode.E) && enemyManager.enemyCount == 0) {
             player.GetComponent<MovePlayer>().JumpNextLevel();
-            Debug.Log(name + ": Player tried to jump to the next level.");
+            Debug.Log(name + ": Player jumped to the next level.");
         }
     }
 
-    void OnTriggerEnter(Collider other) {
+    protected void OnTriggerEnter(Collider other) {
         if (other.gameObject == player) {
             isPlayerOnTrigger = true;
             ShowUI(true);
@@ -46,7 +42,7 @@ public class Jump : MonoBehaviour {
         }
     }
 
-    void OnTriggerExit(Collider other) {
+    protected void OnTriggerExit(Collider other) {
         if (other.gameObject == player) {
             isPlayerOnTrigger = false;
             ShowUI(false);
@@ -54,13 +50,27 @@ public class Jump : MonoBehaviour {
         }
     }
 
-    void ShowUI(bool show) {
+    protected virtual void ShowUI(bool show) {
         if (show) {
-            UItext.text = "Jump to the next sector";
-            UIimage.sprite = keySprite;
+            if (enemyManager.enemyCount > 0) {
+                UItext.text = "Defeat all enemies to access the next level!";
+                UItext.color = Color.red;
+                UIimage.gameObject.SetActive(false);
+            }
+            else {
+                UItext.text = "Jump to the next sector";
+                UItext.color = Color.white;
+                UIimage.sprite = keySprite;
+                UIimage.gameObject.SetActive(true);
+            }
             UIButton.SetActive(true);
         } else {
+            UIimage.gameObject.SetActive(true);
             UIButton.SetActive(false);
         }
+    }
+
+    public void UpdateUI() {
+        ShowUI(isPlayerOnTrigger);
     }
 }

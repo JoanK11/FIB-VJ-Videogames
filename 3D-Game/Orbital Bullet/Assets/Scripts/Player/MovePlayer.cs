@@ -19,7 +19,7 @@ public class MovePlayer : MonoBehaviour {
     float speedY;
 
     /* -- Player States -- */
-    public enum PlayerStates { Normal, ChangingLevel, ChangingRing, Invincible };
+    public enum PlayerStates { Normal, ChangingLevel, ChangingRing, Invulnerable };
     PlayerStates State;
 
     /* -- Dash -- */
@@ -35,12 +35,14 @@ public class MovePlayer : MonoBehaviour {
     public GameObject prefab;
     bool reloading;
 
-    CharacterController charControl;
-    Animator anim;
-
+    /* -- Weapons -- */
     WeaponBase[] weapons;
     int index;
     WeaponBase currentWeapon;
+
+    /* -- Animation -- */
+    CharacterController charControl;
+    Animator anim;
 
     /* -- Health -- */
     const float maxHealth = 120.0f;
@@ -49,20 +51,23 @@ public class MovePlayer : MonoBehaviour {
 
     /* -- Audio -- */
     PlayerAudio playerAudio;
+
+    /* -- UI -- */
+    public GameOver gameOver;
+
     /* --  Ammo -- */
     const int maxAmmo = 60;
     int ammo;
     CurrentAmmo text;
 
-    /* --  Radius -- */
-    float radius;
     public Vector3 GetCenter() {
         return Center;
     }
-    public Vector3 GetStartDirection()
-    {
+
+    public Vector3 GetStartDirection() {
         return startDirection;
     }
+
     void SetupWeapons() { 
         weapons = GetComponentsInChildren<WeaponBase>(true);
         foreach (WeaponBase weapon in weapons) {
@@ -82,10 +87,17 @@ public class MovePlayer : MonoBehaviour {
             currentWeapon = weapons[index];
         }
     }
+
     public void SetAmmo(int ammo) {
         this.ammo = Math.Min(ammo, maxAmmo);
         text.SetAmmo(this.ammo);
     }
+
+    public void IncreaseAmmo(int x) {
+        ammo = Math.Min(ammo + x, maxAmmo);
+        text.SetAmmo(ammo);
+    }
+
     void Start() {
         // Store starting direction of the player with respect to the axis of the level
         startDirection = transform.position - transform.parent.position;
@@ -108,7 +120,6 @@ public class MovePlayer : MonoBehaviour {
     
         reloading = false;
 
-
         /* -- Dashing Time -- */
         TimeDashing = 0.0f;
         isDashing = false;
@@ -117,6 +128,7 @@ public class MovePlayer : MonoBehaviour {
         charControl = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
 
+        /* -- Weapons -- */
         SetupWeapons();
 
         health = maxHealth;
@@ -131,16 +143,24 @@ public class MovePlayer : MonoBehaviour {
         /* -- Ammo -- */
         text = GameObject.Find("CurrentAmmo").GetComponent<CurrentAmmo>();
         SetAmmo(maxAmmo);
-        radius= charControl.radius;
     }
 
     public void TakeDamage(float damageAmount) {
-        if (!isDashing) {
-            health -= damageAmount;
-            playerAudio.PlayDamageSound();
-            healthBar.SetHealth(health);
+        if (State != PlayerStates.Normal) return;
+        if (isDashing) return;
+        health -= damageAmount;
+        playerAudio.PlayDamageSound();
+        healthBar.SetHealth(health);
+
+        if (health <= 0) {
+            playerAudio.PlayDieSound();
+            gameOver.OnPlayerDeath();
         }
-        
+    }
+
+    public void IncreaseHealth(int x) {
+        health = Math.Min(health + x, maxHealth);
+        healthBar.SetHealth(health);
     }
 
     void Update() {
@@ -152,6 +172,7 @@ public class MovePlayer : MonoBehaviour {
         /* -- CheckingDash -- */
         CheckDashing(charControl);
     }
+
     void Shoot() {
         Vector3 currentDirection = transform.position - Center;
         reloading = false;
@@ -159,8 +180,8 @@ public class MovePlayer : MonoBehaviour {
         bulletPos.y = transform.position.y;
         currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent, oneOrientation);
         SetAmmo(ammo - 1);
-        
     }
+
     // Update is called once per frame
     void FixedUpdate() {
         bool canMove = true;
@@ -169,16 +190,15 @@ public class MovePlayer : MonoBehaviour {
             canMove = false;
         }
 
-
         /* -- Left-Right Movement -- */
         Vector3 position = transform.position;
         float angle = rotationSpeed * Time.deltaTime;
         Vector3 direction = position - Center;
         Vector3 target;
 
-        if (!isDashing) {
+        if (!isDashing && canMove) {
           /* -- Horizontal Movement -- */
-          if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && canMove) {
+          if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) {
 
               if (Input.GetKey(KeyCode.A)) {
                   target = Center + Quaternion.AngleAxis(angle, Vector3.up) * direction;
@@ -199,11 +219,11 @@ public class MovePlayer : MonoBehaviour {
                   oneOrientation = -1.0f;
               }
               // Increment Character Speed
-              rotationSpeed += 2.0f;
+              rotationSpeed += 5.0f;
               if (rotationSpeed > maxRotationSpeed) rotationSpeed = maxRotationSpeed;
           }
           else {
-              //rotationSpeed -= 5.0f;
+              rotationSpeed -= 3.0f;
               if (rotationSpeed < 0) rotationSpeed = 0;
               anim.SetBool("Moving", false);
           }
@@ -285,8 +305,8 @@ public class MovePlayer : MonoBehaviour {
         CharacterController charControl = GetComponent<CharacterController>();
 
         // Calculate the bottom position of the character controller
-        Vector3 rayStart = transform.position - new Vector3(0, charControl.height / 4, 0);
-        float checkDistance = charControl.skinWidth + 0.1f; // Small distance plus skinWidth
+        Vector3 rayStart = transform.position - new Vector3(0, charControl.height / 5.5f, 0);
+        float checkDistance = charControl.skinWidth + 0.05f; // Small distance plus skinWidth
         Debug.DrawRay(rayStart, Vector3.down * checkDistance, Color.red, 1.0f);
 
         RaycastHit hit;
@@ -333,10 +353,10 @@ public class MovePlayer : MonoBehaviour {
         State = PlayerStates.Normal;
     }
 
-    public void ChangeRing(Vector3 targetPosition) {
+    public void ChangeRing(Vector3 targetPosition, float duration) {
         State = PlayerStates.ChangingRing;
         playerAudio.PlayRingChangeSound();
-        StartCoroutine(MovePlayerToPosition(transform.position, targetPosition, 0.6f));
+        StartCoroutine(MovePlayerToPosition(transform.position, targetPosition, duration));
     }
 
     public void ChangeCylinder(Vector3 targetPosition) {
@@ -374,5 +394,12 @@ public class MovePlayer : MonoBehaviour {
                 
             }
         }
+    }
+
+    public void TeleportTo(Vector3 newPosition, Vector3 newCenter) {
+        CharacterController charControl = GetComponent<CharacterController>();
+        transform.position = newPosition;
+        Center = newCenter;
+        State = PlayerStates.Normal;
     }
 }

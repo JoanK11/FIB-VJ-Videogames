@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
 public class PlayerAudio : MonoBehaviour {
-    private AudioSource audioSource;
+    AudioSource audioSource;
 
     public AudioClip jumpSound1, jumpSound2;
     public AudioClip attackSound;
@@ -12,6 +12,8 @@ public class PlayerAudio : MonoBehaviour {
     public AudioClip teleportSound;
     public AudioClip ringChangeSound;
     public AudioClip chestSound;
+    public AudioClip dieSound;
+    public AudioClip winSound;
 
     private void Start() {
         audioSource = GetComponent<AudioSource>();
@@ -50,6 +52,16 @@ public class PlayerAudio : MonoBehaviour {
 
     public void PlayAttackSound() {
         audioSource.clip = attackSound;
+        audioSource.Play();
+    }
+
+    public void PlayDieSound() {
+        audioSource.clip = dieSound;
+        audioSource.Play();
+    }
+
+    public void PlayWinSound() {
+        audioSource.clip = winSound;
         audioSource.Play();
     }
 
