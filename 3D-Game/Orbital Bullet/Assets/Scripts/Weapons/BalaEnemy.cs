@@ -29,7 +29,7 @@ public class BalaEnemy : BalaBase
         if (other.gameObject.tag == "Player")
         {
             MovePlayer player = other.gameObject.GetComponent<MovePlayer>();
-            //player.takeDamage(GetDamage());
+            player.TakeDamage(GetDamage());
         }
         GameObject explosion = Instantiate(prefab, transform.position, Quaternion.identity);
         Destroy(explosion, 1.0f);

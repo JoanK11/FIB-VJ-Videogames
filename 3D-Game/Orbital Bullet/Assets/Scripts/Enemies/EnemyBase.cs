@@ -34,7 +34,7 @@ public class EnemyBase : MonoBehaviour {
             if (health <= 0) {
 
                 Destroy(gameObject);
-
+                if (gameObject.tag == "Enemy") transform.parent.gameObject.GetComponent<EnemyManager>().EnemyDefeated();
             }
         }
     }

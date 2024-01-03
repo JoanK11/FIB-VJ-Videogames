@@ -20,6 +20,7 @@ public class EnemyStationary : EnemyBase {
     EnemyState currentState;
 
     Transform reference;
+    Quaternion rotacionInicial;
     void Start() {
         base.init();
         original = transform.rotation;
@@ -27,13 +28,14 @@ public class EnemyStationary : EnemyBase {
         currentTime = 0.0f;
         currentNumberOfBullets = 0;
         reference = GameObject.Find("World").transform ;
+        rotacionInicial = transform.rotation ;
     }
     
     // Update is called once per frame
     void FixedUpdate() {
         if (currentState == EnemyState.IDLE) {
             currentTime += Time.deltaTime;
-
+            transform.rotation = rotacionInicial ;
             if (currentTime > secondsInIdle) {
                 System.Random rand = new System.Random();
                 currentTime = 0;
@@ -45,9 +47,12 @@ public class EnemyStationary : EnemyBase {
                     decision = rand.Next() % 100;
                     Debug.Log("Decision para orientacion " + decision);
                     direction = 1.0f;
-                    if (decision < 42) {
+                    if (decision < 42)
+                    {
                         direction = -1.0f;
+                        transform.rotation *= Quaternion.Euler(0,180,0);
                     }
+                    
                     Debug.Log("Orientacion" + direction);
                     currentNumberOfBullets = 0;
                 }

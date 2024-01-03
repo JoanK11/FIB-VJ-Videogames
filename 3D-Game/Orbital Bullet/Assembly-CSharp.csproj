@@ -102,6 +102,7 @@
     <Compile Include="Assets\Scripts\Dynamic Objects\RingChange.cs" />
     <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\Weapons\BalaLongPlayer.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Enemy3.cs" />
     <Compile Include="Assets\Scripts\Objects\BossLevel.cs" />
     <Compile Include="Assets\Scripts\Weapons\WeaponNormal.cs" />
     <Compile Include="Assets\Scripts\Player\idle.cs" />
@@ -1017,6 +1018,10 @@
     </Reference>
     <Reference Include="Unity.Rider.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Flow">

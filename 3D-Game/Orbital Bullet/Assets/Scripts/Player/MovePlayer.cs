@@ -24,15 +24,14 @@ public class MovePlayer : MonoBehaviour {
 
     /* -- Dash -- */
     float oneOrientation;
-    const float TimeDashOcurr = 1.5f;
-    const float VelocityOfDashing = 50.0f / TimeDashOcurr;
+    const float TimeDashOcurr = 1.6f;
+    const float VelocityOfDashing = 25.0f / TimeDashOcurr;
     const float RotationHimself = 360.0f / TimeDashOcurr;
     bool isDashing;
     float TimeDashing;
 
     /* -- Shooting -- */
-    float timeToRestartShoot;
-    float restartTime;
+    
     public GameObject prefab;
     bool reloading;
 
@@ -110,7 +109,7 @@ public class MovePlayer : MonoBehaviour {
 
         /* -- Player Movement -- */
         rotationSpeed = 0;
-        jumpSpeed = 8.25f;
+        jumpSpeed = 8.5f;
         gravity = 25;
         Center = new Vector3(0, 0, 0);
 
@@ -118,8 +117,7 @@ public class MovePlayer : MonoBehaviour {
         //jumpCount = 0;
 
         /* -- Shooting -- */
-        timeToRestartShoot = 0.25f;
-        restartTime = 0;
+    
         reloading = false;
 
         /* -- Dashing Time -- */
@@ -149,7 +147,7 @@ public class MovePlayer : MonoBehaviour {
 
     public void TakeDamage(float damageAmount) {
         if (State != PlayerStates.Normal) return;
-
+        if (isDashing) return;
         health -= damageAmount;
         playerAudio.PlayDamageSound();
         healthBar.SetHealth(health);
@@ -168,13 +166,16 @@ public class MovePlayer : MonoBehaviour {
     void Update() {
         /* -- CheckingSelectionOfWeapon -- */
         CheckSelectionWeapon();
-        if (Input.GetKeyDown(KeyCode.P)) TakeDamage(10);
+        /*-- Cheat of reloading -- */
+        if (Input.GetKeyDown(KeyCode.G)) SetAmmo(maxAmmo);
+
+        /* -- CheckingDash -- */
+        CheckDashing(charControl);
     }
 
     void Shoot() {
         Vector3 currentDirection = transform.position - Center;
         reloading = false;
-        restartTime = 0.0f;
         Vector3 bulletPos = Center + Quaternion.AngleAxis(oneOrientation * 5.0f, Vector3.up) * currentDirection;
         bulletPos.y = transform.position.y;
         currentWeapon.Shoot(bulletPos, transform.rotation, transform.parent, oneOrientation);
@@ -247,12 +248,11 @@ public class MovePlayer : MonoBehaviour {
         }
 
 
-        /* -- CheckingDash -- */
-        CheckDashing(charControl);
+        
 
 
         /* -- Shooting -- */
-        if (Input.GetKey(KeyCode.K) && !reloading && ammo > 0) {
+        if (Input.GetKey(KeyCode.K)&& !isDashing && !reloading && ammo > 0) {
             reloading = true;
             playerAudio.PlayAttackSound();
             anim.SetTrigger("Shoot");
@@ -284,7 +284,7 @@ public class MovePlayer : MonoBehaviour {
             }
         }*/
         // Apply up-down movement
-        if (State != PlayerStates.ChangingRing) {
+        if (State != PlayerStates.ChangingRing && !isDashing) {
             position = transform.position;
             if (charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.None) {
                 transform.position = position;
@@ -371,6 +371,8 @@ public class MovePlayer : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.LeftShift)) {
             isDashing = true;
             TimeDashing = 0.0f;
+            
+            anim.SetTrigger("Roll");
         }
 
         if (isDashing) {
@@ -379,18 +381,17 @@ public class MovePlayer : MonoBehaviour {
             Vector3 position = transform.position;
             float angle = oneOrientation * VelocityOfDashing * time;
             Vector3 direction = position - Center;
+            
             Vector3 target = Center + Quaternion.AngleAxis(angle, Vector3.up) * direction;
             if (charControl.Move(target - position) != CollisionFlags.None) {
                 Debug.Log("He entrado");
-                //transform.position = position;
+                transform.position = position;
                 Physics.SyncTransforms();
             }
-            float bodyRotation = - RotationHimself * TimeDashing;
-
-            Quaternion rotation = Quaternion.Euler(0f, 0f, bodyRotation);
-            transform.rotation *= rotation;
+           
             if (TimeDashing > TimeDashOcurr) {
                 isDashing = false;
+                
             }
         }
     }
