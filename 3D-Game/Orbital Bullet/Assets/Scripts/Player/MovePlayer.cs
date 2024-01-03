@@ -365,7 +365,7 @@ public class MovePlayer : MonoBehaviour {
             Vector3 target = Center + Quaternion.AngleAxis(angle, Vector3.up) * direction;
             if (charControl.Move(target - position) != CollisionFlags.None) {
                 Debug.Log("He entrado");
-                //transform.position = position;
+                transform.position = position;
                 Physics.SyncTransforms();
             }
            
