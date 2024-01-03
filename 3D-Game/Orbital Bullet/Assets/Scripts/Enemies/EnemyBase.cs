@@ -10,12 +10,17 @@ public class EnemyBase : MonoBehaviour {
     float shield;
     EnemyHealthBar healthBar;
     EnemyHealthBar shieldBar;
+    Camera c;
     public void init() {
         EnemyHealthBar[] bars = GetComponentsInChildren<EnemyHealthBar>();
         healthBar = bars[0];
         shieldBar = bars[1];
         shield = maxShield;
         health = maxHealth;
+        c = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+    }
+    protected void lookCamera() {
+        transform.rotation = c.transform.rotation;
     }
     public void takeDamage(float damageAmount) {
         if (shield > 0) {

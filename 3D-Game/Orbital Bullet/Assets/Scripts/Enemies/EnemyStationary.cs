@@ -67,6 +67,7 @@ public class EnemyStationary : EnemyBase {
             if (currentTime > secondsBetweenBullets) currentTime = 0.0f;
             if (currentNumberOfBullets >= numberOfBullets) currentState = EnemyState.IDLE;
         }
+        lookCamera();
     }
 
     private void makeBala() {

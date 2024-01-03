@@ -91,8 +91,8 @@ public class MoveEnemy1 : EnemyBase
         }
         else
             speedY -= gravity * Time.deltaTime;
-        
-        
+        lookCamera();
+
     }
     
     void OnControllerColliderHit(ControllerColliderHit hit) {

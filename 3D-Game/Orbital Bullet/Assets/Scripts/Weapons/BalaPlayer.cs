@@ -8,7 +8,7 @@ public class BalaPlayer : BalaBase {
     GameObject prefab;
     public void init() {
         rotationSpeed = -70.0f;
-        damage = 10.0f;
+        damage = 50.0f;
         base.initBala();
         
         prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/SmallExplosion.prefab");
