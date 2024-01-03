@@ -42,19 +42,17 @@ public class Trap : MonoBehaviour {
     }
 
     IEnumerator FlashScreen() {
-        if (screenFlash != null) {
-            screenFlash.color = new Color(screenFlash.color.r, screenFlash.color.g, screenFlash.color.b, 0.5f);
-            float elapsed = 0;
+        screenFlash.color = new Color(screenFlash.color.r, screenFlash.color.g, screenFlash.color.b, 0.5f);
+        float elapsed = 0;
 
-            while (elapsed < flashDuration) {
-                elapsed += Time.deltaTime;
-                float alpha = Mathf.Lerp(0.5f, 0, elapsed / flashDuration);
-                screenFlash.color = new Color(screenFlash.color.r, screenFlash.color.g, screenFlash.color.b, alpha);
-                yield return null;
-            }
-
-            // Ensure the image is fully transparent again
-            screenFlash.color = new Color(screenFlash.color.r, screenFlash.color.g, screenFlash.color.b, 0);
+        while (elapsed < flashDuration) {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(0.5f, 0, elapsed / flashDuration);
+            screenFlash.color = new Color(screenFlash.color.r, screenFlash.color.g, screenFlash.color.b, alpha);
+            yield return null;
         }
+
+        // Ensure the image is fully transparent again
+        screenFlash.color = new Color(screenFlash.color.r, screenFlash.color.g, screenFlash.color.b, 0);
     }
 }
