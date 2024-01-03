@@ -76,18 +76,23 @@ public class MoveEnemy1 : EnemyBase {
 
         // Apply up-down movement
         position = transform.position;
-        if (charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.None) {
+        if (charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.Sides) {
             transform.position = position;
             Physics.SyncTransforms();
         }
         if (charControl.isGrounded) {
             if (speedY < 0.0f)
                 speedY = 0.0f;
-
+           
         }
-        else {
+        else
             speedY -= gravity * Time.deltaTime;
-        }
-        
+        lookCamera();
+
+    }
+    
+    void OnControllerColliderHit(ControllerColliderHit hit) {
+        if (hit.gameObject.tag == "Floor") return;
+        //Debug.Log("he hiteado a " + hit.gameObject.name);
     }
 }

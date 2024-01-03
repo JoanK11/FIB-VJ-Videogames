@@ -24,7 +24,7 @@ public class BalaPlayer : BalaBase {
             Destroy(gameObject);
             return;
         }
-
+        if (exploded) return;
         Move();
         Distance += Math.Abs(rotationSpeed * Time.deltaTime);
 
@@ -48,6 +48,7 @@ public class BalaPlayer : BalaBase {
         }
 
         PlayExplosionSound();
+        GetComponent<Renderer>().enabled = false;
         GameObject explosion = Instantiate(prefab, transform.position, Quaternion.identity);
         Destroy(explosion, 1.0f);
     }

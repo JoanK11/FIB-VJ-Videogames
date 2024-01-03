@@ -92,7 +92,7 @@ public class Enemy3 : EnemyBase {
         else
             speedY -= gravity * Time.deltaTime;
 
-
+        lookCamera();
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit) {

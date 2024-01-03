@@ -16,17 +16,22 @@ public class EnemyBase : MonoBehaviour {
     protected AudioSource audioSource;
     public AudioClip dieSound1, dieSound2;
     protected bool playedSound;
-
+    Camera c;
     public void init() {
         EnemyHealthBar[] bars = GetComponentsInChildren<EnemyHealthBar>();
         healthBar = bars[0];
         shieldBar = bars[1];
         shield = maxShield;
         health = maxHealth;
-
+        c = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         /* -- Sound Effects -- */
         audioSource = GetComponent<AudioSource>();
         playedSound = false;
+    }
+    protected void lookCamera() {
+        transform.rotation = c.transform.rotation;
+
+        
     }
 
     void Update() {
