@@ -12,6 +12,7 @@ public class PlayerAudio : MonoBehaviour {
     public AudioClip teleportSound;
     public AudioClip ringChangeSound;
     public AudioClip chestSound;
+    public AudioClip noBulletsSound;
     public AudioClip dieSound;
     public AudioClip winSound;
 
@@ -20,12 +21,12 @@ public class PlayerAudio : MonoBehaviour {
     }
 
     public void PlayJumpSound() {
-        if (!audioSource.isPlaying) {
-            int random = Random.Range(0, 2); // [min, max)
-            if (random == 0) audioSource.clip = jumpSound1;
-            else audioSource.clip = jumpSound2;
-            audioSource.Play();
-        }
+        if (audioSource.isPlaying) return;
+
+        int random = Random.Range(0, 2); // [min, max)
+        if (random == 0) audioSource.clip = jumpSound1;
+        else audioSource.clip = jumpSound2;
+        audioSource.Play();
     }
 
     public void PlayDamageSound() {
@@ -55,6 +56,13 @@ public class PlayerAudio : MonoBehaviour {
         audioSource.Play();
     }
 
+    public void PlayNoBulletsSound() {
+        if (audioSource.isPlaying) return;
+
+        audioSource.clip = noBulletsSound;
+        audioSource.Play();
+    }
+
     public void PlayDieSound() {
         audioSource.clip = dieSound;
         audioSource.Play();
@@ -64,6 +72,4 @@ public class PlayerAudio : MonoBehaviour {
         audioSource.clip = winSound;
         audioSource.Play();
     }
-
-
 }

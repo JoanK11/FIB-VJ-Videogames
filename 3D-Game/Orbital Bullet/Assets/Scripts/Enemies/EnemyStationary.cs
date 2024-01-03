@@ -31,8 +31,16 @@ public class EnemyStationary : EnemyBase {
         rotacionInicial = transform.rotation ;
     }
     
-    // Update is called once per frame
     void FixedUpdate() {
+        // Destroy the enemy if it has died and finished making the sound
+        if (playedSound && !audioSource.isPlaying) {
+            Destroy(gameObject);
+            if (gameObject.tag == "Enemy") {
+                transform.parent.gameObject.GetComponent<EnemyManager>().EnemyDefeated();
+            }
+            return;
+        }
+
         if (currentState == EnemyState.IDLE) {
             currentTime += Time.deltaTime;
             transform.rotation = rotacionInicial ;

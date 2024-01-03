@@ -31,7 +31,6 @@ public class MovePlayer : MonoBehaviour {
     float TimeDashing;
 
     /* -- Shooting -- */
-    
     public GameObject prefab;
     bool reloading;
 
@@ -56,7 +55,7 @@ public class MovePlayer : MonoBehaviour {
     public GameOver gameOver;
 
     /* --  Ammo -- */
-    const int maxAmmo = 60;
+    const int maxAmmo = 20;
     int ammo;
     CurrentAmmo text;
 
@@ -247,42 +246,20 @@ public class MovePlayer : MonoBehaviour {
             transform.rotation *= Quaternion.Euler(0, 180.0f, 0);
         }
 
-
-        
-
-
         /* -- Shooting -- */
-        if (Input.GetKey(KeyCode.K)&& !isDashing && !reloading && ammo > 0) {
-            reloading = true;
-            playerAudio.PlayAttackSound();
-            anim.SetTrigger("Shoot");
-            Invoke("Shoot", 0.7f);
+        if (Input.GetKey(KeyCode.K) && !isDashing && !reloading) {
+            if (ammo > 0) {
+                reloading = true;
+                playerAudio.PlayAttackSound();
+                anim.SetTrigger("Shoot");
+                Invoke("Shoot", 0.7f);
+            }
+            else {
+                playerAudio.PlayNoBulletsSound();
+            }
         }
 
         
-
-        /* -- Vertical Movement && Double Jump --
-        if (IsGrounded() && jumpCount > 0) {
-            jumpCount = 0;
-        }
-        if (State != PlayerStates.ChangingRing) {
-            if (Input.GetKeyDown(KeyCode.W) && jumpCount < maxJumpCount) {
-                speedY = jumpSpeed;
-                jumpCount++;
-
-            }
-            else if (!IsGrounded()) {
-                speedY -= gravity * Time.deltaTime;
-            }
-
-            position = transform.position;
-            Vector3 moveVector = new Vector3(0, speedY, 0) * Time.deltaTime;
-            CollisionFlags flags = charControl.Move(moveVector);
-            if (flags != CollisionFlags.Below) {
-                speedY = 0;
-
-            }
-        }*/
         // Apply up-down movement
         if (State != PlayerStates.ChangingRing && !isDashing) {
             position = transform.position;
