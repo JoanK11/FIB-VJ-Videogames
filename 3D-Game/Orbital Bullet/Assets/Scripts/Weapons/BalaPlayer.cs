@@ -1,39 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEditor;
 
 public class BalaPlayer : BalaBase {
-    // Start is called before the first frame update
     GameObject prefab;
+    private float Distance;
+
     public void init() {
         rotationSpeed = -70.0f;
         damage = 50.0f;
         base.initBala();
-        
+
+        Distance = 0.0f;
         prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/SmallExplosion.prefab");
         Center = GameObject.Find("Player").GetComponent<MovePlayer>().GetCenter();
-        Quaternion pre = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Bala.prefab").transform.rotation;
-        rotacionInicial = GameObject.Find("Player").transform.rotation * Quaternion.Euler(0, 90, 0) * pre;
-  
     }
 
-    // Update is called once per frame
-    void FixedUpdate() {
-
+    void Update() {
+        // Destroy the bullet if it has already exploded and finished making the sound
+        if (exploded && !audioSource.isPlaying) {
+            Destroy(gameObject);
+            return;
+        }
+        if (exploded) return;
         Move();
+        Distance += Math.Abs(rotationSpeed * Time.deltaTime);
+
+        if (Distance >= 40.0) {
+            audioSource.volume = distanceVolume;
+            PlayExplosionSound();
+            GameObject explosion = Instantiate(prefab, transform.position, Quaternion.identity);
+            Destroy(explosion, 1.0f);
+        }
     }
+
     protected void OnTriggerEnter(Collider other) {
-        Debug.Log(other.gameObject.name + " ha entrado en el colider de " + gameObject.name);
-        
+        if (exploded) return;
 
         if (other.gameObject.tag == "Enemy") {
             EnemyBase enemy = other.gameObject.GetComponent<EnemyBase>();
             enemy.takeDamage(GetDamage());
         }
+        else {
+            audioSource.volume = distanceVolume;
+        }
+
+        PlayExplosionSound();
+        GetComponent<Renderer>().enabled = false;
         GameObject explosion = Instantiate(prefab, transform.position, Quaternion.identity);
         Destroy(explosion, 1.0f);
-        Destroy(gameObject);
     }
     
 }

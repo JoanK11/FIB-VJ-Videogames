@@ -2,25 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveEnemy1 : EnemyBase
-{
-    // Start is called before the first frame update
+public class MoveEnemy1 : EnemyBase {
     public float rotationSpeed, jumpSpeed, gravity;
-
 
     Vector3 startDirection;
     float speedY;
 
-
     Quaternion originalrotation;
     bool isRight;
-
   
     CharacterController charControl;
     Transform reference;
-    void Start()
-    {
+
+    void Start() {
         reference = GameObject.Find("World").transform;
+
         // Store starting direction of the player with respect to the axis of the level
         startDirection = transform.position - reference.position;
         startDirection.y = 0.0f;
@@ -30,34 +26,36 @@ public class MoveEnemy1 : EnemyBase
         originalrotation = transform.rotation;
         isRight = true;
 
-
         charControl = GetComponent<CharacterController>();
         charControl.detectCollisions = true;
 
         base.init();
     }
-    // Update is called once per frame
+
     void Update() {
-        Vector3 position;
+        // Destroy the enemy if it has died and finished making the sound
+        if (playedSound && !audioSource.isPlaying) {
+            Destroy(gameObject);
+            if (gameObject.tag == "Enemy") {
+                transform.parent.gameObject.GetComponent<EnemyManager>().EnemyDefeated();
+            }
+            return;
+        }
 
-        float angle;
-        Vector3 direction, target;
+        Vector3 position = transform.position;
 
-        position = transform.position;
-        angle = rotationSpeed * Time.deltaTime;
-        direction = position - reference.position;
+        float angle = rotationSpeed * Time.deltaTime;
+        Vector3 direction = position - reference.position;
+        Vector3 target;
 
         // Left-right movement
-
         target = reference.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
-        if (charControl.Move(target - position) != CollisionFlags.None)
-        {
+        if (charControl.Move(target - position) != CollisionFlags.None) {
             transform.position = position;
             rotationSpeed *= -1;
             isRight = !isRight;
             
         }
-    
 
         // Correct orientation of player
         // Compute current direction
@@ -78,13 +76,11 @@ public class MoveEnemy1 : EnemyBase
 
         // Apply up-down movement
         position = transform.position;
-        if (charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.None)
-        {
+        if (charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.Sides) {
             transform.position = position;
             Physics.SyncTransforms();
         }
-        if (charControl.isGrounded)
-        {
+        if (charControl.isGrounded) {
             if (speedY < 0.0f)
                 speedY = 0.0f;
            
@@ -96,8 +92,7 @@ public class MoveEnemy1 : EnemyBase
     }
     
     void OnControllerColliderHit(ControllerColliderHit hit) {
-        if(hit.gameObject.tag != "Floor")
-        Debug.Log("he hiteado a " + hit.gameObject.name);
+        if (hit.gameObject.tag == "Floor") return;
+        //Debug.Log("he hiteado a " + hit.gameObject.name);
     }
-
 }

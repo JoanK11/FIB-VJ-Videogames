@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-public class BalaEnemy : BalaBase
-{
-    // Start is called before the first frame update
+public class BalaEnemy : BalaBase {
     GameObject prefab;
     public void init() {
         rotationSpeed = -70.0f;
@@ -14,23 +12,19 @@ public class BalaEnemy : BalaBase
         Center = transform.parent.position;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-
+    void FixedUpdate() {
         Move();
     }
-    protected void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(other.gameObject.name + " ha entrado en el colider de " + gameObject.name);
+
+    protected void OnTriggerEnter(Collider other) {
         MeshRenderer mesh = GetComponent<MeshRenderer>();
         mesh.enabled = false;
 
-        if (other.gameObject.tag == "Player")
-        {
+        if (other.gameObject.tag == "Player") {
             MovePlayer player = other.gameObject.GetComponent<MovePlayer>();
             player.TakeDamage(GetDamage());
         }
+
         GameObject explosion = Instantiate(prefab, transform.position, Quaternion.identity);
         Destroy(explosion, 1.0f);
         Destroy(gameObject);
