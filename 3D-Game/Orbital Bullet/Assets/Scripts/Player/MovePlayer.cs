@@ -55,7 +55,8 @@ public class MovePlayer : MonoBehaviour {
     public GameOver gameOver;
 
     /* --  Ammo -- */
-    const int maxAmmo = 20;
+    const int maxAmmo = 30;
+    const int startAmmo = 10;
     int ammo;
     CurrentAmmo text;
 
@@ -75,6 +76,13 @@ public class MovePlayer : MonoBehaviour {
         weapons[0].gameObject.SetActive(true);
         index = 0;
         currentWeapon = weapons[index];
+    }
+
+    public void EnableWeapon(int weaponIndex) {
+        // weaponIndex == 0 -> Long Range
+        // weaponIndex == 1 -> Short Range
+        /* -- Jeremy mira de completar esta función, la llama ChestWeapon con weaponIndex == 1,
+         * para activar el arco de corto alcance cuando lo coge del cofre -- */
     }
 
     void CheckSelectionWeapon() {
@@ -141,7 +149,7 @@ public class MovePlayer : MonoBehaviour {
 
         /* -- Ammo -- */
         text = GameObject.Find("CurrentAmmo").GetComponent<CurrentAmmo>();
-        SetAmmo(maxAmmo);
+        SetAmmo(startAmmo);
     }
 
     public void TakeDamage(float damageAmount) {

@@ -48,20 +48,17 @@ public class EnemyStationary : EnemyBase {
                 System.Random rand = new System.Random();
                 currentTime = 0;
                 int decision = rand.Next() % 100;
-                Debug.Log("Decision " + decision);
+
                 if (decision < 75) {
                     currentState = EnemyState.ATTACKING;
 
                     decision = rand.Next() % 100;
-                    Debug.Log("Decision para orientacion " + decision);
                     direction = 1.0f;
-                    if (decision < 42)
-                    {
+                    if (decision < 42) {
                         direction = -1.0f;
                         transform.rotation *= Quaternion.Euler(0,180,0);
                     }
                     
-                    Debug.Log("Orientacion" + direction);
                     currentNumberOfBullets = 0;
                 }
             }
