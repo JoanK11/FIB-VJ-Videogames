@@ -55,7 +55,8 @@ public class MovePlayer : MonoBehaviour {
     public GameOver gameOver;
 
     /* --  Ammo -- */
-    const int maxAmmo = 20;
+    const int maxAmmo = 30;
+    const int startAmmo = 10;
     int ammo;
     CurrentAmmo text;
 
@@ -81,11 +82,13 @@ public class MovePlayer : MonoBehaviour {
         {
             activeWeapon[i] = false;
         }
-        weapons[1].gameObject.SetActive(true);
-        index = 1;
+        weapons[0].gameObject.SetActive(true);
+        index = 0;
         currentWeapon = weapons[index];
-        activeWeapon[1] = true;
+        activeWeapon[0] = true;
     }
+
+    
 
     void CheckSelectionWeapon() {
         if (Input.GetKeyDown(KeyCode.L)) {
@@ -156,7 +159,7 @@ public class MovePlayer : MonoBehaviour {
 
         /* -- Ammo -- */
         text = GameObject.Find("CurrentAmmo").GetComponent<CurrentAmmo>();
-        SetAmmo(maxAmmo);
+        SetAmmo(startAmmo);
     }
 
     public void TakeDamage(float damageAmount) {

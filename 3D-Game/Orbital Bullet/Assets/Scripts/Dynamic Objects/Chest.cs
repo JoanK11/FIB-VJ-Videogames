@@ -13,8 +13,6 @@ public class Chest : MonoBehaviour {
 
     /* -- Loot -- */
     public GameObject loot;
-    public int dropsAmmo;
-    public int dropsHealth;
 
     /* -- UI -- */
     public GameObject UIButton;
@@ -42,7 +40,7 @@ public class Chest : MonoBehaviour {
         /* -- Player -- */
         player = GameObject.Find("Player");
 
-        /* -- UI Button -- */
+        /* -- UI -- */
         UItext = UIButton.GetComponentInChildren<TextMeshProUGUI>();
         UIimage = UIButton.GetComponentInChildren<Image>();
         keySprite = Resources.Load<Sprite>("E-Key");
@@ -61,13 +59,6 @@ public class Chest : MonoBehaviour {
 
             animator.SetTrigger("move");
             Debug.Log(name + ": Player opened chest.");
-
-            if (dropsAmmo > 0) {
-                player.GetComponent<MovePlayer>().IncreaseAmmo(dropsAmmo);
-            }
-            if (dropsHealth > 0) {
-                player.GetComponent<MovePlayer>().IncreaseHealth(dropsHealth);
-            }
         }
     }
 

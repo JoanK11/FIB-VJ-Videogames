@@ -66,6 +66,7 @@
     <Compile Include="Assets\UnityTechnologies\EffectExamples\Shared\Scripts\DecalDestroyer.cs" />
     <Compile Include="Assets\Scripts\Objects\Platform_Script.cs" />
     <Compile Include="Assets\Scripts\UI\GameWin.cs" />
+    <Compile Include="Assets\Scripts\Dynamic Objects\ChestAmmo.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Player\MovePlayer.cs" />
     <Compile Include="Assets\Scripts\Weapons\BalaBase.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Assets\Scripts\Weapons\WeaponLong.cs" />
     <Compile Include="Assets\Scripts\UI\HealthBar.cs" />
     <Compile Include="Assets\UnityTechnologies\EffectExamples\Shared\Scripts\GunShoot.cs" />
+    <Compile Include="Assets\Scripts\Dynamic Objects\ChestHealth.cs" />
     <Compile Include="Assets\UnityTechnologies\EffectExamples\Shared\Scripts\ParticleCollision.cs" />
     <Compile Include="Assets\Scripts\Main Menu\MainMenu.cs" />
     <Compile Include="Assets\Scripts\UI\ShowCurrentWeapon.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="Assets\Scripts\Dynamic Objects\RingChange.cs" />
     <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\Enemies\BossEnemy.cs" />
+    <Compile Include="Assets\Scripts\Dynamic Objects\ChestWeapon.cs" />
     <Compile Include="Assets\Scripts\Weapons\BalaLongPlayer.cs" />
     <Compile Include="Assets\Scripts\Enemies\Enemy3.cs" />
     <Compile Include="Assets\Scripts\Objects\BossLevel.cs" />
