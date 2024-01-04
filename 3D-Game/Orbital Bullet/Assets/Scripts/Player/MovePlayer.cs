@@ -59,6 +59,8 @@ public class MovePlayer : MonoBehaviour {
     int ammo;
     CurrentAmmo text;
 
+    /*--Activable --*/
+    bool[] activeWeapon;
     public Vector3 GetCenter() {
         return Center;
     }
@@ -67,26 +69,39 @@ public class MovePlayer : MonoBehaviour {
         return startDirection;
     }
 
-    void SetupWeapons() { 
+    void SetupWeapons() {
+        
+
         weapons = GetComponentsInChildren<WeaponBase>(true);
         foreach (WeaponBase weapon in weapons) {
             weapon.gameObject.SetActive(false);
         }
-        weapons[0].gameObject.SetActive(true);
-        index = 0;
+        activeWeapon = new bool[weapons.Length];
+        for (int i = 0; i < activeWeapon.Length; ++i)
+        {
+            activeWeapon[i] = false;
+        }
+        weapons[1].gameObject.SetActive(true);
+        index = 1;
         currentWeapon = weapons[index];
+        activeWeapon[1] = true;
     }
 
     void CheckSelectionWeapon() {
         if (Input.GetKeyDown(KeyCode.L)) {
-            weapons[index].gameObject.SetActive(false);
-            index = (index + 1) % weapons.Length;
+            do
+            {
+                weapons[index].gameObject.SetActive(false);
+                index = (index + 1) % weapons.Length;
 
-            weapons[index].gameObject.SetActive(true);
-            currentWeapon = weapons[index];
+                weapons[index].gameObject.SetActive(true);
+                currentWeapon = weapons[index];
+            } while (activeWeapon[index] == false);
         }
     }
-
+    public void EnableWeapon(int i) {
+        activeWeapon[i] = true;
+    }
     public void SetAmmo(int ammo) {
         this.ammo = Math.Min(ammo, maxAmmo);
         text.SetAmmo(this.ammo);
@@ -261,7 +276,7 @@ public class MovePlayer : MonoBehaviour {
 
         
         // Apply up-down movement
-        if (State != PlayerStates.ChangingRing && !isDashing) {
+        if (State != PlayerStates.ChangingRing) {
             position = transform.position;
             if (charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.None) {
                 transform.position = position;
@@ -349,7 +364,7 @@ public class MovePlayer : MonoBehaviour {
             isDashing = true;
             TimeDashing = 0.0f;
             
-            anim.SetTrigger("Roll");
+            anim.SetBool("Roll", true);
         }
 
         if (isDashing) {
@@ -368,7 +383,7 @@ public class MovePlayer : MonoBehaviour {
            
             if (TimeDashing > TimeDashOcurr) {
                 isDashing = false;
-                
+                anim.SetBool("Roll", false);
             }
         }
     }

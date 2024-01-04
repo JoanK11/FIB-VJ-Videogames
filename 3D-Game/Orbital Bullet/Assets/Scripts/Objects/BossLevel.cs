@@ -6,7 +6,7 @@ using UnityEngine;
 public class BossLevel : MonoBehaviour {
     float rotationSpeed = 25.0f;
     public bool exitedTrigger;
-
+    public GameObject boss;
     /* -- Music -- */
     AudioSource audioSource;
     public AudioClip bossMusic;
@@ -36,6 +36,7 @@ public class BossLevel : MonoBehaviour {
         exitedTrigger = true;
         GetComponent<BoxCollider>().isTrigger = false;
         audioSource.Play();
+        boss.SetActive(true);
     }
 
     public void WinGame() {

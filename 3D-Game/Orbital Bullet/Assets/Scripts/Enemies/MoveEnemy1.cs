@@ -13,7 +13,9 @@ public class MoveEnemy1 : EnemyBase {
   
     CharacterController charControl;
     Transform reference;
-
+    const float timeAttack= 3.0f;
+    float time;
+    bool canAttack;
     void Start() {
         reference = GameObject.Find("World").transform;
 
@@ -30,6 +32,8 @@ public class MoveEnemy1 : EnemyBase {
         charControl.detectCollisions = true;
 
         base.init();
+        time = 0;
+        canAttack = true;
     }
 
     void Update() {
@@ -41,7 +45,12 @@ public class MoveEnemy1 : EnemyBase {
             }
             return;
         }
-
+        if (!canAttack) {
+            time += Time.deltaTime;
+            if (time >= timeAttack) {
+                canAttack = true;
+            }
+        }
         Vector3 position = transform.position;
 
         float angle = rotationSpeed * Time.deltaTime;
@@ -50,7 +59,7 @@ public class MoveEnemy1 : EnemyBase {
 
         // Left-right movement
         target = reference.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
-        if (charControl.Move(target - position) != CollisionFlags.None) {
+        if (charControl.Move(target - position) == CollisionFlags.Sides) {
             transform.position = position;
             rotationSpeed *= -1;
             isRight = !isRight;
@@ -76,7 +85,7 @@ public class MoveEnemy1 : EnemyBase {
 
         // Apply up-down movement
         position = transform.position;
-        if (charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.Sides) {
+        if (charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.None) {
             transform.position = position;
             Physics.SyncTransforms();
         }
@@ -94,5 +103,10 @@ public class MoveEnemy1 : EnemyBase {
     void OnControllerColliderHit(ControllerColliderHit hit) {
         if (hit.gameObject.tag == "Floor") return;
         //Debug.Log("he hiteado a " + hit.gameObject.name);
+        if (canAttack && hit.gameObject.tag == "Player") {
+            canAttack = false;
+            time = 0;
+            hit.gameObject.GetComponent<MovePlayer>().TakeDamage(10);
+        }
     }
 }

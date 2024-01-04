@@ -55,6 +55,7 @@ public class BalaBase : MonoBehaviour {
         // Change orientation of player accordingly
         Vector3 forward = Vector3.Cross(currentDirection, Vector3.up);
         transform.rotation = Quaternion.LookRotation(forward);
+        if (rotationSpeed >= 0) transform.rotation *= Quaternion.Euler(0, 180, 0);
     }
 
     public float GetDamage() { 

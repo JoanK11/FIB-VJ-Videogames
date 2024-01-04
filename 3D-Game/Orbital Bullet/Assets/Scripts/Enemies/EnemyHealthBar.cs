@@ -18,6 +18,8 @@ public class EnemyHealthBar : MonoBehaviour {
 
     void Update() {
         transform.rotation = c.transform.rotation;
-        transform.position = target.position + new Vector3(0, 1.0f, 0);
+        if(target.gameObject.name == "Boss") transform.position = target.position + new Vector3(0, 3.5f, 0);
+        else transform.position = target.position + new Vector3(0, 1.0f, 0);
+
     }
 }
