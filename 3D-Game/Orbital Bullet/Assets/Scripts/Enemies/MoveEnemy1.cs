@@ -16,6 +16,7 @@ public class MoveEnemy1 : EnemyBase {
     const float timeAttack= 3.0f;
     float time;
     bool canAttack;
+    const int attackDamage = 10;
     void Start() {
         reference = GameObject.Find("World").transform;
 
@@ -36,7 +37,7 @@ public class MoveEnemy1 : EnemyBase {
         canAttack = true;
     }
 
-    void Update() {
+    void FixedUpdate() {
         // Destroy the enemy if it has died and finished making the sound
         if (playedSound && !audioSource.isPlaying) {
             Destroy(gameObject);
@@ -106,7 +107,7 @@ public class MoveEnemy1 : EnemyBase {
         if (canAttack && hit.gameObject.tag == "Player") {
             canAttack = false;
             time = 0;
-            hit.gameObject.GetComponent<MovePlayer>().TakeDamage(10);
+            hit.gameObject.GetComponent<MovePlayer>().TakeDamage(attackDamage);
         }
     }
 }

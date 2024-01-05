@@ -20,7 +20,7 @@ public class Enemy3 : EnemyBase {
     Transform reference;
 
     /* -- Enemy Attack -- */
-    const float enemyDamage = 20;
+    const float attackDamage = 20;
     bool canAttack;
     const float timeToRestartAttack = 6.0f;
     float timeAttack;
@@ -97,7 +97,7 @@ public class Enemy3 : EnemyBase {
 
     void OnControllerColliderHit(ControllerColliderHit hit) {
         if (canAttack && hit.gameObject.tag == "Player") {
-            hit.gameObject.GetComponent<MovePlayer>().TakeDamage(enemyDamage);
+            hit.gameObject.GetComponent<MovePlayer>().TakeDamage(attackDamage);
             canAttack = false;
             timeAttack = 0;
         }
