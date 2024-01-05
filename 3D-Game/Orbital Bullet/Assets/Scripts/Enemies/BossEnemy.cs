@@ -51,7 +51,7 @@ public class BossEnemy : EnemyBase
         timeA = 0;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // Destroy the enemy if it has died and finished making the sound
         if (playedSound && !audioSource.isPlaying)
@@ -60,11 +60,7 @@ public class BossEnemy : EnemyBase
             if (gameObject.name == "Boss") {
                 Debug.Log("He entrado en la pantalla de win");
                 gameWin.OnGameWin();
-                return;
-            }
-            if (gameObject.tag == "Enemy")
-            {
-                transform.parent.gameObject.GetComponent<EnemyManager>().EnemyDefeated();
+                
             }
             return;
         }

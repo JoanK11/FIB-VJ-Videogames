@@ -34,7 +34,7 @@ public class EnemyBase : MonoBehaviour {
         
     }
 
-    void Update() {
+    void FixedUpdate() {
         // Destroy the enemy if it has died and finished making the sound
         if (playedSound && !audioSource.isPlaying) {
             Destroy(gameObject);
