@@ -7,6 +7,7 @@ public class BossLevel : MonoBehaviour {
     float rotationSpeed = 25.0f;
     public bool exitedTrigger;
     public GameObject boss;
+
     /* -- Music -- */
     AudioSource audioSource;
     public AudioClip bossMusic;

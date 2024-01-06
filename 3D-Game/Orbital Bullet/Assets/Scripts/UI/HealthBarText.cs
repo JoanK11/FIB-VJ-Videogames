@@ -10,6 +10,7 @@ public class HealthBarText : MonoBehaviour {
 
     float currentHealth;
     const float duration = 1f;
+    Coroutine highlightCoroutine;
 
     void Start() {
         healthText.text = slider.value.ToString();
@@ -18,10 +19,12 @@ public class HealthBarText : MonoBehaviour {
 
     void Update() {
         if (slider.value + 1 < currentHealth) {
-            StartCoroutine(HighlightText(Color.red));
+            if (highlightCoroutine != null) StopCoroutine(highlightCoroutine);
+            highlightCoroutine = StartCoroutine(HighlightText(Color.red));
         }
         else if (slider.value - 1 > currentHealth) {
-            StartCoroutine(HighlightText(Color.green));
+            if (highlightCoroutine != null) StopCoroutine(highlightCoroutine);
+            highlightCoroutine = StartCoroutine(HighlightText(Color.green));
         }
 
         healthText.text = slider.value.ToString();

@@ -23,6 +23,7 @@ public class BossEnemy : EnemyBase {
     float timeA;
     bool canAttack;
     public GameWin gameWin;
+    public BossLevel bossLevel;
 
     void Start() {
         reference = new Vector3(50, 0, 0);
@@ -57,6 +58,7 @@ public class BossEnemy : EnemyBase {
             if (gameObject.name == "Boss") {
                 Debug.Log("He entrado en la pantalla de win");
                 gameWin.OnGameWin();
+                bossLevel.WinGame();
             }
             return;
         }
@@ -92,7 +94,7 @@ public class BossEnemy : EnemyBase {
                 time = 0;
             }
         }
-        else if(currentState == State.ASSSAULT){
+        else if (currentState == State.ASSSAULT){
             time += Time.deltaTime;
             Vector3 position = transform.position;
 
