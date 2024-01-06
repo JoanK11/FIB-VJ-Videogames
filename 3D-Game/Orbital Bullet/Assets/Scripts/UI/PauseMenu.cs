@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour {
     public static bool GamePaused = false;
+    public BossLevel bossLevel;
     public GameObject PauseMenuUI;
 
     // Update is called once per frame
@@ -20,16 +21,17 @@ public class PauseMenu : MonoBehaviour {
     }
 
     public void Resume() {
-        Debug.Log("resue");
         PauseMenuUI.SetActive(false);
         Time.timeScale = 1;
         GamePaused = false;
+        bossLevel.ResumeMusic();
     }
 
     void Pause() {
         PauseMenuUI.SetActive(true);
         Time.timeScale = 0;
         GamePaused = true;
+        bossLevel.PauseMusic();
     }
 
     public void LoadMenu() {

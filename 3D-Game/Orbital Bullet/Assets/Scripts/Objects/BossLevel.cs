@@ -43,4 +43,12 @@ public class BossLevel : MonoBehaviour {
     public void WinGame() {
         audioSource.Stop();
     }
+
+    public void ResumeMusic() {
+        audioSource.UnPause();
+    }
+
+    public void PauseMusic() {
+        audioSource.Pause();
+    }
 }

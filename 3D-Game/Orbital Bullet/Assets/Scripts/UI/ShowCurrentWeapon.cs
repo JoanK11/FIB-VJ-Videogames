@@ -4,28 +4,29 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ShowCurrentWeapon : MonoBehaviour {
-    Image[] images;
+    GameObject[] images;
     GameObject[] weapons;
 
     void Start() {
+        /* -- Weapons -- */
         weapons = new GameObject[2];
         weapons[0] = GameObject.Find("Bow1");
         weapons[1] = GameObject.Find("Bow2");
-        images = GetComponentsInChildren<Image>();
-        foreach (Image image in images) {
-            image.enabled = false;
-        }
+
+        /* -- Images -- */
+        images = new GameObject[2];
+        images[0] = GameObject.Find("BowLittle");
+        images[1] = GameObject.Find("BowLarge");
     }
 
     void Update() {
-        foreach (Image image in images) {
-            image.enabled = false;
-        }
         if (weapons[0].activeSelf) {
-            images[0].enabled = true;
+            images[0].gameObject.SetActive(true);
+            images[1].gameObject.SetActive(false);
         }
         else {
-            images[1].enabled = true;
+            images[0].gameObject.SetActive(false);
+            images[1].gameObject.SetActive(true);
         }
     }
 }

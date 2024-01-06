@@ -65,7 +65,10 @@ public class BossEnemy : EnemyBase {
             return;
         }
 
-        if (playedSound) return;
+        if (playedSound) {
+            lookCamera();
+            return;
+        }
 
         if (!canAttack) {
             timeA += Time.deltaTime;
@@ -89,8 +92,8 @@ public class BossEnemy : EnemyBase {
                 rotationSpeed *= -1;
                 rotationSpeedAssault *= -1;
                 isRight = !isRight;
-
             }
+
             if (time >= timeGood) {
                 currentState = State.ASSSAULT;
                 time = 0;
@@ -155,7 +158,6 @@ public class BossEnemy : EnemyBase {
         } else {
             speedY -= gravity * Time.deltaTime;
         }
-
         lookCamera();
     }
 

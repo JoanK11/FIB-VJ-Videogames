@@ -14,7 +14,7 @@ public class PlayerAudio : MonoBehaviour {
     public AudioClip chestSound;
     public AudioClip noBulletsSound;
     public AudioClip dieSound;
-    public AudioClip winSound;
+    public AudioClip reloadSound;
 
     private void Start() {
         audioSource = GetComponent<AudioSource>();
@@ -68,8 +68,8 @@ public class PlayerAudio : MonoBehaviour {
         audioSource.Play();
     }
 
-    public void PlayWinSound() {
-        audioSource.clip = winSound;
+    public void PlayReloadSound() {
+        audioSource.clip = reloadSound;
         audioSource.Play();
     }
 }

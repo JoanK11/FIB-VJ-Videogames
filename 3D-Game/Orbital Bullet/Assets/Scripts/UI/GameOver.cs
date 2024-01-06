@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameOver : MonoBehaviour {
+    public BossLevel bossLevel;
+
     public void OnPlayerDeath() {
         gameObject.SetActive(true);
         Time.timeScale = 0;
+        bossLevel.PauseMusic();
     }
 
     public void Retry() {

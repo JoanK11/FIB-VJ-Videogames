@@ -6,13 +6,11 @@ public class Enemy3 : EnemyBase {
     // Start is called before the first frame update
     float jumpSpeed, gravity;
 
-
     Vector3 startDirection;
     float speedY;
 
 
     Quaternion originalrotation;
-
 
     CharacterController charControl;
     const float timeToJump = 4.0f;
@@ -26,6 +24,7 @@ public class Enemy3 : EnemyBase {
     float timeAttack;
 
     bool isJumping;
+
     void Start() {
         reference = GameObject.Find("World").transform;
         // Store starting direction of the player with respect to the axis of the level
@@ -42,7 +41,7 @@ public class Enemy3 : EnemyBase {
 
         base.init();
         time = 0;
-        jumpSpeed = 16f;
+        jumpSpeed = 12f;
         gravity = 25;
         canAttack = true;
         isJumping = false;

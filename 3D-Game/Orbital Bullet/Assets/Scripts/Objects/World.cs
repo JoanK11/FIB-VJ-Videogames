@@ -15,7 +15,11 @@ public class World : MonoBehaviour {
     }
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Alpha3) && level < 3) {
+        if (Input.GetKeyDown(KeyCode.Alpha2) && level < 2) {
+            SetLevel2();
+            level = 2;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3) && level < 3) {
             SetLevel3();
             level = 3;
         }
@@ -27,6 +31,20 @@ public class World : MonoBehaviour {
             SetBossLevel();
             level = 6;
         }
+    }
+
+    void SetLevel2() {
+        /* -- Level -- */
+        GameObject level2E = GameObject.Find("Platform_Exterior2");
+        level2E.GetComponent<BoxCollider>().isTrigger = false;
+        GameObject level2I = GameObject.Find("Platform_Moving2");
+        level2I.transform.rotation = Quaternion.Euler(level2I.transform.eulerAngles.x,
+                                     135f, level2I.transform.eulerAngles.z);
+
+        /* -- Player -- */
+        Vector3 playerPosition = new Vector3(-4.79f, 7f, -6.74f);
+        Vector3 newCenter = new Vector3(0, 0, 0);
+        player.TeleportTo(playerPosition, newCenter);
     }
 
     void SetLevel3() {
@@ -46,6 +64,20 @@ public class World : MonoBehaviour {
     void SetLevel4() {
         /* -- Player -- */
         Vector3 playerPosition = new Vector3(39.3f, 12.95f, -0.45f);
+        Vector3 newCenter = new Vector3(50, 0, 0);
+        player.TeleportTo(playerPosition, newCenter);
+
+        /* -- Camera -- */
+        if (level < 4) {
+            Quaternion newRotation = new Quaternion(0, -0.72176f, 0, -0.69214f);
+            Vector3 newPosition = new Vector3(50f, 0, 0);
+            camera.SetCamera(newRotation, newPosition, newCenter);
+        }
+    }
+
+    void SetLevel5() {
+        /* -- Player -- */
+        Vector3 playerPosition = new Vector3(55.6f, 18.95f, 2.93f);
         Vector3 newCenter = new Vector3(50, 0, 0);
         player.TeleportTo(playerPosition, newCenter);
 

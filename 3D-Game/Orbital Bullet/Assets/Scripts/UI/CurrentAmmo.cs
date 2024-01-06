@@ -10,7 +10,7 @@ public class CurrentAmmo : MonoBehaviour {
 
     void Start() {
         ammoText = gameObject.GetComponentInChildren<TMP_Text>();
-        currentAmmo = 10;
+        currentAmmo = 20;
     }
 
     public void SetAmmo(int ammo) {

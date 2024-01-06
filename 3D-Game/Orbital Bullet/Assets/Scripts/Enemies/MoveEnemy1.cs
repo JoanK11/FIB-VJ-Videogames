@@ -13,10 +13,11 @@ public class MoveEnemy1 : EnemyBase {
   
     CharacterController charControl;
     Transform reference;
-    const float timeAttack= 3.0f;
+    const float timeBetweenAttacks = 1.5f;
     float time;
     bool canAttack;
     const int attackDamage = 10;
+
     void Start() {
         reference = GameObject.Find("World").transform;
 
@@ -55,7 +56,7 @@ public class MoveEnemy1 : EnemyBase {
         }
         if (!canAttack) {
             time += Time.deltaTime;
-            if (time >= timeAttack) {
+            if (time >= timeBetweenAttacks) {
                 canAttack = true;
             }
         }
