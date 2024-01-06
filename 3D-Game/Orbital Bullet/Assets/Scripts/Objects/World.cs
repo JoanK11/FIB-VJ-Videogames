@@ -14,6 +14,10 @@ public class World : MonoBehaviour {
         level = 1;
     }
 
+    public void IncreaseLevel() {
+        level++;
+    }
+
     void Update() {
         if (Input.GetKeyDown(KeyCode.Alpha2) && level < 2) {
             SetLevel2();
@@ -26,6 +30,10 @@ public class World : MonoBehaviour {
         else if (Input.GetKeyDown(KeyCode.Alpha4) && level < 4) {
             SetLevel4();
             level = 4;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5) && level < 5) {
+            SetLevel5();
+            level = 5;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha6) && level < 6) {
             SetBossLevel();

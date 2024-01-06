@@ -6,6 +6,7 @@ using UnityEngine.UI; // Image namespace
 
 public class BossPortal : MonoBehaviour {
     public GameObject target;
+    public World world;
     GameObject player;
     bool isPlayerOnTrigger;
     const float duration = 3.0f;
@@ -34,6 +35,7 @@ public class BossPortal : MonoBehaviour {
             Vector3 targetPosition = target.transform.position + Vector3.up;
             Debug.Log(name + ": Teleporting Player to " + targetPosition);
             player.GetComponent<MovePlayer>().ChangeRing(targetPosition, duration);
+            world.IncreaseLevel();
         }
     }
 

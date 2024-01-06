@@ -930,7 +930,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &90248291
 Transform:
   m_ObjectHideFlags: 0
@@ -1459,6 +1459,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 625777102}
+  world: {fileID: 1614345175}
   UIButton: {fileID: 1720476781}
 --- !u!1001 &112614630
 PrefabInstance:
@@ -3492,19 +3493,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6096218364374383867, guid: cd20b14012a6ad041955ab4cbfb4777b, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6096218364374383867, guid: cd20b14012a6ad041955ab4cbfb4777b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8630163989298318706, guid: cd20b14012a6ad041955ab4cbfb4777b, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8630163989298318706, guid: cd20b14012a6ad041955ab4cbfb4777b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8715819418767588111, guid: cd20b14012a6ad041955ab4cbfb4777b, type: 3}
       propertyPath: m_LocalScale.x
@@ -6024,6 +6025,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1083843989}
+  world: {fileID: 1614345175}
   enemyManager: {fileID: 1221832529}
   UIButton: {fileID: 1720476781}
 --- !u!65 &577003030
@@ -12926,6 +12928,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1083843989}
+  world: {fileID: 1614345175}
   enemyManager: {fileID: 90248292}
   UIButton: {fileID: 1720476781}
 --- !u!1001 &1106528552
@@ -13661,6 +13664,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1083843989}
+  world: {fileID: 1614345175}
   enemyManager: {fileID: 556576701}
   UIButton: {fileID: 1720476781}
   target: {fileID: 199105363}
@@ -13957,19 +13961,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6096218364374383867, guid: cd20b14012a6ad041955ab4cbfb4777b, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6096218364374383867, guid: cd20b14012a6ad041955ab4cbfb4777b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8630163989298318706, guid: cd20b14012a6ad041955ab4cbfb4777b, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8630163989298318706, guid: cd20b14012a6ad041955ab4cbfb4777b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8715819418767588111, guid: cd20b14012a6ad041955ab4cbfb4777b, type: 3}
       propertyPath: m_LocalScale.x
@@ -18473,11 +18477,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2163166154048415378, guid: b08956c1a4c59f44bb0436a9c3eea0f9, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2163166154048415378, guid: b08956c1a4c59f44bb0436a9c3eea0f9, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2554937645882485446, guid: b08956c1a4c59f44bb0436a9c3eea0f9, type: 3}
       propertyPath: m_Name
@@ -18485,11 +18489,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3343829066781139163, guid: b08956c1a4c59f44bb0436a9c3eea0f9, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3343829066781139163, guid: b08956c1a4c59f44bb0436a9c3eea0f9, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5199234479871577389, guid: b08956c1a4c59f44bb0436a9c3eea0f9, type: 3}
       propertyPath: m_LocalScale.y
@@ -20259,7 +20263,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1.2999878, y: 0}
+  m_AnchoredPosition: {x: 1.3000488, y: 0}
   m_SizeDelta: {x: -38, y: -32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1859136166

@@ -6,6 +6,7 @@ using UnityEngine.UI; // Image namespace
 
 public class Jump : MonoBehaviour {
     public GameObject player;
+    public World world;
     protected bool isPlayerOnTrigger;
 
     /* -- Enemy Manager -- */
@@ -30,6 +31,7 @@ public class Jump : MonoBehaviour {
     protected virtual void Update() {
         if (isPlayerOnTrigger && Input.GetKeyUp(KeyCode.E) && enemyManager.enemyCount == 0) {
             player.GetComponent<MovePlayer>().JumpNextLevel();
+            world.IncreaseLevel();
             Debug.Log(name + ": Player jumped to the next level.");
         }
     }

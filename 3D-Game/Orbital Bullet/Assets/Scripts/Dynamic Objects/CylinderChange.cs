@@ -11,6 +11,7 @@ public class CylinderChange : Jump {
         if (isPlayerOnTrigger && Input.GetKeyUp(KeyCode.E) && enemyManager.enemyCount == 0) {
             Vector3 targetPosition = target.transform.position;
             Debug.Log(name + ": Player needs to go to " + targetPosition);
+            world.IncreaseLevel();
             player.GetComponent<MovePlayer>().ChangeCylinder(targetPosition);
         }
     }
