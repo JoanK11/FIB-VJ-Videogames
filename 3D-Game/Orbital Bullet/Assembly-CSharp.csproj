@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\Objects\Platform_Move.cs" />
     <Compile Include="Assets\Scripts\Dynamic Objects\Jump.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyHealthBar.cs" />
+    <Compile Include="Assets\Scripts\UI\TimeCounter.cs" />
     <Compile Include="Assets\UnityTechnologies\EffectExamples\Shared\Scripts\DecalDestroyer.cs" />
     <Compile Include="Assets\Scripts\Objects\Platform_Script.cs" />
     <Compile Include="Assets\Scripts\UI\GameWin.cs" />

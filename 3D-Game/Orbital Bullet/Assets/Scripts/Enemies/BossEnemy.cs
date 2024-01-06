@@ -25,9 +25,11 @@ public class BossEnemy : EnemyBase {
     public GameWin gameWin;
     public BossLevel bossLevel;
     public GameObject Bar;
+
     void Start() {
         reference = new Vector3(50, 0, 0);
         Bar.SetActive(true);
+
         // Store starting direction of the player with respect to the axis of the level
         startDirection = transform.position - reference;
         startDirection.y = 0.0f;
@@ -105,7 +107,6 @@ public class BossEnemy : EnemyBase {
             // Left-right movement
             target = reference + Quaternion.AngleAxis(angle, Vector3.up) * direction;
             if (charControl.Move(target - position) == CollisionFlags.Sides) {
-                //Debug.Log("Ha entrado el boosss2");
                 transform.position = position;
                 rotationSpeed *= -1;
                 rotationSpeedAssault *= -1;
@@ -125,6 +126,7 @@ public class BossEnemy : EnemyBase {
         Vector3 currentDirection = transform.position - reference;
         currentDirection.y = 0.0f;
         currentDirection.Normalize();
+
         // Change orientation of player accordingly
         Quaternion orientation;
         if ((startDirection - currentDirection).magnitude < 1e-3) {
@@ -158,8 +160,6 @@ public class BossEnemy : EnemyBase {
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit) {
-        // if (hit.gameObject.tag == "Floor") return;
-        //Debug.Log("he hiteado a " + hit.gameObject.name);
         if (canAttack && hit.gameObject.tag == "Player") {
             canAttack = false;
             timeA = 0;

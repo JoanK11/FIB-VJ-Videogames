@@ -62,14 +62,15 @@ public class MovePlayer : MonoBehaviour {
     CurrentAmmo text;
 
     /* -- Invulnerability Cheat -- */
-    public bool isPlayerInvulnerable;
+    public bool isPlayerInvulnerableCheat;
     
     /*--Activable --*/
     bool[] activeWeapon;
 
     public bool IsInvencible() {
-        return isPlayerInvulnerable;
+        return isDashing || isPlayerInvulnerableCheat;
     }
+
     public Vector3 GetCenter() {
         return Center;
     }
@@ -171,11 +172,11 @@ public class MovePlayer : MonoBehaviour {
         SetAmmo(startAmmo);
 
         /* -- Invulnerability Cheat -- */
-        isPlayerInvulnerable = false;
+        isPlayerInvulnerableCheat = false;
     }
 
     public void TakeDamage(float damageAmount) {
-        if (State != PlayerStates.Normal || isDashing || isPlayerInvulnerable) return;
+        if (State != PlayerStates.Normal || isDashing || IsInvencible()) return;
 
         health -= damageAmount;
         StartCoroutine(redDamage.FlashScreen());
@@ -204,7 +205,7 @@ public class MovePlayer : MonoBehaviour {
 
         /* -- Check Invulnerability Cheat -- */
         if (Input.GetKeyDown(KeyCode.G)) {
-            isPlayerInvulnerable = !isPlayerInvulnerable;
+            isPlayerInvulnerableCheat = !isPlayerInvulnerableCheat;
         }
     }
 
@@ -279,7 +280,6 @@ public class MovePlayer : MonoBehaviour {
         }
             
         else {
-            Debug.Log("he entrado en el 3");
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
         }
 

@@ -2,20 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class ShowInvencible : MonoBehaviour
-{
-    // Start is called before the first frame update
+public class ShowInvencible : MonoBehaviour {
     public MovePlayer player;
     Image img;
-    void Start()
-    {
+    TextMeshProUGUI text;
+
+    void Start() {
         img = GetComponentInChildren<Image>();
+        text = GetComponentInChildren<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        img.enabled = player.IsInvencible();
+    void Update() {
+        bool playerInvencible = player.IsInvencible();
+        img.enabled = playerInvencible;
+        text.enabled = playerInvencible;
     }
 }
