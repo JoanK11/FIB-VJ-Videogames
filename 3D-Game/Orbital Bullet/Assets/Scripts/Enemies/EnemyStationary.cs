@@ -40,7 +40,12 @@ public class EnemyStationary : EnemyBase {
             }
             return;
         }
+        if (playedSound) {
+            GetComponent<Collider>().enabled = false;
+            GetComponent<CharacterController>().enabled = false;
+            return;
 
+        } 
         if (currentState == EnemyState.IDLE) {
             currentTime += Time.deltaTime;
             transform.rotation = rotacionInicial ;

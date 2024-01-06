@@ -75,7 +75,9 @@ public class EnemyBase : MonoBehaviour {
             Debug.LogError("audioSource.clip is null in EnemyBase");
         }
         audioSource.Play();
-
+        Animator a = gameObject.GetComponentInChildren<Animator>();
+        a.SetTrigger("Dead");
+        if (random == 1) a.speed = a.speed * 1.444f / 0.417f;
         playedSound = true;
     }
 }
