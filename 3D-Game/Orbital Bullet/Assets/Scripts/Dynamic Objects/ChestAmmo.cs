@@ -13,7 +13,7 @@ public class ChestAmmo : MonoBehaviour {
     /* -- Player -- */
     GameObject player;
     bool isPlayerOnTrigger;
-    const int ammo = 10;
+    public int ammo = 15;
 
     /* -- UI Button -- */
     public GameObject UIButton;

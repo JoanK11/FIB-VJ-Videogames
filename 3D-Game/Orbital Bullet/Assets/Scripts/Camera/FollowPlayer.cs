@@ -42,22 +42,10 @@ public class FollowPlayer : MonoBehaviour {
 
     private void UpdateDirectionAndOrientation() {
         // Compute current direction
-        Vector3 currentDirection = player.transform.position - Center;
-        currentDirection.y = 0.0f;
+        Vector3 currentDirection = Center - player.transform.position;
+        currentDirection.y = 0;
         currentDirection.Normalize();
-
-        // Change orientation of the camera pivot to match the player's
-        Quaternion orientation;
-        if ((startDirection - currentDirection).magnitude < 1e-3) {
-            orientation = Quaternion.AngleAxis(0.0f, Vector3.up);
-        }
-        else if ((startDirection + currentDirection).magnitude < 1e-3) {
-            orientation = Quaternion.AngleAxis(180.0f, Vector3.up);
-        }
-        else {
-            orientation = Quaternion.FromToRotation(startDirection, currentDirection);
-        }
-        transform.parent.rotation = orientation;
+        transform.parent.rotation = Quaternion.LookRotation(currentDirection);
     }
 
     private void FollowPlayerYPosition() {

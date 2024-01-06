@@ -29,7 +29,6 @@ public class HealthBarText : MonoBehaviour {
     }
 
     IEnumerator HighlightText(Color color) {
-        Debug.Log("Change to color " + color);
         healthText.color = color;
         yield return new WaitForSeconds(duration);
         healthText.color = Color.white;

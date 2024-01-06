@@ -56,10 +56,13 @@ public class MovePlayer : MonoBehaviour {
     RedDamage redDamage;
 
     /* --  Ammo -- */
-    const int maxAmmo = 30;
-    const int startAmmo = 10;
+    const int maxAmmo = 40;
+    const int startAmmo = 20;
     int ammo;
     CurrentAmmo text;
+
+    /* -- Invulnerability Cheat -- */
+    public bool isPlayerInvulnerable;
 
     /*--Activable --*/
     bool[] activeWeapon;
@@ -88,8 +91,6 @@ public class MovePlayer : MonoBehaviour {
         currentWeapon = weapons[index];
         activeWeapon[0] = true;
     }
-
-    
 
     void CheckSelectionWeapon() {
         if (Input.GetKeyDown(KeyCode.L)) {
@@ -164,10 +165,13 @@ public class MovePlayer : MonoBehaviour {
         /* -- Ammo -- */
         text = GameObject.Find("CurrentAmmo").GetComponent<CurrentAmmo>();
         SetAmmo(startAmmo);
+
+        /* -- Invulnerability Cheat -- */
+        isPlayerInvulnerable = false;
     }
 
     public void TakeDamage(float damageAmount) {
-        if (State != PlayerStates.Normal || isDashing) return;
+        if (State != PlayerStates.Normal || isDashing || isPlayerInvulnerable) return;
 
         health -= damageAmount;
         StartCoroutine(redDamage.FlashScreen());
@@ -193,6 +197,11 @@ public class MovePlayer : MonoBehaviour {
 
         /* -- CheckingDash -- */
         CheckDashing(charControl);
+
+        /* -- Check Invulnerability Cheat -- */
+        if (Input.GetKeyDown(KeyCode.G)) {
+            isPlayerInvulnerable = !isPlayerInvulnerable;
+        }
     }
 
     void Shoot() {
@@ -258,13 +267,20 @@ public class MovePlayer : MonoBehaviour {
 
         // Change orientation of player accordingly
         Quaternion orientation;
-        if ((startDirection - currentDirection).magnitude < 1e-3)
+        if ((startDirection - currentDirection).magnitude < 1e-3) {
             orientation = Quaternion.AngleAxis(0.0f, Vector3.up);
-        else if ((startDirection + currentDirection).magnitude < 1e-3)
+        }
+        else if ((startDirection + currentDirection).magnitude < 1e-3) {
             orientation = Quaternion.AngleAxis(180.0f, Vector3.up);
-        else
+        }
+            
+        else {
+            Debug.Log("he entrado en el 3");
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
+        }
+
         transform.rotation = orientation;
+
         if (oneOrientation == 1.0f) {
             transform.rotation *= Quaternion.Euler(0, 180.0f, 0);
         }
