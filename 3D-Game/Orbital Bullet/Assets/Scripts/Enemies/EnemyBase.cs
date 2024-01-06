@@ -30,8 +30,6 @@ public class EnemyBase : MonoBehaviour {
     }
     protected void lookCamera() {
         transform.rotation = c.transform.rotation;
-
-        
     }
 
     void FixedUpdate() {

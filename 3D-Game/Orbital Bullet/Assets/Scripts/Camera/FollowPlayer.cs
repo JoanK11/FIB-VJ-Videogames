@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FollowPlayer : MonoBehaviour {
     GameObject player;
-    Vector3 startDirection;
+    public Vector3 startDirection;
     float yOffset;
     bool changingCylinder;
     Vector3 Center;
@@ -28,6 +28,7 @@ public class FollowPlayer : MonoBehaviour {
 
     void Update() {
         if (changingCylinder) return;
+
         // Update direction and orientation
         UpdateDirectionAndOrientation();
 
@@ -36,11 +37,7 @@ public class FollowPlayer : MonoBehaviour {
     }
 
     private void InitializeGameObjects() {
-        player = GameObject.Find("Player");
-
-        if (player == null) {
-            Debug.LogError(name + ": Player object not found. Make sure your player is named 'Player'.");
-        }
+        player = GameObject.FindWithTag("Player");
     }
 
     private void UpdateDirectionAndOrientation() {
@@ -79,6 +76,7 @@ public class FollowPlayer : MonoBehaviour {
         euler.y = -euler.y;
         Quaternion endRotation = Quaternion.Euler(euler);
 
+        /* -- Parent -- */
         Vector3 startPosition = transform.parent.position;
         Vector3 endPosition = startPosition + new Vector3(moveAmountX, 0, 0);
         float durationRotation = duration / 3;
@@ -94,8 +92,7 @@ public class FollowPlayer : MonoBehaviour {
             // Move the parent of the camera on the X axis
             transform.parent.position = new Vector3(
                 Mathf.Lerp(startPosition.x, endPosition.x, progress),
-                transform.parent.position.y,
-                transform.parent.position.z
+                transform.parent.position.y, transform.parent.position.z
             );
 
             yield return null;

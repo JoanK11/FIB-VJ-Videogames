@@ -92,6 +92,7 @@
     <Compile Include="Assets\UnityTechnologies\EffectExamples\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\Dynamic Objects\CylinderChange.cs" />
     <Compile Include="Assets\Scripts\Weapons\WeaponLong.cs" />
+    <Compile Include="Assets\Scripts\UI\RedDamage.cs" />
     <Compile Include="Assets\Scripts\UI\HealthBar.cs" />
     <Compile Include="Assets\UnityTechnologies\EffectExamples\Shared\Scripts\GunShoot.cs" />
     <Compile Include="Assets\Scripts\Dynamic Objects\ChestHealth.cs" />

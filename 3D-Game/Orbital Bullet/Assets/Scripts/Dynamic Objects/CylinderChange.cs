@@ -9,7 +9,7 @@ public class CylinderChange : Jump {
 
     protected override void Update() {
         if (isPlayerOnTrigger && Input.GetKeyUp(KeyCode.E) && enemyManager.enemyCount == 0) {
-            Vector3 targetPosition = target.transform.position + Vector3.up;
+            Vector3 targetPosition = target.transform.position;
             Debug.Log(name + ": Player needs to go to " + targetPosition);
             player.GetComponent<MovePlayer>().ChangeCylinder(targetPosition);
         }

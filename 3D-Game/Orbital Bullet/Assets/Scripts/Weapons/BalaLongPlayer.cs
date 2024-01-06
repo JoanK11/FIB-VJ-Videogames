@@ -7,6 +7,7 @@ using UnityEditor;
 public class BalaLongPlayer : BalaBase {
     GameObject prefab;
     private float Distance;
+    const float maxDistance = 360f;
 
     public void init() {
         rotationSpeed = -120.0f;
@@ -28,7 +29,7 @@ public class BalaLongPlayer : BalaBase {
         Move();
         Distance += Math.Abs(rotationSpeed * Time.deltaTime);
 
-        if (Distance >= 320.0) {
+        if (Distance >= maxDistance) {
             audioSource.volume = distanceVolume;
             PlayExplosionSound();
             GameObject explosion = Instantiate(prefab, transform.position, Quaternion.identity);

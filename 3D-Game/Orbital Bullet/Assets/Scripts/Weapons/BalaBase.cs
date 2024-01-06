@@ -68,7 +68,6 @@ public class BalaBase : MonoBehaviour {
 
     protected void PlayExplosionSound() {
         if (exploded) return;
-        Debug.Log("---------------------------- volume is " + audioSource.volume);
 
         if (audioSource == null) {
             Debug.LogError("audioSource is null in BalaBase");

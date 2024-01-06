@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossEnemy : EnemyBase
-{
+public class BossEnemy : EnemyBase {
     public float rotationSpeed, gravity;
     float rotationSpeedAssault;
     Vector3 startDirection;
@@ -24,8 +23,8 @@ public class BossEnemy : EnemyBase
     float timeA;
     bool canAttack;
     public GameWin gameWin;
-    void Start()
-    {
+
+    void Start() {
         reference = new Vector3(50, 0, 0);
 
         // Store starting direction of the player with respect to the axis of the level
@@ -51,20 +50,19 @@ public class BossEnemy : EnemyBase
         timeA = 0;
     }
 
-    void FixedUpdate()
-    {
+    void FixedUpdate() {
         // Destroy the enemy if it has died and finished making the sound
-        if (playedSound && !audioSource.isPlaying)
-        {
+        if (playedSound && !audioSource.isPlaying) {
             Destroy(gameObject);
             if (gameObject.name == "Boss") {
                 Debug.Log("He entrado en la pantalla de win");
                 gameWin.OnGameWin();
-                
             }
             return;
         }
+
         if (playedSound) return;
+
         if (!canAttack) {
             timeA += Time.deltaTime;
             if (timeA >= timeAttack) canAttack = true;
@@ -82,9 +80,7 @@ public class BossEnemy : EnemyBase
             target = reference + Quaternion.AngleAxis(angle, Vector3.up) * direction;
             
             
-            if (charControl.Move(target - position) == CollisionFlags.Sides)
-            {
-               // Debug.Log("Ha entrado el boosss1");
+            if (charControl.Move(target - position) == CollisionFlags.Sides) {
                 transform.position = position;
                 rotationSpeed *= -1;
                 rotationSpeedAssault *= -1;
@@ -106,8 +102,7 @@ public class BossEnemy : EnemyBase
 
             // Left-right movement
             target = reference + Quaternion.AngleAxis(angle, Vector3.up) * direction;
-            if (charControl.Move(target - position) == CollisionFlags.Sides)
-            {
+            if (charControl.Move(target - position) == CollisionFlags.Sides) {
                 //Debug.Log("Ha entrado el boosss2");
                 transform.position = position;
                 rotationSpeed *= -1;
@@ -115,8 +110,7 @@ public class BossEnemy : EnemyBase
                 isRight = !isRight; ;
 
             }
-            if (time >= timeAssault)
-            {
+            if (time >= timeAssault) {
                 currentState = State.GOOD;
                 rotationSpeed *= -1;
                 rotationSpeedAssault *= -1;
@@ -131,36 +125,37 @@ public class BossEnemy : EnemyBase
         currentDirection.Normalize();
         // Change orientation of player accordingly
         Quaternion orientation;
-        if ((startDirection - currentDirection).magnitude < 1e-3)
+        if ((startDirection - currentDirection).magnitude < 1e-3) {
             orientation = Quaternion.AngleAxis(0.0f, Vector3.up);
-        else if ((startDirection + currentDirection).magnitude < 1e-3)
+        }
+        else if ((startDirection + currentDirection).magnitude < 1e-3) {
             orientation = Quaternion.AngleAxis(180.0f, Vector3.up);
-        else
+        }
+        else {
             orientation = Quaternion.FromToRotation(startDirection, currentDirection);
+        }
         transform.rotation = orientation * originalrotation;
+
         if (!isRight) transform.rotation *= Quaternion.Euler(0, 180, 0);
 
         Vector3 pos = transform.position;
-        if (charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.None)
-        {
+        if (charControl.Move(speedY * Time.deltaTime * Vector3.up) != CollisionFlags.None) {
             transform.position = pos;
             Physics.SyncTransforms();
         }
-        if (charControl.isGrounded)
-        {
-            if (speedY < 0.0f)
-                speedY = 0.0f;
 
-        }
-        else
+        if (charControl.isGrounded) {
+            if (speedY < 0.0f) {
+                speedY = 0.0f;
+            }
+        } else {
             speedY -= gravity * Time.deltaTime;
+        }
 
         lookCamera();
-
     }
 
-    void OnControllerColliderHit(ControllerColliderHit hit)
-    {
+    void OnControllerColliderHit(ControllerColliderHit hit) {
         // if (hit.gameObject.tag == "Floor") return;
         //Debug.Log("he hiteado a " + hit.gameObject.name);
         if (canAttack && hit.gameObject.tag == "Player") {

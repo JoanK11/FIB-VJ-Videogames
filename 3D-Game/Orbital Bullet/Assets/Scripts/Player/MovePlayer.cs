@@ -53,6 +53,7 @@ public class MovePlayer : MonoBehaviour {
 
     /* -- UI -- */
     public GameOver gameOver;
+    RedDamage redDamage;
 
     /* --  Ammo -- */
     const int maxAmmo = 30;
@@ -154,6 +155,9 @@ public class MovePlayer : MonoBehaviour {
         
         healthBar.SetMaxHealth(maxHealth);
 
+        /* -- UI -- */
+        redDamage = GameObject.Find("RedDamage").GetComponent<RedDamage>();
+
         /* -- Audio -- */
         playerAudio = GetComponent<PlayerAudio>();
 
@@ -163,9 +167,10 @@ public class MovePlayer : MonoBehaviour {
     }
 
     public void TakeDamage(float damageAmount) {
-        if (State != PlayerStates.Normal) return;
-        if (isDashing) return;
+        if (State != PlayerStates.Normal || isDashing) return;
+
         health -= damageAmount;
+        StartCoroutine(redDamage.FlashScreen());
         playerAudio.PlayDamageSound();
         healthBar.SetHealth(health);
 
@@ -358,7 +363,10 @@ public class MovePlayer : MonoBehaviour {
         State = PlayerStates.ChangingRing;
         StartCoroutine(MovePlayerToPosition(transform.position, targetPosition, 3.0f));
         Center = new Vector3(50, 0, 0);
-        FollowPlayer cameraScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
+
+        // Camera
+        GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
+        FollowPlayer cameraScript = camera.GetComponent<FollowPlayer>();
         StartCoroutine(cameraScript.ChangeCylinder(3.5f, 50.0f));
     }
 
