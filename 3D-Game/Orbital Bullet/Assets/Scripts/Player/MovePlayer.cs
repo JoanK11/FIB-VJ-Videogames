@@ -270,20 +270,9 @@ public class MovePlayer : MonoBehaviour {
         currentDirection.Normalize();
 
         // Change orientation of player accordingly
-        Quaternion orientation;
-        if ((startDirection - currentDirection).magnitude < 1e-3) {
-            orientation = Quaternion.AngleAxis(0.0f, Vector3.up);
-        }
-        else if ((startDirection + currentDirection).magnitude < 1e-3) {
-            orientation = Quaternion.AngleAxis(180.0f, Vector3.up);
-        }
-            
-        else {
-            Debug.Log("he entrado en el 3");
-            orientation = Quaternion.FromToRotation(startDirection, currentDirection);
-        }
-
-        transform.rotation = orientation;
+        Vector3 forward = Vector3.Cross(currentDirection, Vector3.up);
+        transform.rotation = Quaternion.LookRotation(forward);
+   
 
         if (oneOrientation == 1.0f) {
             transform.rotation *= Quaternion.Euler(0, 180.0f, 0);
