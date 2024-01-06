@@ -9,8 +9,8 @@ public class EnemyBase : MonoBehaviour {
 
     public float maxShield;
     float shield;
-    EnemyHealthBar healthBar;
-    EnemyHealthBar shieldBar;
+    public EnemyHealthBar healthBar;
+    public EnemyHealthBar shieldBar;
 
     /* -- Sound Effects -- */
     protected AudioSource audioSource;
@@ -18,15 +18,19 @@ public class EnemyBase : MonoBehaviour {
     protected bool playedSound;
     Camera c;
     public void init() {
-        EnemyHealthBar[] bars = GetComponentsInChildren<EnemyHealthBar>();
-        healthBar = bars[0];
-        shieldBar = bars[1];
         shield = maxShield;
         health = maxHealth;
         c = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         /* -- Sound Effects -- */
         audioSource = GetComponent<AudioSource>();
         playedSound = false;
+        if (gameObject.name != "Boss") {
+            EnemyHealthBar[] bars = GetComponentsInChildren<EnemyHealthBar>();
+            healthBar = bars[0];
+            shieldBar = bars[1];
+        }
+        
+        
     }
     protected void lookCamera() {
         transform.rotation = c.transform.rotation;

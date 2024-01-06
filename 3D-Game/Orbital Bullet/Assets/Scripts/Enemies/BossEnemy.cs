@@ -23,10 +23,10 @@ public class BossEnemy : EnemyBase {
     float timeA;
     bool canAttack;
     public GameWin gameWin;
-
+    public GameObject Bar;
     void Start() {
         reference = new Vector3(50, 0, 0);
-
+        Bar.SetActive(true);
         // Store starting direction of the player with respect to the axis of the level
         startDirection = transform.position - reference;
         startDirection.y = 0.0f;
