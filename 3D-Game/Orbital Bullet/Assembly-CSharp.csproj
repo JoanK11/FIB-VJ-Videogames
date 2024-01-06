@@ -105,6 +105,7 @@
     <Compile Include="Assets\Scripts\Dynamic Objects\RingChange.cs" />
     <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\Enemies\BossEnemy.cs" />
+    <Compile Include="Assets\Scripts\UI\ShowInvencible.cs" />
     <Compile Include="Assets\Scripts\Dynamic Objects\ChestWeapon.cs" />
     <Compile Include="Assets\Scripts\Weapons\BalaLongPlayer.cs" />
     <Compile Include="Assets\Scripts\Enemies\Enemy3.cs" />

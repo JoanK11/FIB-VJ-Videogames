@@ -63,9 +63,13 @@ public class MovePlayer : MonoBehaviour {
 
     /* -- Invulnerability Cheat -- */
     public bool isPlayerInvulnerable;
-
+    
     /*--Activable --*/
     bool[] activeWeapon;
+
+    public bool IsInvencible() {
+        return isPlayerInvulnerable;
+    }
     public Vector3 GetCenter() {
         return Center;
     }
