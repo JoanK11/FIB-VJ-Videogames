@@ -15,7 +15,7 @@ public class BalaLongPlayer : BalaBase {
         base.initBala();
 
         Distance = 0.0f;
-        prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/BigExplosion.prefab");
+        prefab = Resources.Load<GameObject>("BigExplosion");
         Center = GameObject.Find("Player").GetComponent<MovePlayer>().GetCenter();
     }
 

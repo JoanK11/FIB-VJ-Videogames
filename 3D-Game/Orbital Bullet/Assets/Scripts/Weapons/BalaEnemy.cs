@@ -8,7 +8,7 @@ public class BalaEnemy : BalaBase {
         rotationSpeed = -70.0f;
         damage = 10.0f;
         initBala();
-        prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/SmallExplosion.prefab");
+        prefab = Resources.Load<GameObject>("SmallExplosion");
         Center = transform.parent.position;
     }
 
