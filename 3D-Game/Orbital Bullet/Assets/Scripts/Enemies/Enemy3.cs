@@ -59,7 +59,13 @@ public class Enemy3 : EnemyBase {
             }
             return;
         }
+        if (playedSound)
+        {
+            charControl.enabled = false;
 
+            return;
+
+        }
         Vector3 position = transform.position;
         Vector3 direction = position - reference.position;
 

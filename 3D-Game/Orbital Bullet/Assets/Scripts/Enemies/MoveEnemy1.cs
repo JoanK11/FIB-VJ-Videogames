@@ -46,6 +46,13 @@ public class MoveEnemy1 : EnemyBase {
             }
             return;
         }
+        if (playedSound)
+        {
+            GetComponent<Collider>().enabled = false;
+            charControl.enabled = false;
+            return;
+
+        }
         if (!canAttack) {
             time += Time.deltaTime;
             if (time >= timeAttack) {
@@ -60,7 +67,7 @@ public class MoveEnemy1 : EnemyBase {
 
         // Left-right movement
         target = reference.position + Quaternion.AngleAxis(angle, Vector3.up) * direction;
-        if (charControl.Move(target - position) == CollisionFlags.Sides) {
+        if (charControl.Move(target - position) != CollisionFlags.None) {
             transform.position = position;
             rotationSpeed *= -1;
             isRight = !isRight;

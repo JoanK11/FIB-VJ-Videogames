@@ -189,7 +189,7 @@ public class MovePlayer : MonoBehaviour {
         /* -- CheckingSelectionOfWeapon -- */
         CheckSelectionWeapon();
         /*-- Cheat of reloading -- */
-        if (Input.GetKeyDown(KeyCode.G)) SetAmmo(maxAmmo);
+        if (Input.GetKeyDown(KeyCode.M)) SetAmmo(maxAmmo);
 
         /* -- CheckingDash -- */
         CheckDashing(charControl);
