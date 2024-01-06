@@ -63,7 +63,7 @@ public class MovePlayer : MonoBehaviour {
 
     /* -- Invulnerability Cheat -- */
     public bool isPlayerInvulnerableCheat;
-    
+
     /*--Activable --*/
     bool[] activeWeapon;
 
@@ -80,7 +80,7 @@ public class MovePlayer : MonoBehaviour {
     }
 
     void SetupWeapons() {
-        
+
 
         weapons = GetComponentsInChildren<WeaponBase>(true);
         foreach (WeaponBase weapon in weapons) {
@@ -141,7 +141,7 @@ public class MovePlayer : MonoBehaviour {
         //jumpCount = 0;
 
         /* -- Shooting -- */
-    
+
         reloading = false;
 
         /* -- Dashing Time -- */
@@ -158,7 +158,7 @@ public class MovePlayer : MonoBehaviour {
         health = maxHealth;
         GameObject tmp = GameObject.Find("Health Bar");
         healthBar = tmp.GetComponentInChildren<HealthBar>();
-        
+
         healthBar.SetMaxHealth(maxHealth);
 
         /* -- UI -- */
@@ -271,19 +271,9 @@ public class MovePlayer : MonoBehaviour {
         currentDirection.Normalize();
 
         // Change orientation of player accordingly
-        Quaternion orientation;
-        if ((startDirection - currentDirection).magnitude < 1e-3) {
-            orientation = Quaternion.AngleAxis(0.0f, Vector3.up);
-        }
-        else if ((startDirection + currentDirection).magnitude < 1e-3) {
-            orientation = Quaternion.AngleAxis(180.0f, Vector3.up);
-        }
-            
-        else {
-            orientation = Quaternion.FromToRotation(startDirection, currentDirection);
-        }
+        Vector3 forward = Vector3.Cross(currentDirection, Vector3.up);
+        transform.rotation = Quaternion.LookRotation(forward);
 
-        transform.rotation = orientation;
 
         if (oneOrientation == 1.0f) {
             transform.rotation *= Quaternion.Euler(0, 180.0f, 0);
@@ -302,7 +292,7 @@ public class MovePlayer : MonoBehaviour {
             }
         }
 
-        
+
         // Apply up-down movement
         if (State != PlayerStates.ChangingRing) {
             position = transform.position;
@@ -394,7 +384,7 @@ public class MovePlayer : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.LeftShift)) {
             isDashing = true;
             TimeDashing = 0.0f;
-            
+
             anim.SetBool("Roll", true);
         }
 
@@ -404,14 +394,14 @@ public class MovePlayer : MonoBehaviour {
             Vector3 position = transform.position;
             float angle = oneOrientation * VelocityOfDashing * time;
             Vector3 direction = position - Center;
-            
+
             Vector3 target = Center + Quaternion.AngleAxis(angle, Vector3.up) * direction;
             if (charControl.Move(target - position) != CollisionFlags.None) {
                 Debug.Log("He entrado");
                 transform.position = position;
                 Physics.SyncTransforms();
             }
-           
+
             if (TimeDashing > TimeDashOcurr) {
                 isDashing = false;
                 anim.SetBool("Roll", false);
