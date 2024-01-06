@@ -24,10 +24,10 @@ public class BossEnemy : EnemyBase {
     bool canAttack;
     public GameWin gameWin;
     public BossLevel bossLevel;
-
+    public GameObject Bar;
     void Start() {
         reference = new Vector3(50, 0, 0);
-
+        Bar.SetActive(true);
         // Store starting direction of the player with respect to the axis of the level
         startDirection = transform.position - reference;
         startDirection.y = 0.0f;
@@ -80,8 +80,8 @@ public class BossEnemy : EnemyBase {
 
             // Left-right movement
             target = reference + Quaternion.AngleAxis(angle, Vector3.up) * direction;
-            
-            
+
+
             if (charControl.Move(target - position) == CollisionFlags.Sides) {
                 transform.position = position;
                 rotationSpeed *= -1;
